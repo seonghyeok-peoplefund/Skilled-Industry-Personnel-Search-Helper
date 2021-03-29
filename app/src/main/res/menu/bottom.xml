@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/icon_company"
+        android:enabled="true"
+        android:icon="@drawable/ic_business"
+        android:title="Company"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/icon_note"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_sticky_note"
+        android:title="Something1" />
+    <item
+        android:id="@+id/icon_account"
+        app:showAsAction="ifRoom"
+        android:enabled="true"
+        android:icon="@drawable/ic_account_circle"
+        android:title="Something2" />
+</menu>
