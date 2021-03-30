@@ -23,7 +23,7 @@ import com.ray.personnel.R
 import java.util.*
 
 
-class CompanyListFragment(var information: ArrayList<String>) : Fragment() {
+class CompanyListFragment(private var companies: List<Company>) : Fragment() {
 
     lateinit var ctx: Context
 
@@ -53,7 +53,7 @@ class CompanyListFragment(var information: ArrayList<String>) : Fragment() {
         with(view.findViewById<RecyclerView>(R.id.list)){
             layoutManager = GridLayoutManager(ctx, 2)
             addItemDecoration(getGridDecoration())
-            adapter = CompanyListAdapter(ctx, getCompaniesFromIntent())
+            adapter = CompanyListAdapter(ctx, companies)
             (adapter as CompanyListAdapter).setOnItemClickListener { view: View, company: Company -> run{
                 val i = Intent(ctx, CompanyInfo::class.java)
                 i.putExtra("Company", gson.toJson(company))
@@ -61,14 +61,6 @@ class CompanyListFragment(var information: ArrayList<String>) : Fragment() {
                 activity?.overridePendingTransition(R.anim.activity_slide_in, R.anim.activity_slide_out)
             }}
         }
-    }
-
-    private fun getCompaniesFromIntent(): ArrayList<Company>{
-        val companies = ArrayList<Company>()
-        for (json in information) {
-            companies.add(gson.fromJson(json, Company::class.java))
-        }
-        return companies
     }
 
     private fun getGridDecoration(): ItemDecoration = object : ItemDecoration() {

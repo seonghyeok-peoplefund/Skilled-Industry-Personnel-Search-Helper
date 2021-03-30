@@ -2,6 +2,10 @@ package com.ray.personnel.Parser
 
 import android.net.Uri
 import com.google.gson.Gson
+import com.ray.personnel.Company.Company
+import com.ray.personnel.Company.CompanyDatabase
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import org.json.JSONObject
 import org.jsoup.Jsoup
 import org.reactivestreams.Publisher
@@ -18,7 +22,7 @@ class WantedParser(var minCount: Int? = null) : Publisher<Int>{
     private var progress = NO_PROGRESS
     private var jsonCompany: JSONObject? = null
     private var itemCount: Int = 0
-    val output: ArrayList<String> = ArrayList()
+    val output: ArrayList<Company> = ArrayList()
     @Throws(IOException::class)
     get(){
         if(progress == NO_PROGRESS) throw IOException("You Can't Access Before Search Has Been Finished")
@@ -52,7 +56,7 @@ class WantedParser(var minCount: Int? = null) : Publisher<Int>{
                         c.thumbURL = jsonCompany!!.getJSONArray("data").getJSONObject(i).getJSONObject("title_img")["origin"].toString()
                         c.department = jsonCompany!!.getJSONArray("data").getJSONObject(i).getString("position")
                         c.recruit_url = "https://www.wanted.co.kr/wd/"+jsonCompany!!.getJSONArray("data").getJSONObject(i).getString("id")
-                        output.add(Gson().toJson(c))
+                        output.add(c)
                     }
                     i ++
                 }

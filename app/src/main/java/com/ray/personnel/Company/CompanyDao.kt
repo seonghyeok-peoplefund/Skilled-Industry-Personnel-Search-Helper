@@ -4,6 +4,7 @@ import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Observable
+import io.reactivex.internal.util.LinkedArrayList
 
 @Dao
 interface CompanyDao{
@@ -12,6 +13,12 @@ interface CompanyDao{
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(company: Company): Completable
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(companies: List<Company>): Completable
+
+    @Update
+    fun update(company: Company): Completable
 
     @Delete
     fun delete(company: Company): Completable

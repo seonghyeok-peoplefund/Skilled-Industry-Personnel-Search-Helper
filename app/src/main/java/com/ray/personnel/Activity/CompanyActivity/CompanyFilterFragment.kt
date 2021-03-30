@@ -13,6 +13,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.kaopiz.kprogresshud.KProgressHUD
 import com.ray.personnel.Activity.CompanyActivity.CompanyList.CompanyListFragment
 import com.ray.personnel.Activity.SupportActivity
+import com.ray.personnel.Company.CompanyDatabase
 import com.ray.personnel.Parser.WantedParser
 import com.ray.personnel.Parser.WantedParser.Companion.CHECKING_MILITARY
 import com.ray.personnel.Parser.WantedParser.Companion.MAX_PRESUMED_COUNT
@@ -46,34 +47,40 @@ class CompanyFilterFragment : Fragment() {
         view.findViewById<Spinner>(R.id.sp3).adapter = ArrayAdapter(ctx, android.R.layout.simple_list_item_1, Arrays.asList("원티드"))
         view.findViewById<Spinner>(R.id.sp4).adapter = ArrayAdapter(ctx, android.R.layout.simple_list_item_1, Arrays.asList("서울"))
         view.findViewById<FloatingActionButton>(R.id.btn1).setOnClickListener {
-            WantedParser().let{ parse ->
-                var describedInt: Int = (MAX_PRESUMED_COUNT / MAX_SEARCH_COUNT) * 2
-                var i = 0
-                Observable.fromPublisher(parse)
-                        .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                        .doOnSubscribe {
-                            progress = progress_init(ctx, (SEARCH_FINISHED - (CHECKING_MILITARY - PARSING_WANTED + 1) + describedInt) )
-                        }
-                        .subscribe(
-                                { p ->
-                                    progress_setPercent(progress, ++i) },
-                                { err -> progress_fail(progress); println("onError - $err") },
-                                {
-                                    progress_success(progress)
-                                    /*
-                                    val i = Intent(ctx, CompanyListFragment::class.java)
-                                    i.putStringArrayListExtra("Companies", parse.output)
-                                    startActivity(i)*/
-
-
-                                    var act = (activity as SupportActivity?)
-                                    act?.loadFragment(CompanyListFragment(parse.output), true)
+            CompanyDatabase.getInstance(ctx).companyDao().getAll()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe{companies ->
+                    if(companies.isNotEmpty()) {
+                        (activity as SupportActivity).loadFragment(CompanyListFragment(companies), true)
+                    } else{
+                        WantedParser().let{ parse ->
+                            var describedInt: Int = (MAX_PRESUMED_COUNT / MAX_SEARCH_COUNT) * 2
+                            var i = 0
+                            Observable.fromPublisher(parse)
+                                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                                .doOnSubscribe {
+                                    progress = progress_init(ctx, (SEARCH_FINISHED - CHECKING_MILITARY + PARSING_WANTED + describedInt) )
                                 }
-                        )
-            }
+                                .subscribe(
+                                    { p ->
+                                        progress_setPercent(progress, ++i) },
+                                    { err -> progress_fail(progress); println("onError - $err") },
+                                    {
+                                        progress_setPercent(progress, ++i)
+                                        CompanyDatabase.getInstance(ctx).companyDao().insertAll(parse.output)
+                                            .subscribeOn(Schedulers.io())
+                                            .observeOn(AndroidSchedulers.mainThread())
+                                            .subscribe{
+                                                progress_success(progress)
+                                                (activity as SupportActivity).loadFragment(CompanyListFragment(parse.output), true)
+                                            }
 
-
-
+                                    }
+                                )
+                        }
+                    }
+                }
         }
 
     }

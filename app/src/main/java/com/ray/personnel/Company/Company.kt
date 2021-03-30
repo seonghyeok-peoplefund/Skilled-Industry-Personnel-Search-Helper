@@ -47,6 +47,8 @@ class Company constructor(var title: String) : Comparable<Company> {
         get() = NaverParser.Builder.build(title)
     @Ignore
     var news: ArrayList<News>? = null
+
+    //TODO : 위치, 금액, 규모, 설명, 지원자격, 우대조건
 /*
     var salary: Int? = null
         get(){

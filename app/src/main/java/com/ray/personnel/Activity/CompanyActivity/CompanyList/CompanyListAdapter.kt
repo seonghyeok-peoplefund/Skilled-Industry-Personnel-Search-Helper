@@ -23,7 +23,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 
-class CompanyListAdapter(private val mContext: Context, private val companies: ArrayList<Company>) : RecyclerView.Adapter<CompanyListAdapter.SimpleCompanyHolder>() {
+class CompanyListAdapter(private val mContext: Context, private val companies: List<Company>) : RecyclerView.Adapter<CompanyListAdapter.SimpleCompanyHolder>() {
     var onItemClickListener: OnItemClickListener? = null
 
     interface OnItemClickListener {
@@ -54,21 +54,18 @@ class CompanyListAdapter(private val mContext: Context, private val companies: A
         holder.title.text = company.title
         holder.department.text = company.department
         holder.pane.setOnClickListener { v -> onItemClickListener?.onItemClick(v, company) }
-
-        CompanyDatabase.getInstance(mContext).companyDao().getCompany(company.title, company.department)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe{company -> if(company != null) holder.favorite.isLiked = true }
-
+        if(company.isLiked) holder.favorite.isLiked = true
         holder.favorite.setOnLikeListener(object: OnLikeListener{
             override fun liked(likeButton: LikeButton) {
-                CompanyDatabase.getInstance(mContext).companyDao().insert(company)
+                company.isLiked = true
+                CompanyDatabase.getInstance(mContext).companyDao().update(company)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe()
             }
             override fun unLiked(likeButton: LikeButton) {
-                CompanyDatabase.getInstance(mContext).companyDao().delete(company)
+                company.isLiked = false
+                CompanyDatabase.getInstance(mContext).companyDao().update(company)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe()

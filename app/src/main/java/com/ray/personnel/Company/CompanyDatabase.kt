@@ -8,7 +8,7 @@ import io.reactivex.Flowable
 import io.reactivex.Observable
 
 
-@Database(entities = [Company::class], version = 1)
+@Database(entities = [Company::class], version = 2)
 abstract class CompanyDatabase : RoomDatabase() {
     abstract fun companyDao(): CompanyDao
 
