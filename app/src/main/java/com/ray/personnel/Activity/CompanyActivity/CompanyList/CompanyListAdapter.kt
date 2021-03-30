@@ -3,6 +3,7 @@ package com.ray.personnel.Activity.CompanyActivity.CompanyList
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Outline
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +17,10 @@ import com.bumptech.glide.Glide
 import com.like.LikeButton
 import com.like.OnLikeListener
 import com.ray.personnel.Company.Company
+import com.ray.personnel.Company.CompanyDatabase
 import com.ray.personnel.R
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 class CompanyListAdapter(private val mContext: Context, private val companies: ArrayList<Company>) : RecyclerView.Adapter<CompanyListAdapter.SimpleCompanyHolder>() {
@@ -44,18 +48,32 @@ class CompanyListAdapter(private val mContext: Context, private val companies: A
     override fun onBindViewHolder(holder: SimpleCompanyHolder, position: Int) {
         val company = companies[position]
         Glide.with(mContext)
-                .load(company.thumbURL)
+                .load(Uri.parse(company.thumbURL))
                 .thumbnail(0.5f)
                 .into(holder.img_thumb)
         holder.title.text = company.title
         holder.department.text = company.department
         holder.pane.setOnClickListener { v -> onItemClickListener?.onItemClick(v, company) }
+
+        CompanyDatabase.getInstance(mContext).companyDao().getCompany(company.title, company.department)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe{company -> if(company != null) holder.favorite.isLiked = true }
+
         holder.favorite.setOnLikeListener(object: OnLikeListener{
             override fun liked(likeButton: LikeButton) {
+                CompanyDatabase.getInstance(mContext).companyDao().insert(company)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe()
             }
             override fun unLiked(likeButton: LikeButton) {
+                CompanyDatabase.getInstance(mContext).companyDao().delete(company)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe()
             }
-        });
+        })
     }
 
     override fun getItemCount() = companies.size

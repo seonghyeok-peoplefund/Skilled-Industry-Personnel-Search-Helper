@@ -1,6 +1,10 @@
 package com.ray.personnel.Company
 
 import android.net.Uri
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import com.ray.personnel.Parser.CompanyBasicInformationParser
 import com.ray.personnel.Parser.NaverParser
 import io.reactivex.Observable
@@ -9,23 +13,30 @@ import java.net.URI
 import java.net.URL
 
 
-//primary constructor is used for only comparing
+@Entity(primaryKeys = arrayOf("title", "department"))
 class Company constructor(var title: String) : Comparable<Company> {
     /**
      * These informations will be initialized
      * before @link com.ray.personnel.Activity.CompanyActivity.CompanyList.CompanyList
      * !! loaded from First Parser - Parser, WantedParser !!
      */
+    @ColumnInfo
     lateinit var department: String
+    @ColumnInfo
     lateinit var military_url: String
+    @ColumnInfo
     lateinit var recruit_url: String
-    lateinit var thumbURL: URL
+    @ColumnInfo
+    lateinit var thumbURL: String
+    @ColumnInfo
+    var isLiked = false
 
     /**
      * These informations will be initialized
      * before @link com.ray.personnel.Activity.Info
      * !! loaded from Second Parser - NaverParser !!
      */
+    @ColumnInfo
     var description = "OOO 회사는 ~~~를 하는 회사입니다."
 
     /**
@@ -34,6 +45,7 @@ class Company constructor(var title: String) : Comparable<Company> {
      */
     val observableNews: Observable<ArrayList<News>>
         get() = NaverParser.Builder.build(title)
+    @Ignore
     var news: ArrayList<News>? = null
 /*
     var salary: Int? = null

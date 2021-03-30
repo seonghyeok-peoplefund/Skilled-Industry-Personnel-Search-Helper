@@ -49,7 +49,7 @@ class WantedParser(var minCount: Int? = null) : Publisher<Int>{
                     if (jsonCompany!!.getJSONArray("data").isNull(i)) break
                     val name = jsonCompany!!.getJSONArray("data").getJSONObject(i).getJSONObject("company")["name"].toString().replace("\\([^\\)]*\\)".toRegex(), "")
                     Parser.getMilitaryCompany(name)?.also{ c ->
-                        c.thumbURL = URL(jsonCompany!!.getJSONArray("data").getJSONObject(i).getJSONObject("title_img")["origin"].toString())
+                        c.thumbURL = jsonCompany!!.getJSONArray("data").getJSONObject(i).getJSONObject("title_img")["origin"].toString()
                         c.department = jsonCompany!!.getJSONArray("data").getJSONObject(i).getString("position")
                         c.recruit_url = "https://www.wanted.co.kr/wd/"+jsonCompany!!.getJSONArray("data").getJSONObject(i).getString("id")
                         output.add(Gson().toJson(c))

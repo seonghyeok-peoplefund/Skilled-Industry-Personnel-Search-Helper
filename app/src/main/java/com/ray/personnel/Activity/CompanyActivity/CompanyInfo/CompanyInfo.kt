@@ -2,6 +2,7 @@ package com.ray.personnel.Activity.CompanyActivity.CompanyInfo
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.Gravity
 import android.view.Menu
@@ -61,17 +62,13 @@ class CompanyInfo : AppCompatActivity() {
             company.news = arr
             (activity.list.adapter as CompanyInfoAdapter).refresh(CompanyInfoAdapter.NEWS)
         }
-        company.observableNews.subscribe{ arr ->
-            company.news = arr
-            (activity.list.adapter as CompanyInfoAdapter).refresh(CompanyInfoAdapter.NEWS)
-        }
     }
     // Set the background and text colors of a toolbar given a
     // bitmap image to match
     fun setBackgroundImage() {
         Glide.with(this)
                 .asBitmap()
-                .load(company.thumbURL)
+                .load(Uri.parse(company.thumbURL))
                 .thumbnail(0.3f)
                 .into(object : SimpleTarget<Bitmap>() {
                     override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
