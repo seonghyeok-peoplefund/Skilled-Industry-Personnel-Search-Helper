@@ -55,7 +55,8 @@ class WantedParser(var minCount: Int? = null) : Publisher<Int>{
                     Parser.getMilitaryCompany(name)?.also{ c ->
                         c.thumbURL = jsonCompany!!.getJSONArray("data").getJSONObject(i).getJSONObject("title_img")["origin"].toString()
                         c.department = jsonCompany!!.getJSONArray("data").getJSONObject(i).getString("position")
-                        c.recruit_url = "https://www.wanted.co.kr/wd/"+jsonCompany!!.getJSONArray("data").getJSONObject(i).getString("id")
+                        c.wanted_id = jsonCompany!!.getJSONArray("data").getJSONObject(i).getString("id")
+                        c.state ++
                         output.add(c)
                     }
                     i ++
@@ -89,68 +90,3 @@ class WantedParser(var minCount: Int? = null) : Publisher<Int>{
         const val SEARCH_FINISHED = CHECKING_MILITARY + 1
     }
 }
-/*
-companion object{
-    val link = "https://www.wanted.co.kr/api/v4/jobs?country=kr&locations=all&years=-1&limit=1&offset=0&job_sort=job.latest_order&tag_type_id=677"
-    val companyList: ArrayList<String>
-        get() {
-            val img = json.getJsonArray("data").get(i).getJson("title_img").getObject("thumb").toString()
-            val name = json.getJsonArray("data").get(i).getJson("company").getObject("name")
-        }
-    protected String uniToKsc(String uni) throws UnsupportedEncodingException{
-        return new String (uni.getBytes("8859_1"),"KSC5601");
-    }
-    protected String kscToUni(String uni) throws UnsupportedEncodingException{
-        return new String (uni.getBytes("KSC5601"),"8859_1");
-    }
-}
-*/
-/*
-public static ArrayList<String> getCompanyList(int count) throws Exception {
-Elements companies = Jsoup.connect("https://www.wanted.co.kr/wdlist/518/677?country=kr&job_sort=job.latest_order&years=-1&locations=all")
-       .ignoreContentType(true).get().getElementsByAttributeValue("data-cy","job-card");
-ArrayList<String> output = new ArrayList<String>();
-System.out.println(companies.size());
-Gson gson = new GsonBuilder().create();
-
-for(Element c : companies){
-   Company company = new Company("머니브레인","개발자");
-   String url = Parser.getMilitaryInformation(company);
-   if(url.length() == 0) {
-       continue;
-   }
-   company.setMilitaryInformation(url);
-   output.add(gson.toJson(company));
-}
-return output;
-}*/
-/*
-fun getCompanyList(offset: Int = 0, minCount: Int? = null): ArrayList<String> {
-    var i = offset
-    var ii = 0
-    while (minCount == null || output.size < minCount) {
-        val json = JSONObject(Jsoup.connect("https://www.wanted.co.kr/api/v4/jobs?country=kr&locations=all&years=-1&limit=$MAX_SEARCH_COUNT&offset=$i&job_sort=job.latest_order&tag_type_id=677")
-                .ignoreContentType(true).execute().body())
-        ii = 0
-        while (ii < MAX_SEARCH_COUNT) {
-            if (json.isNull("data")) break
-            if (json.getJSONArray("data").isNull(ii)) break
-            val name = json.getJSONArray("data").getJSONObject(ii).getJSONObject("company")["name"].toString()
-                    .replace("\\([^\\)]*\\)".toRegex(), "")
-            val bool = !isMilitary(name)
-            if (bool) {
-                ii++
-                continue
-            }
-            val img = json.getJSONArray("data").getJSONObject(ii).getJSONObject("title_img")["thumb"].toString()
-            val c = Company(name)
-            c.setThumb(img)
-            val millitary = getMilitaryInformation(name)
-            c.setMilitaryInformation(millitary)
-            output.add(Gson().toJson(c))
-            ii++
-        }
-        if (json.getJSONObject("links")["next"].toString() == "null") break
-        i += MAX_SEARCH_COUNT
-    }
-    return output*/

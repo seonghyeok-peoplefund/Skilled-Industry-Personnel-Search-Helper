@@ -62,6 +62,8 @@ class CompanyListAdapter(private val mContext: Context, private val companies: L
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe()
+                company.getInformation(1)
+                println(company.title+" : "+company.wanted_id)
             }
             override fun unLiked(likeButton: LikeButton) {
                 company.isLiked = false
@@ -90,7 +92,6 @@ class CompanyListAdapter(private val mContext: Context, private val companies: L
             title = convertView.findViewById(R.id.company_list_item_title)
             department = convertView.findViewById(R.id.company_list_item_department)
             favorite = convertView.findViewById(R.id.favorite)
-            //img_thumb.setBackgroundResource(R.drawable.company_info_item_rounded)
             val radius = 30f
             img_thumb.outlineProvider = object : ViewOutlineProvider() {
                 override fun getOutline(view: View?, outline: Outline?) {

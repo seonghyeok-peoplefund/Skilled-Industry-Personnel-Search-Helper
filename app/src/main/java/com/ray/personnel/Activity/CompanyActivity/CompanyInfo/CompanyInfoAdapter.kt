@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.ColumnInfo
 import com.ray.personnel.Company.Company
+import com.ray.personnel.Company.Location
 import com.ray.personnel.Company.News
 import com.ray.personnel.R
 import kotlin.collections.ArrayList
@@ -74,14 +76,23 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
                 (holder as SubtitledHolder).content.text = company.title
                 (holder as SubtitledHolder).subcontent.text = company.department
             }
-            POSITION -> {
-                (holder as DefaultHolder).content.text = company.department
+            INTRO -> {
+                (holder as DefaultHolder).content.text = company.intro
             }
-            DESCRIPTION -> {
-                (holder as DefaultHolder).content.text = company.description
+            MAIN_TASKS -> {
+                (holder as DefaultHolder).content.text = company.main_tasks
             }
-            RECRUIT -> {
-                (holder as DefaultHolder).content.text = "NOTHING"+(position.toString())
+            REQUIREMENTS -> {
+                (holder as DefaultHolder).content.text = company.requirements
+            }
+            PREFERRED -> {
+                (holder as DefaultHolder).content.text = company.preferred
+            }
+            BENEFITS -> {
+                (holder as DefaultHolder).content.text = company.benefits
+            }
+            LOCATION -> {
+                (holder as DefaultHolder).content.text = "LOCATION, NOTHING"+(position.toString())
             }
             NEWS -> {
                 if(company.news == null){
@@ -140,13 +151,17 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
     }
 
 
+
     companion object{
         const val DEFAULT = -1
         const val TITLE = 0
-        const val POSITION = TITLE + 1
-        const val DESCRIPTION = POSITION + 1
-        const val RECRUIT = DESCRIPTION + 1
-        const val NEWS = RECRUIT + 1
+        const val INTRO = TITLE + 1
+        const val MAIN_TASKS = INTRO + 1
+        const val REQUIREMENTS = MAIN_TASKS + 1
+        const val PREFERRED = REQUIREMENTS + 1
+        const val BENEFITS = PREFERRED + 1
+        const val LOCATION = BENEFITS + 1
+        const val NEWS = LOCATION + 1
 
         //const val NORMAL = 0
         //const val = NORMAL + 1
