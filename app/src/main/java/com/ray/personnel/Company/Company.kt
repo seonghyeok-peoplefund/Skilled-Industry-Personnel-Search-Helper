@@ -10,10 +10,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.json.JSONObject
 import org.jsoup.Jsoup
+import java.util.concurrent.Callable
 
 
 @Entity(primaryKeys = arrayOf("title", "department"))
-class Company constructor(var title: String) : Comparable<Company> {
+data class Company constructor(var title: String) : Comparable<Company> {
     /**
      * state means 'how many does it load'
      * 0 : init only
@@ -57,7 +58,7 @@ class Company constructor(var title: String) : Comparable<Company> {
     @ColumnInfo
     var benefits = "복지는 ~~가 있습니."
     @ColumnInfo
-    lateinit var location: Location
+    var location: Location? = null
 
     //TODO : 금액, 규모
     /**
@@ -101,10 +102,10 @@ class Company constructor(var title: String) : Comparable<Company> {
     }
 
 
-    fun getInformation(step: Int){
+    fun getInformation(step: Int): Callable<Unit>? {
         // TODO : 스케쥴러 바꿔서 Queue만들고, 모든Company에 대해서 실행하게 할것, 그리고 클릭대상이 되면 빠르게 그거먼저 로딩할것.
         if(state == step) when(step){
-            1 -> Observable.fromCallable{
+            1 -> return Callable<Unit>{
                 val doc = JSONObject(Jsoup.connect(WANTED_INFORMATION_URL + wanted_id).ignoreContentType(true).execute().body())
                 doc.optJSONObject("job").optJSONObject("detail").let { json ->
                     intro = json.optString ("intro")
@@ -122,10 +123,12 @@ class Company constructor(var title: String) : Comparable<Company> {
                                 json.optJSONObject("geo_location").optJSONObject("location").optDouble("lng"))
                     }
                 }
+                intro = intro.replaceAfter(".","").replace(Regex(".+\\?"), "").replace(Regex("【[^】]*】"), "").replace(Regex("\\[[^\\]]*\\]"), "").trim()
                 state ++
-            }.observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe()
+            }
 
         }
+        return null
     }
 
     companion object{

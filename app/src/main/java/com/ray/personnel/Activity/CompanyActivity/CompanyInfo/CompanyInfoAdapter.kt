@@ -6,6 +6,8 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.ListView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.ColumnInfo
@@ -61,13 +63,26 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when(viewType){
         TITLE-> SubtitledHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_subtitled, parent, false))
         NEWS-> NewsHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_news, parent, false))
-        else-> DefaultHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_default, parent, false))
+        MAIN_TASKS, REQUIREMENTS, PREFERRED -> {
+            ListHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_list, parent, false))
+        }
+        else-> {
+            println("$viewType to DefaultHolder")
+            DefaultHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_default, parent, false))
+        }
     }
 
     override fun getItemViewType(i: Int) = when(i){
         TITLE -> TITLE
+        MAIN_TASKS -> MAIN_TASKS
+        REQUIREMENTS -> REQUIREMENTS
+        PREFERRED -> PREFERRED
         NEWS -> NEWS
-        else -> DEFAULT
+
+        else -> {
+            println("$i to $DEFAULT")
+            DEFAULT
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -80,16 +95,17 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
                 (holder as DefaultHolder).content.text = company.intro
             }
             MAIN_TASKS -> {
-                (holder as DefaultHolder).content.text = company.main_tasks
+                (holder as ListHolder).content.text = company.main_tasks
             }
             REQUIREMENTS -> {
-                (holder as DefaultHolder).content.text = company.requirements
+                (holder as ListHolder).content.text = company.requirements
             }
             PREFERRED -> {
-                (holder as DefaultHolder).content.text = company.preferred
+                (holder as ListHolder).content.text = company.preferred
             }
             BENEFITS -> {
-                (holder as DefaultHolder).content.text = company.benefits
+                //(holder as ListHolder).content.text = company.benefits
+                (holder as DefaultHolder).content.text = "BENEFIT, NOTHING"+(position.toString())
             }
             LOCATION -> {
                 (holder as DefaultHolder).content.text = "LOCATION, NOTHING"+(position.toString())
@@ -115,6 +131,10 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
     }
 
     inner class DefaultHolder(v: View) : RecyclerView.ViewHolder(v) {
+        val content: TextView = v.findViewById(R.id.content)
+    }
+
+    inner class ListHolder(v: View) : RecyclerView.ViewHolder(v) {
         val content: TextView = v.findViewById(R.id.content)
     }
 

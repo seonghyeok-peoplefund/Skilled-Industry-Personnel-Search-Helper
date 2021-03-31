@@ -53,11 +53,13 @@ class WantedParser(var minCount: Int? = null) : Publisher<Int>{
                     if (jsonCompany!!.getJSONArray("data").isNull(i)) break
                     val name = jsonCompany!!.getJSONArray("data").getJSONObject(i).getJSONObject("company")["name"].toString().replace("\\([^\\)]*\\)".toRegex(), "")
                     Parser.getMilitaryCompany(name)?.also{ c ->
-                        c.thumbURL = jsonCompany!!.getJSONArray("data").getJSONObject(i).getJSONObject("title_img")["origin"].toString()
-                        c.department = jsonCompany!!.getJSONArray("data").getJSONObject(i).getString("position")
-                        c.wanted_id = jsonCompany!!.getJSONArray("data").getJSONObject(i).getString("id")
-                        c.state ++
-                        output.add(c)
+                        val company = c.copy()
+                        company.military_url = c.military_url
+                        company.thumbURL = jsonCompany!!.getJSONArray("data").getJSONObject(i).getJSONObject("title_img")["origin"].toString()
+                        company.department = jsonCompany!!.getJSONArray("data").getJSONObject(i).getString("position")
+                        company.wanted_id = jsonCompany!!.getJSONArray("data").getJSONObject(i).getString("id")
+                        company.state ++
+                        output.add(company)
                     }
                     i ++
                 }

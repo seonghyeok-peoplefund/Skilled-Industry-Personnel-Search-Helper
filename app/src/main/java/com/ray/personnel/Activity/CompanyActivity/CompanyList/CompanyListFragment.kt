@@ -19,7 +19,11 @@ import com.ray.personnel.Activity.CompanyActivity.CompanyInfo.CompanyInfo
 import com.ray.personnel.Activity.Global.gson
 import com.ray.personnel.Activity.SupportActivity
 import com.ray.personnel.Company.Company
+import com.ray.personnel.Company.CompanyDatabase
 import com.ray.personnel.R
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 
@@ -41,6 +45,15 @@ class CompanyListFragment(private var companies: List<Company>) : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setRecyclerView(view)
         setSpinner(view)
+        for(company: Company in companies){
+            if(company.state == 1)
+            Observable.fromCallable(company.getInformation(1)).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe {
+                CompanyDatabase.getInstance(ctx).companyDao().update(company)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe()
+            }
+        }
     }
 
     private fun setSpinner(view: View) {

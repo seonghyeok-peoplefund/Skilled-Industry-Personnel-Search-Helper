@@ -28,14 +28,3 @@ class Location {
         }
     }
 }
-class LocationConverter {
-    @TypeConverter
-    fun fromTimestamp(value: String?): Location? {
-        return value?.let { Global.gson.fromJson(value, Location::class.java) }
-    }
-
-    @TypeConverter
-    fun dateToTimestamp(location: Location?): String? {
-        return Global.gson.toJson(location)
-    }
-}
