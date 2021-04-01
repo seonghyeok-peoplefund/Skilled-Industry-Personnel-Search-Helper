@@ -67,7 +67,7 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
         MAIN_TASKS, REQUIREMENTS, PREFERRED -> {
             ListHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_list, parent, false))
         }
-        LOCATION-> LocationHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_subtitled, parent, false))
+        LOCATION-> LocationHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_location, parent, false))
         else-> {
             DefaultHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_default, parent, false))
         }
