@@ -27,8 +27,7 @@ import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 
-class CompanyListFragment(private var companies: List<Company>) : Fragment() {
-
+class CompanyListFragment() : Fragment() {
     lateinit var ctx: Context
 
     override fun onAttach(context: Context) {
@@ -45,17 +44,23 @@ class CompanyListFragment(private var companies: List<Company>) : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setRecyclerView(view)
         setSpinner(view)
-        for(company: Company in companies){
-            if(company.state == 1)
-            Observable.fromCallable(company.getInformation(1)).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe {
-                CompanyDatabase.getInstance(ctx).companyDao().update(company)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe()
-            }
-        }
+        getCompany(view)
     }
 
+    private fun getCompany(view: View){
+        CompanyDatabase.getInstance(ctx).companyDao().getAll()
+                .subscribeOn(Schedulers.single())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe{ arr ->
+                    view.findViewById<RecyclerView>(R.id.list).adapter = CompanyListAdapter(ctx, arr)
+                    (view.findViewById<RecyclerView>(R.id.list).adapter as CompanyListAdapter).setOnItemClickListener { view: View, company: Company -> run{
+                        val i = Intent(ctx, CompanyInfo::class.java)
+                        i.putExtra("Company", gson.toJson(company))
+                        startActivity(i)
+                        activity?.overridePendingTransition(R.anim.activity_slide_in, R.anim.activity_slide_out)
+                    }}
+                }
+    }
     private fun setSpinner(view: View) {
         view.findViewById<Spinner>(R.id.company_list_sp1).adapter = ArrayAdapter(ctx, android.R.layout.simple_list_item_1, Arrays.asList("중소기업", "중견기업", "대기업"))
         view.findViewById<Spinner>(R.id.company_list_sp2).adapter = ArrayAdapter(ctx, android.R.layout.simple_list_item_1, Arrays.asList("1km", "5km", "10km", "50km", "100km", "그 외"))
@@ -66,13 +71,6 @@ class CompanyListFragment(private var companies: List<Company>) : Fragment() {
         with(view.findViewById<RecyclerView>(R.id.list)){
             layoutManager = GridLayoutManager(ctx, 2)
             addItemDecoration(getGridDecoration())
-            adapter = CompanyListAdapter(ctx, companies)
-            (adapter as CompanyListAdapter).setOnItemClickListener { view: View, company: Company -> run{
-                val i = Intent(ctx, CompanyInfo::class.java)
-                i.putExtra("Company", gson.toJson(company))
-                startActivity(i)
-                activity?.overridePendingTransition(R.anim.activity_slide_in, R.anim.activity_slide_out)
-            }}
         }
     }
 

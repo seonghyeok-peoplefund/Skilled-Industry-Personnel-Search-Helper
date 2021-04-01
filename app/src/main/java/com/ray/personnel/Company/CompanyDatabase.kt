@@ -5,33 +5,30 @@ import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.google.gson.reflect.TypeToken
 import com.ray.personnel.Activity.Global
+import com.ray.personnel.Parser.CompanyListParser
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Observable
 
 
-@Database(entities = [Company::class], version = 14)
+@Database(entities = [Company::class], version = 15)
 @TypeConverters(LocationConverter::class)
 abstract class CompanyDatabase : RoomDatabase() {
     abstract fun companyDao(): CompanyDao
-
     companion object{
-        private val instance: CompanyDatabase? = null
-        fun getInstance(context: Context) = instance ?: buildDataBase(context)
-
-        private fun buildDataBase(context: Context): CompanyDatabase {
-            return Room.databaseBuilder(context.applicationContext, CompanyDatabase::class.java, "company_db")
-                .fallbackToDestructiveMigration()
-                .addCallback(object : Callback() {
-                    override fun onCreate(db: SupportSQLiteDatabase) {
-                        super.onCreate(db)
-                    }
-                }).build()
+        private var instance: CompanyDatabase? = null
+        fun getInstance(context: Context): CompanyDatabase = instance ?: run {
+            instance = Room.databaseBuilder(context.applicationContext, CompanyDatabase::class.java, "company_db_"+CompanyListParser.sortType)
+                    .fallbackToDestructiveMigration()
+                    .addCallback(object : Callback() {
+                        override fun onCreate(db: SupportSQLiteDatabase) {
+                            super.onCreate(db)
+                        }
+                    }).build()
+            instance!!
         }
+
     }
-
-
-
 }
 
 class LocationConverter {
@@ -55,30 +52,3 @@ class LocationConverter {
         return list?.let { Global.gson.toJson(list) }
     }
 }
-/*
-
-    abstract fun companyDao(): CompanyDao
-
-    companion object {
-
-        private var instance: CompanyDatabase? = null
-
-        @Synchronized
-        fun getInstance(context: Context): CompanyDatabase? {
-            if (instance == null) {
-                instance = Room.databaseBuilder(context.applicationContext,
-                    CompanyDatabase::class.java, "company_db")
-                    .fallbackToDestructiveMigration()
-                    .allowMainThreadQueries()
-                    .build()
-            }
-            return instance
-        }
-    }
-
-
-
-
-    abstract fun companyDao(): CompanyDao
-
- */

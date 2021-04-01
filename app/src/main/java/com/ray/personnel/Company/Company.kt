@@ -3,6 +3,7 @@ package com.ray.personnel.Company
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import com.ray.personnel.Activity.Global
 import com.ray.personnel.Parser.NaverParser
 import io.reactivex.Observable
@@ -13,15 +14,15 @@ import org.jsoup.Jsoup
 import java.util.concurrent.Callable
 
 
-@Entity(primaryKeys = arrayOf("title", "department"))
+@Entity
 data class Company constructor(var title: String) : Comparable<Company> {
     /**
      * state means 'how many does it load'
      * 0 : init only
      * 1 : loaded by @link com.ray.personnel.Parser.WantedParser
      */
-    @ColumnInfo
-    var state = 0
+    @PrimaryKey(autoGenerate = true)
+    var id = 0
     /**
      * state 1
      * These informations will be initialized
@@ -102,36 +103,8 @@ data class Company constructor(var title: String) : Comparable<Company> {
     }
 
 
-    fun getInformation(step: Int): Callable<Unit>? {
-        // TODO : 스케쥴러 바꿔서 Queue만들고, 모든Company에 대해서 실행하게 할것, 그리고 클릭대상이 되면 빠르게 그거먼저 로딩할것.
-        if(state == step) when(step){
-            1 -> return Callable<Unit>{
-                val doc = JSONObject(Jsoup.connect(WANTED_INFORMATION_URL + wanted_id).ignoreContentType(true).execute().body())
-                doc.optJSONObject("job").optJSONObject("detail").let { json ->
-                    intro = json.optString ("intro")
-                    main_tasks = json.optString("main_tasks")
-                    requirements = json.optString("requirements")
-                    preferred = json.optString("preferred_points")
-                    benefits = json.optString("benefits")
-                }
-                location = Location().apply{
-                    doc.optJSONObject("job").optJSONObject("address").let { json ->
-                        location = json.optString ("country")
-                        full_location = json.optString("full_location")
-                        geo_location = GeoLocation(
-                                json.optJSONObject("geo_location").optJSONObject("location").optDouble("lat"),
-                                json.optJSONObject("geo_location").optJSONObject("location").optDouble("lng"))
-                    }
-                }
-                intro = intro.replaceAfter(".","").replace(Regex(".+\\?"), "").replace(Regex("【[^】]*】"), "").replace(Regex("\\[[^\\]]*\\]"), "").trim()
-                state ++
-            }
-
-        }
-        return null
-    }
 
     companion object{
-        private const val WANTED_INFORMATION_URL = "https://www.wanted.co.kr/api/v4/jobs/"
+        const val WANTED_INFORMATION_URL = "https://www.wanted.co.kr/api/v4/jobs/"
     }
 }

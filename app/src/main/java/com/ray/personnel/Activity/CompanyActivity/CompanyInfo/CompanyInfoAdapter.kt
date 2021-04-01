@@ -67,7 +67,6 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
             ListHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_list, parent, false))
         }
         else-> {
-            println("$viewType to DefaultHolder")
             DefaultHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_default, parent, false))
         }
     }
@@ -80,7 +79,6 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
         NEWS -> NEWS
 
         else -> {
-            println("$i to $DEFAULT")
             DEFAULT
         }
     }

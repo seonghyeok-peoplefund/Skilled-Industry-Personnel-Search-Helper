@@ -9,7 +9,7 @@ import java.io.IOException
 import java.util.*
 import kotlin.jvm.Throws
 
-object Parser {
+object MilitaryParser {
 
     val link = Jsoup.connect("https://work.mma.go.kr/caisBYIS/search/byjjecgeomsaek.do?eopjong_gbcd=1&pageUnit=10000&pageIndex=1").timeout(20000).ignoreContentType(true).maxBodySize(0).get().body()
 
@@ -28,12 +28,5 @@ object Parser {
     }
     fun init(){
         Collections.sort(sortedCompany)
-
-        /*
-        */
-
-
-        saveFile(link.html())
-
     }
 }

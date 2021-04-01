@@ -62,7 +62,6 @@ class CompanyListAdapter(private val mContext: Context, private val companies: L
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe()
-                println(company.title+" : "+company.wanted_id)
             }
             override fun unLiked(likeButton: LikeButton) {
                 company.isLiked = false

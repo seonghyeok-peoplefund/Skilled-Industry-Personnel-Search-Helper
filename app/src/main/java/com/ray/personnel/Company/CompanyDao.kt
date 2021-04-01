@@ -4,12 +4,21 @@ import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.internal.util.LinkedArrayList
 
 @Dao
 interface CompanyDao{
     @Query("SELECT * FROM company")
     fun getAll(): Flowable<List<Company>>
+
+
+
+    @Query("SELECT COUNT(*) FROM company")
+    fun getSize(): Single<Int>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertBackground(company: Company)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(company: Company): Completable
