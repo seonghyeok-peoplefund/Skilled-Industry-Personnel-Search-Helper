@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp">
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout1"
@@ -47,8 +50,7 @@
         android:background="#808080"
         app:layout_constraintBottom_toTopOf="@+id/layout2"
         app:layout_constraintTop_toBottomOf="@+id/layout1"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"/>
+        android:layout_margin="10dp"/>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout2"
         android:layout_width="match_parent"
@@ -91,8 +93,7 @@
         android:background="#808080"
         app:layout_constraintBottom_toTopOf="@+id/layout3"
         app:layout_constraintTop_toBottomOf="@+id/layout2"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp" />
+        android:layout_margin="10dp" />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout3"
         android:layout_width="match_parent"
@@ -135,8 +136,7 @@
         android:background="#808080"
         app:layout_constraintBottom_toTopOf="@+id/layout4"
         app:layout_constraintTop_toBottomOf="@+id/layout3"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp" />
+        android:layout_margin="10dp" />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout4"
         android:layout_width="match_parent"
@@ -179,8 +179,7 @@
         android:background="#808080"
         app:layout_constraintBottom_toTopOf="@+id/layout5"
         app:layout_constraintTop_toBottomOf="@+id/layout4"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"  />
+        android:layout_margin="10dp" />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout5"
         android:layout_width="match_parent"

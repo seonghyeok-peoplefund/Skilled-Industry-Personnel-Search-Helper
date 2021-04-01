@@ -3,6 +3,7 @@ package com.ray.personnel.Activity.CompanyActivity.CompanyInfo
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -104,12 +105,8 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
             PREFERRED -> {
                 (holder as ListHolder).content.text = company.preferred
             }
-            BENEFITS -> {
-                //(holder as ListHolder).content.text = company.benefits
-                (holder as DefaultHolder).content.text = "BENEFIT, NOTHING"+(position.toString())
-            }
             LOCATION -> {
-                (holder as LocationHolder).content.text = company.distance.toString()+" M 떨어져있습니다."
+                (holder as LocationHolder).content.text = "거리 : "+company.distance.toString()+" M"
                 holder.subcontent.text = company.location?.full_location
                 holder.wrapper.setOnClickListener {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.co.kr/maps/@"+company.location!!.geo_location.latitude+","+company.location!!.geo_location.longitude+",20z"))
@@ -166,8 +163,8 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
 
         fun setNews(n: ArrayList<News>){
             for(i in 0 until n.size){
-                title[i].text = n[i].searchTitle
-                contents[i].text = n[i].searchDescription
+                title[i].text = Html.fromHtml(n[i].searchTitle)
+                contents[i].text = Html.fromHtml(n[i].searchDescription)
                 button[i].setOnClickListener{
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(n[i].searchURL))
                     mContext.startActivity(intent)
@@ -190,10 +187,10 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
         const val MAIN_TASKS = INTRO + 1
         const val REQUIREMENTS = MAIN_TASKS + 1
         const val PREFERRED = REQUIREMENTS + 1
-        const val BENEFITS = PREFERRED + 1
-        const val LOCATION = BENEFITS + 1
+        const val LOCATION = PREFERRED + 1
         const val NEWS = LOCATION + 1
 
+        //const val BENEFITS = PREFERRED + 1
         //const val NORMAL = 0
         //const val = NORMAL + 1
     }
