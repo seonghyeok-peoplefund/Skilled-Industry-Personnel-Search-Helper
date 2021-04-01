@@ -8,11 +8,14 @@ import android.os.Build
 import android.os.Environment
 import androidx.core.content.ContextCompat
 import com.google.gson.GsonBuilder
+import com.ray.personnel.Company.Location
 import java.io.File
 import java.io.FileWriter
 
 object Global : Application() {
     val gson = GsonBuilder().create()
+    //val curLocation = Location.GeoLocation(37.49588155109891, 127.03185679685451)
+    val curLocation = Location.GeoLocation(37.4945831, 127.0374230)
 
     fun checkPermissionForCulture(context: Context?): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

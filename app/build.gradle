@@ -37,6 +37,13 @@ android {
 }
 
 dependencies {
+    // Lifecycle components
+    def archLifecycleVersion = '2.2.0'
+    implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
+    kapt "androidx.lifecycle:lifecycle-compiler:$archLifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$archLifecycleVersion"
+    kapt "com.android.databinding:compiler:4.0.1"
+
     def room_version = "2.2.6"
 
     implementation "androidx.room:room-runtime:$room_version"

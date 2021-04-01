@@ -12,6 +12,11 @@ interface CompanyDao{
     @Query("SELECT * FROM company")
     fun getAll(): Flowable<List<Company>>
 
+    @Update
+    fun updateAll(companies: List<Company>): Completable
+
+    @Query("SELECT * FROM company ORDER BY distance ASC")
+    fun getAllByDistance(): Flowable<List<Company>>
 
 
     @Query("SELECT COUNT(*) FROM company")

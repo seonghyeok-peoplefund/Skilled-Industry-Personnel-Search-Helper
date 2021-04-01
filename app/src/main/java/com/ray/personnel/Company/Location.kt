@@ -11,7 +11,7 @@ class Location {
     lateinit var geo_location: GeoLocation
 
 
-    inner class GeoLocation(val latitude: Double, val longitude: Double)
+    class GeoLocation(val latitude: Double, val longitude: Double)
 
     companion object{
         fun getDistance(locationA: GeoLocation, locationB: GeoLocation): Int{

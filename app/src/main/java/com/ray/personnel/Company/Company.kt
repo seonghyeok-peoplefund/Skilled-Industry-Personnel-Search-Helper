@@ -60,6 +60,8 @@ data class Company constructor(var title: String) : Comparable<Company> {
     var benefits = "복지는 ~~가 있습니."
     @ColumnInfo
     var location: Location? = null
+    @ColumnInfo
+    var distance: Int = 0x7fffffff
 
     //TODO : 금액, 규모
     /**

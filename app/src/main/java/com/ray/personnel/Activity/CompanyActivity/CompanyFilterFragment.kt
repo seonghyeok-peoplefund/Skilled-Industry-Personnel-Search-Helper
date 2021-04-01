@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.kaopiz.kprogresshud.KProgressHUD
 import com.ray.personnel.Activity.CompanyActivity.CompanyList.CompanyListFragment
+import com.ray.personnel.Activity.Global
 import com.ray.personnel.Activity.SupportActivity
 import com.ray.personnel.Company.Company
 import com.ray.personnel.Company.CompanyDatabase
@@ -84,11 +85,15 @@ class CompanyFilterFragment : Fragment() {
                 doc.optJSONObject("job").optJSONObject("address").let { json ->
                     location = json.optString("country")
                     full_location = json.optString("full_location")
-                    geo_location = GeoLocation(
-                            json.optJSONObject("geo_location").optJSONObject("location").optDouble("lat"),
-                            json.optJSONObject("geo_location").optJSONObject("location").optDouble("lng"))
+                    geo_location = Location.GeoLocation(
+                        json.optJSONObject("geo_location").optJSONObject("location")
+                            .optDouble("lat"),
+                        json.optJSONObject("geo_location").optJSONObject("location")
+                            .optDouble("lng")
+                    )
                 }
             }
+            c.distance = Location.getDistance(c.location!!.geo_location, Global.curLocation)
             // regex로 괄호 바깥 & 따옴표 바깥에 있는 . 검색, 그뒤에는 제거함. 이후
             //TODO : 알고리즘 바꿔야함.
             c.intro = c.intro.replaceAfter(".", "").replaceBeforeLast("\n", "").replace(Regex(".+\\?"), "").replace(Regex("【[^】]*】"), "").replace(Regex("\\[[^\\]]*\\]"), "").trim()

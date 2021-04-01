@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.ColumnInfo
 import com.ray.personnel.Company.Company
@@ -66,6 +67,7 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
         MAIN_TASKS, REQUIREMENTS, PREFERRED -> {
             ListHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_list, parent, false))
         }
+        LOCATION-> LocationHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_subtitled, parent, false))
         else-> {
             DefaultHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_default, parent, false))
         }
@@ -77,6 +79,7 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
         REQUIREMENTS -> REQUIREMENTS
         PREFERRED -> PREFERRED
         NEWS -> NEWS
+        LOCATION -> LOCATION
 
         else -> {
             DEFAULT
@@ -106,7 +109,12 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
                 (holder as DefaultHolder).content.text = "BENEFIT, NOTHING"+(position.toString())
             }
             LOCATION -> {
-                (holder as DefaultHolder).content.text = "LOCATION, NOTHING"+(position.toString())
+                (holder as LocationHolder).content.text = company.distance.toString()+" M 떨어져있습니다."
+                holder.subcontent.text = company.location?.full_location
+                holder.wrapper.setOnClickListener {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.co.kr/maps/@"+company.location!!.geo_location.latitude+","+company.location!!.geo_location.longitude+",20z"))
+                    mContext.startActivity(intent)
+                }
             }
             NEWS -> {
                 if(company.news == null){
@@ -168,6 +176,11 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
         }
     }
 
+    inner class LocationHolder(v: View) : RecyclerView.ViewHolder(v) {
+        val content: TextView = v.findViewById(R.id.content)
+        val subcontent: TextView = v.findViewById(R.id.subcontent)
+        val wrapper: ConstraintLayout = v.findViewById(R.id.wrapper)
+    }
 
 
     companion object{
