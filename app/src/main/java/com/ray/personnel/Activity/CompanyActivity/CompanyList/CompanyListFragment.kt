@@ -74,6 +74,7 @@ class CompanyListFragment() : Fragment() {
         view.findViewById<Spinner>(R.id.company_list_sp2).onItemSelectedListener = object:
             AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
+
             }
             override fun onItemSelected(parent: AdapterView<*>?, v: View, position: Int, id: Long) {
 

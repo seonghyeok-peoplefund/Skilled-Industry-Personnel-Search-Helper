@@ -10,13 +10,13 @@ import io.reactivex.internal.util.LinkedArrayList
 @Dao
 interface CompanyDao{
     @Query("SELECT * FROM company")
-    fun getAll(): Flowable<List<Company>>
+    fun getAll(): Single<List<Company>>
 
     @Update
     fun updateAll(companies: List<Company>): Completable
 
     @Query("SELECT * FROM company ORDER BY distance ASC")
-    fun getAllByDistance(): Flowable<List<Company>>
+    fun getAllByDistance(): Single<List<Company>>
 
 
     @Query("SELECT COUNT(*) FROM company")
@@ -38,7 +38,7 @@ interface CompanyDao{
     fun delete(company: Company): Completable
 
     @Query("SELECT * FROM company WHERE title = :title AND department = :department")
-    fun getCompany(title: String, department: String): Observable<Company?>
+    fun getCompany(title: String, department: String): Single<Company?>
 
     @Query("DELETE FROM company")
     fun deleteAll(): Completable

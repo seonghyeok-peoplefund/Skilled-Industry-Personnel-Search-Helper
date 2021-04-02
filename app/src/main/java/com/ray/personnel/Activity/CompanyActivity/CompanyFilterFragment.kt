@@ -6,8 +6,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.SpinnerAdapter
 import androidx.annotation.UiThread
 import androidx.fragment.app.Fragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -17,6 +20,7 @@ import com.ray.personnel.Activity.Global
 import com.ray.personnel.Activity.SupportActivity
 import com.ray.personnel.Company.Company
 import com.ray.personnel.Company.CompanyDatabase
+import com.ray.personnel.Company.CompanyOccupation
 import com.ray.personnel.Company.Location
 import com.ray.personnel.Parser.CompanyListParser
 import com.ray.personnel.R
@@ -30,7 +34,6 @@ import java.util.*
 
 
 class CompanyFilterFragment : Fragment() {
-
     lateinit var progress: KProgressHUD
     lateinit var ctx: Context
 
@@ -86,10 +89,10 @@ class CompanyFilterFragment : Fragment() {
                     location = json.optString("country")
                     full_location = json.optString("full_location")
                     geo_location = Location.GeoLocation(
-                        json.optJSONObject("geo_location").optJSONObject("location")
-                            .optDouble("lat"),
-                        json.optJSONObject("geo_location").optJSONObject("location")
-                            .optDouble("lng")
+                            json.optJSONObject("geo_location").optJSONObject("location")
+                                    .optDouble("lat"),
+                            json.optJSONObject("geo_location").optJSONObject("location")
+                                    .optDouble("lng")
                     )
                 }
             }
@@ -113,8 +116,30 @@ class CompanyFilterFragment : Fragment() {
         // listDisposable이 마지막 onNext이후 onComplete를 너무 늦게 내버린다면 stack == 0이면서 disposed = false일 수도 있음.
     }
     fun initAdapter(view: View){
-        view.findViewById<Spinner>(R.id.sp1).adapter = ArrayAdapter(ctx, android.R.layout.simple_list_item_1, Arrays.asList("개발", "경영/비즈니스", "마케팅/광고", "디자인", "영ㅇㅂ", "고객서비스/리테일", "미디어", "인사", "게임 제작", "금융", "물류/무역", "엔지니어링/설계", "의료/제약/바이오", "제조/생산", "교육", "식/음료", "법률/법집행기관", "건설/시설", "공공/복지"))
+
+        view.findViewById<Spinner>(R.id.sp1).adapter = ArrayAdapter(ctx, android.R.layout.simple_list_item_1, CompanyOccupation.occupation.keys.toList())
         view.findViewById<Spinner>(R.id.sp2).adapter = ArrayAdapter(ctx, android.R.layout.simple_list_item_1, Arrays.asList("<비어 있음>"))
+        view.findViewById<Spinner>(R.id.sp1).onItemSelectedListener = object: OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>, v: View?, position: Int, id: Long) {
+                view.findViewById<Spinner>(R.id.sp2).adapter = ArrayAdapter(ctx, android.R.layout.simple_list_item_1, (CompanyOccupation.occupation[parent.getItemAtPosition(position).toString()]!!).keys.toList())
+
+            }
+
+        }
+        view.findViewById<Spinner>(R.id.sp2).onItemSelectedListener = object: OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>, v: View?, position: Int, id: Long) {
+                println(CompanyOccupation.occupation[view.findViewById<Spinner>(R.id.sp1).selectedItem.toString()]?.get(parent.getItemAtPosition(position).toString()))
+            }
+
+        }/*
+        view.findViewById<Spinner>(R.id.sp1).adapter = ArrayAdapter(ctx, android.R.layout.simple_list_item_1, Arrays.asList("<비어 있음>"))
+        view.findViewById<Spinner>(R.id.sp2).adapter = ArrayAdapter(ctx, android.R.layout.simple_list_item_1, Arrays.asList("<비어 있음>"))*/
         view.findViewById<Spinner>(R.id.sp3).adapter = ArrayAdapter(ctx, android.R.layout.simple_list_item_1, Arrays.asList("원티드"))
         view.findViewById<Spinner>(R.id.sp4).adapter = ArrayAdapter(ctx, android.R.layout.simple_list_item_1, Arrays.asList("서울"))
     }
@@ -147,3 +172,4 @@ class CompanyFilterFragment : Fragment() {
         super.onDestroy()
     }
 }
+
