@@ -1,17 +1,11 @@
-package com.ray.personnel.Parser
+package com.ray.personnel.model.parser
 
-import com.ray.personnel.Company.Company
-import com.ray.personnel.Company.CompanyDatabase
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.ray.personnel.company.Company
 import org.json.JSONObject
 import org.jsoup.Jsoup
 import org.reactivestreams.Publisher
 import org.reactivestreams.Subscriber
 import java.io.IOException
-import java.util.*
-import kotlin.jvm.Throws
 
 object CompanyListParser : Publisher<Company>{
 

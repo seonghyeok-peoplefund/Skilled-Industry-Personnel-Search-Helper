@@ -1,10 +1,7 @@
-package com.ray.personnel.Parser
+package com.ray.personnel.model.parser
 
-import com.ray.personnel.Activity.Global.saveFile
-import com.ray.personnel.Company.Company
+import com.ray.personnel.company.Company
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
-import org.jsoup.select.Elements
 import java.io.IOException
 import java.util.*
 import kotlin.jvm.Throws

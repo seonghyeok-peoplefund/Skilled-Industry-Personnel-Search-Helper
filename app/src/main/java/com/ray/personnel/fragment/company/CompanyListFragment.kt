@@ -1,6 +1,5 @@
-package com.ray.personnel.Activity.CompanyActivity.CompanyList
+package com.ray.personnel.fragment.company
 
-import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
@@ -16,15 +15,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
-import com.ray.personnel.Activity.CompanyActivity.CompanyInfo.CompanyInfo
-import com.ray.personnel.Activity.Global
-import com.ray.personnel.Activity.Global.gson
-import com.ray.personnel.Activity.SupportActivity
-import com.ray.personnel.Company.Company
-import com.ray.personnel.Company.CompanyDatabase
-import com.ray.personnel.Company.Location
+import com.ray.personnel.Global.gson
+import com.ray.personnel.company.Company
+import com.ray.personnel.model.database.CompanyDatabase
 import com.ray.personnel.R
-import io.reactivex.Observable
+import com.ray.personnel.viewmodel.company.list.CompanyListAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.*

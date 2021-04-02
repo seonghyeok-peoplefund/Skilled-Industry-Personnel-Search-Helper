@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.ray.personnel.Activity.CompanyActivity.CompanyList.CompanyListFragment"
+        android:name="com.ray.personnel.fragment.company.CompanyListFragment"
         android:label="CompanyList"
         tools:layout="@layout/company_list">
 

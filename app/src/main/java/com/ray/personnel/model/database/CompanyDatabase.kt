@@ -1,14 +1,13 @@
-package com.ray.personnel.Company
+package com.ray.personnel.model.database
 
 import android.content.Context
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.google.gson.reflect.TypeToken
-import com.ray.personnel.Activity.Global
-import com.ray.personnel.Parser.CompanyListParser
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Observable
+import com.ray.personnel.Global
+import com.ray.personnel.company.Company
+import com.ray.personnel.company.Location
+import com.ray.personnel.model.parser.CompanyListParser
 
 
 @Database(entities = [Company::class], version = 1)
@@ -17,7 +16,8 @@ abstract class CompanyDatabase : RoomDatabase() {
     abstract fun companyDao(): CompanyDao
     companion object{
         private var instance: CompanyDatabase? = null
-        fun getInstance(context: Context): CompanyDatabase = instance ?: run {
+        fun getInstance(context: Context): CompanyDatabase = instance
+                ?: run {
             instance = Room.databaseBuilder(context.applicationContext, CompanyDatabase::class.java, "company_db_"+CompanyListParser.sortType)
                     .fallbackToDestructiveMigration()
                     .addCallback(object : Callback() {

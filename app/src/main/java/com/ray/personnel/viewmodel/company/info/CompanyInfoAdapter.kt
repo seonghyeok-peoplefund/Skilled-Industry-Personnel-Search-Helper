@@ -1,4 +1,4 @@
-package com.ray.personnel.Activity.CompanyActivity.CompanyInfo
+package com.ray.personnel.viewmodel.company.info
 
 import android.content.Context
 import android.content.Intent
@@ -7,15 +7,11 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.ListView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.ColumnInfo
-import com.ray.personnel.Company.Company
-import com.ray.personnel.Company.Location
-import com.ray.personnel.Company.News
+import com.ray.personnel.company.Company
+import com.ray.personnel.company.News
 import com.ray.personnel.R
 import kotlin.collections.ArrayList
 
@@ -63,12 +59,12 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when(viewType){
-        TITLE-> SubtitledHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_subtitled, parent, false))
-        NEWS-> NewsHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_news, parent, false))
+        TITLE -> SubtitledHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_subtitled, parent, false))
+        NEWS -> NewsHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_news, parent, false))
         MAIN_TASKS, REQUIREMENTS, PREFERRED -> {
             ListHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_list, parent, false))
         }
-        LOCATION-> LocationHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_location, parent, false))
+        LOCATION -> LocationHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_location, parent, false))
         else-> {
             DefaultHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_default, parent, false))
         }

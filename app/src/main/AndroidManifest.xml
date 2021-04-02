@@ -14,14 +14,14 @@
         android:theme="@style/Theme.산업기능요원"
         android:requestLegacyExternalStorage="true" >
         <activity
-            android:name=".Activity.SupportActivity">
+            android:name=".SupportActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.ray.personnel.Activity.CompanyActivity.CompanyInfo.CompanyInfo"/>
+            android:name="com.ray.personnel.fragment.company.CompanyInfo"/>
     </application>
 
 </manifest>

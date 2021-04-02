@@ -1,16 +1,12 @@
-package com.ray.personnel.Parser
+package com.ray.personnel.model.parser
 
-import com.ray.personnel.Company.News
+import com.ray.personnel.company.News
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.json.JSONObject
 import org.jsoup.Connection
 import org.jsoup.Jsoup
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
 import java.net.URLEncoder
 import java.util.*
 import java.util.concurrent.Callable

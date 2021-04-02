@@ -1,11 +1,9 @@
-package com.ray.personnel.Company
+package com.ray.personnel.model.database
 
 import androidx.room.*
+import com.ray.personnel.company.Company
 import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.internal.util.LinkedArrayList
 
 @Dao
 interface CompanyDao{

@@ -1,8 +1,7 @@
-package com.ray.personnel.Activity.CompanyActivity
+package com.ray.personnel.fragment.company
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,19 +9,17 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import android.widget.SpinnerAdapter
 import androidx.annotation.UiThread
 import androidx.fragment.app.Fragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.kaopiz.kprogresshud.KProgressHUD
-import com.ray.personnel.Activity.CompanyActivity.CompanyList.CompanyListFragment
-import com.ray.personnel.Activity.Global
-import com.ray.personnel.Activity.SupportActivity
-import com.ray.personnel.Company.Company
-import com.ray.personnel.Company.CompanyDatabase
-import com.ray.personnel.Company.CompanyOccupation
-import com.ray.personnel.Company.Location
-import com.ray.personnel.Parser.CompanyListParser
+import com.ray.personnel.Global
+import com.ray.personnel.SupportActivity
+import com.ray.personnel.company.Company
+import com.ray.personnel.model.database.CompanyDatabase
+import com.ray.personnel.company.CompanyOccupation
+import com.ray.personnel.company.Location
+import com.ray.personnel.model.parser.CompanyListParser
 import com.ray.personnel.R
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -49,10 +46,10 @@ class CompanyFilterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initAdapter(view)
         view.findViewById<FloatingActionButton>(R.id.btn1).setOnClickListener {
-            CompanyDatabase.getInstance(ctx).companyDao().getSize().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{size ->
+            CompanyDatabase.getInstance(ctx).companyDao().getSize().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{ size ->
                 //왜 여러번될까
                 if(size == 0) getCompanyList()
-                else (activity as SupportActivity).loadFragment(CompanyListFragment(), true)
+                else (activity as SupportActivity).loadFragmentAnimation(CompanyListFragment())
             }
         }
 
@@ -109,7 +106,7 @@ class CompanyFilterFragment : Fragment() {
                         company_stack--
                         if(listDisposable.isDisposed && company_stack == 0){
                             progress_success(progress)
-                            (activity as SupportActivity).loadFragment(CompanyListFragment(), true)
+                            (activity as SupportActivity).loadFragmentAnimation(CompanyListFragment())
                         }
                     }
         }

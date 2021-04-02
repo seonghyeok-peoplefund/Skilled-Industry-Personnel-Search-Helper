@@ -1,7 +1,6 @@
-package com.ray.personnel.Activity.CompanyActivity.CompanyList
+package com.ray.personnel.viewmodel.company.list
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Outline
 import android.net.Uri
 import android.view.LayoutInflater
@@ -9,19 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.like.LikeButton
 import com.like.OnLikeListener
-import com.ray.personnel.Company.Company
-import com.ray.personnel.Company.CompanyDatabase
+import com.ray.personnel.company.Company
+import com.ray.personnel.model.database.CompanyDatabase
 import com.ray.personnel.R
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import java.util.*
 
 class CompanyListAdapter(private val mContext: Context, private val companies: List<Company>) : RecyclerView.Adapter<CompanyListAdapter.SimpleCompanyHolder>() {
     var onItemClickListener: OnItemClickListener? = null

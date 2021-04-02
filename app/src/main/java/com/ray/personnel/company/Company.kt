@@ -1,17 +1,11 @@
-package com.ray.personnel.Company
+package com.ray.personnel.company
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.ray.personnel.Activity.Global
-import com.ray.personnel.Parser.NaverParser
+import com.ray.personnel.model.parser.NaverParser
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import org.json.JSONObject
-import org.jsoup.Jsoup
-import java.util.concurrent.Callable
 
 
 @Entity
@@ -19,7 +13,7 @@ data class Company constructor(var title: String) : Comparable<Company> {
     /**
      * state means 'how many does it load'
      * 0 : init only
-     * 1 : loaded by @link com.ray.personnel.Parser.WantedParser
+     * 1 : loaded by @link com.ray.personnel.Model.Parser.WantedParser
      */
     @PrimaryKey(autoGenerate = true)
     var id = 0

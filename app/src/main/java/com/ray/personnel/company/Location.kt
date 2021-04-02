@@ -1,7 +1,5 @@
-package com.ray.personnel.Company
+package com.ray.personnel.company
 
-import androidx.room.TypeConverter
-import com.ray.personnel.Activity.Global
 import kotlin.math.roundToInt
 
 class Location {

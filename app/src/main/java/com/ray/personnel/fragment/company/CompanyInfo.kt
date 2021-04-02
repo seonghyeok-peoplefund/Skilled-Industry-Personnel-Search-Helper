@@ -1,4 +1,4 @@
-package com.ray.personnel.Activity.CompanyActivity.CompanyInfo
+package com.ray.personnel.fragment.company
 
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -13,9 +13,10 @@ import androidx.palette.graphics.Palette
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
-import com.ray.personnel.Activity.Global.gson
-import com.ray.personnel.Company.Company
+import com.ray.personnel.Global.gson
+import com.ray.personnel.company.Company
 import com.ray.personnel.R
+import com.ray.personnel.viewmodel.company.info.CompanyInfoAdapter
 import com.ray.personnel.databinding.CompanyInfoBinding
 
 class CompanyInfo : AppCompatActivity() {
