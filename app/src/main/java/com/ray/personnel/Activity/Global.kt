@@ -14,8 +14,7 @@ import java.io.FileWriter
 
 object Global : Application() {
     val gson = GsonBuilder().create()
-    //val curLocation = Location.GeoLocation(37.49588155109891, 127.03185679685451)
-    val curLocation = Location.GeoLocation(37.4945831, 127.0374230)
+    val curLocation = Location.GeoLocation(37.49588155109891, 127.03185679685451)
 
     fun checkPermissionForCulture(context: Context?): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
