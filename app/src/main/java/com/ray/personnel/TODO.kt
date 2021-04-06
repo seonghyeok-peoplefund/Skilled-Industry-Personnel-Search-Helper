@@ -10,14 +10,14 @@ class TODO{
     }
 }
 /**
+ *
+ *
  * https://www.wanted.co.kr/login
 https://puzzleleaf.tistory.com/50
 public boolean shouldOverrideUrlLoading(WebView view, String url) {
 //return super.shouldOverrideUrlLoading(view, url);
-view.loadUrl(url);
-return true;
 }
- 로그인 넣기
+로그인 넣기
 
 
 
@@ -35,6 +35,8 @@ Ray Jang  오후 6:27
 Ray Jang  오후 6:35
 자신의위치 : spinner에서 선택 Or 추가 -> 팝업창으로 주소등록가능
 
+view.loadUrl(url);
+return true;
  */
 /*
 var str = “”;

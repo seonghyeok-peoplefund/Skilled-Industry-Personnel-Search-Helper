@@ -14,7 +14,7 @@ import com.ray.personnel.R
 
 class SupportViewModel(application: Application): AndroidViewModel(application){
     val text = ObservableField<String>()
-    val curFragment = MutableLiveData<Fragment>()
+    val curFragment = MutableLiveData<Fragment>(CompanyFilterFragment())
 
     /*
     MutableLiveData<

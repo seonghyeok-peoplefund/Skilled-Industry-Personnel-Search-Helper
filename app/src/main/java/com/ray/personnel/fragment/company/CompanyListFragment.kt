@@ -5,13 +5,17 @@ import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
@@ -19,31 +23,45 @@ import com.ray.personnel.Global.gson
 import com.ray.personnel.company.Company
 import com.ray.personnel.model.database.CompanyDatabase
 import com.ray.personnel.R
+import com.ray.personnel.databinding.CompanyListBinding
+import com.ray.personnel.databinding.SupportLayoutBinding
+import com.ray.personnel.fragment.FragmentChangeInterface
+import com.ray.personnel.viewmodel.SupportViewModel
 import com.ray.personnel.viewmodel.company.list.CompanyListAdapter
+import com.ray.personnel.viewmodel.company.list.CompanyListViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 
-class CompanyListFragment() : Fragment() {
+class CompanyListFragment() : Fragment(), FragmentChangeInterface {
     lateinit var ctx: Context
+    override var isAttached: MutableLiveData<Any?> = MutableLiveData()
+    private var _binding: CompanyListBinding? = null
+    private val binding get() = _binding!!
+    override val model: CompanyListViewModel by activityViewModels()
 
     lateinit var companies: List<Company>
     override fun onAttach(context: Context) {
         super.onAttach(context)
         ctx = context
+        isAttached.value = null
     }
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
-            = inflater.inflate(R.layout.company_list, container, false)
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
+        _binding = CompanyListBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setRecyclerView(view)
         setSpinner(view)
         getCompany(view)
+        binding.viewmodel = model
+        binding.lifecycleOwner = this
     }
 
     private fun getCompany(view: View){
@@ -71,7 +89,7 @@ class CompanyListFragment() : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
             }
-            override fun onItemSelected(parent: AdapterView<*>?, v: View, position: Int, id: Long) {
+            override fun onItemSelected(parent: AdapterView<*>?, v: View?, position: Int, id: Long) {
 
             }
         }
@@ -101,6 +119,11 @@ class CompanyListFragment() : Fragment() {
                 outRect.bottom = outerMargin
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }
