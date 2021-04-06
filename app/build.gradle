@@ -51,8 +51,8 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
     implementation "androidx.room:room-rxjava2:$room_version"
     //듣보잡 라이브러리
+    implementation 'com.daimajia.numberprogressbar:library:1.4@aar'
     implementation 'com.github.jd-alexander:LikeButton:0.2.3'
-    implementation 'com.kaopiz:kprogresshud:1.0.2'
     //일반 라이브러리
     implementation 'org.jsoup:jsoup:1.13.1'
     //준필수 라이브러리

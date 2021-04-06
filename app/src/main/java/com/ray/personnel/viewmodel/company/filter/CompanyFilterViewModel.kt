@@ -1,16 +1,15 @@
 package com.ray.personnel.viewmodel.company.filter
 
 import android.app.Application
-import android.content.Context
 import android.view.View
-import androidx.annotation.UiThread
+import androidx.databinding.Bindable
+import androidx.databinding.BindingAdapter
 import androidx.databinding.ObservableField
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.kaopiz.kprogresshud.KProgressHUD
+import com.daimajia.numberprogressbar.NumberProgressBar
 import com.ray.personnel.Global
-import com.ray.personnel.SupportActivity
 import com.ray.personnel.company.Company
 import com.ray.personnel.company.Location
 import com.ray.personnel.fragment.company.CompanyListFragment
@@ -26,11 +25,27 @@ import org.jsoup.Jsoup
 
 class CompanyFilterViewModel(application: Application): AndroidViewModel(application), FragmentChangeModelInterface {
     override var curFragment = MutableLiveData<Fragment>()
-    lateinit var progress: KProgressHUD
+    val progress_max = MutableLiveData<Int>(100)
+    val progress_cur = MutableLiveData<Int>(0)
+    fun getCompanyList(){
+        CompanyListParser.let{ parse ->
+            var i = 0
+            listDisposable = Observable.fromPublisher(parse).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe { progress_max.value = 100; progress_cur.value = 0 }
+                    .subscribe(
+                            { p ->
+                                getCompanyDetail(p)
+                                company_stack ++
+                                progress_cur.value = progress_cur.value?.plus(1) },
+                            { err -> progress_cur.value = 0; println("onError - $err") },
+                            { progress_cur.value = progress_cur.value?.plus(1) })
+        }
+    }
 
-
-
-    //@BindingAdapter("onClick")
+    //"\.(?=(((?!\]).)*\[)|[^\[\]]*$)"
+    //\.(?=(((?!\]).)*\[)|[^\[\]]*$) <- Pattern.MULTILINE (?m)
+    var company_stack = 0
+    lateinit var listDisposable: Disposable
     fun doFilter(v: View){
         CompanyDatabase.getInstance(getApplication()).companyDao().getSize().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{ size ->
             //왜 여러번될까
@@ -38,25 +53,6 @@ class CompanyFilterViewModel(application: Application): AndroidViewModel(applica
             else curFragment.value = CompanyListFragment()
         }
     }
-
-
-    var company_stack = 0
-    lateinit var listDisposable: Disposable
-    fun getCompanyList(){
-        CompanyListParser.let{ parse ->
-            var i = 0
-            listDisposable = Observable.fromPublisher(parse).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe { progress = progress_init(getApplication(), 100) }
-                    .subscribe(
-                            { p ->
-                                getCompanyDetail(p)
-                                company_stack ++
-                                progress_setPercent(progress, ++i) },
-                            { err -> progress_fail(progress); println("onError - $err") },
-                            { progress_setPercent(progress, ++i) })
-        }
-    }//"\.(?=(((?!\]).)*\[)|[^\[\]]*$)"
-    //\.(?=(((?!\]).)*\[)|[^\[\]]*$) <- Pattern.MULTILINE (?m)
     fun getCompanyDetail(c: Company){
         Observable.fromCallable {
             val doc = JSONObject(Jsoup.connect(Company.WANTED_INFORMATION_URL + c.wanted_id).ignoreContentType(true).execute().body())
@@ -91,39 +87,10 @@ class CompanyFilterViewModel(application: Application): AndroidViewModel(applica
                     .subscribe{
                         company_stack--
                         if(listDisposable.isDisposed && company_stack == 0){
-                            progress_success(progress)
                             curFragment.value = CompanyListFragment()
                         }
                     }
         }
         // listDisposable이 마지막 onNext이후 onComplete를 너무 늦게 내버린다면 stack == 0이면서 disposed = false일 수도 있음.
-    }
-
-    @UiThread
-    fun progress_init(ctx: Context, maxProgress: Int): KProgressHUD {
-        val progress = KProgressHUD.create(ctx)
-                .setStyle(KProgressHUD.Style.ANNULAR_DETERMINATE)
-                .setLabel("Please wait")
-                .setAutoDismiss(false)
-                .setDimAmount(0.5f)
-                .setMaxProgress(maxProgress)
-                .show()
-        return progress
-    }
-    @UiThread
-    fun progress_success(progress: KProgressHUD){
-        progress.dismiss()
-    }
-    @UiThread
-    fun progress_fail(progress: KProgressHUD){
-        progress.dismiss()
-    }
-    @UiThread
-    fun progress_setPercent(progress: KProgressHUD, percent: Int){
-        progress.setProgress(percent)
-    }
-
-    override fun onCleared(){
-        if(::progress.isInitialized && progress.isShowing) progress.dismiss()
     }
 }

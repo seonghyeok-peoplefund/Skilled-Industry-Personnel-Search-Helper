@@ -7,6 +7,7 @@ import io.reactivex.Single
 
 @Dao
 interface CompanyDao{
+
     @Query("SELECT * FROM company")
     fun getAll(): Single<List<Company>>
 

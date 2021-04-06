@@ -4,7 +4,8 @@ class CompanyOccupation {
     companion object{
         val occupation :Map<String, Map<String, Int>> =
                 mapOf(
-                        "개" to mapOf("서버 개발자" to 872,
+                        "NONE" to mapOf("NONE" to -1),
+                        "개발" to mapOf("서버 개발자" to 872,
                                 "웹 개발자" to 873,
                                 "프론트엔드 개발자" to 669,
                                 "자바 개발자" to 660,

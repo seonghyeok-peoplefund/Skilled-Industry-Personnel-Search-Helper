@@ -14,8 +14,8 @@ import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.observe
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.kaopiz.kprogresshud.KProgressHUD
 import com.ray.personnel.Global
 import com.ray.personnel.SupportActivity
 import com.ray.personnel.company.Company
@@ -36,6 +36,7 @@ import io.reactivex.schedulers.Schedulers
 import org.json.JSONObject
 import org.jsoup.Jsoup
 import java.util.*
+import androidx.lifecycle.Observer
 
 
 class CompanyFilterFragment : Fragment(), FragmentChangeInterface {
@@ -61,38 +62,34 @@ class CompanyFilterFragment : Fragment(), FragmentChangeInterface {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initAdapter(view)
         binding.viewmodel = model
         binding.lifecycleOwner = this
+        initAdapter(view)
+        model.progress_cur.observe(viewLifecycleOwner, Observer<Int>{ id  -> binding.progress.progress = id })
+        model.progress_max.observe(viewLifecycleOwner, Observer<Int>{ id  -> binding.progress.max = id })
     }
 
     fun initAdapter(view: View){
 
-        view.findViewById<Spinner>(R.id.sp1).adapter = ArrayAdapter(ctx, android.R.layout.simple_list_item_1, CompanyOccupation.occupation.keys.toList())
-        view.findViewById<Spinner>(R.id.sp2).adapter = ArrayAdapter(ctx, android.R.layout.simple_list_item_1, Arrays.asList("<비어 있음>"))
-        view.findViewById<Spinner>(R.id.sp1).onItemSelectedListener = object: OnItemSelectedListener{
+        binding.jobs1 = CompanyOccupation.occupation.keys.toList()
+        binding.jobs2 = Arrays.asList("<비어 있음>")
+        binding.jobs3 = Arrays.asList("원티드")
+        binding.jobs4 = Arrays.asList("서울")
+        binding.sp1.onItemSelectedListener = object: OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
-
             override fun onItemSelected(parent: AdapterView<*>, v: View?, position: Int, id: Long) {
-                view.findViewById<Spinner>(R.id.sp2).adapter = ArrayAdapter(ctx, android.R.layout.simple_list_item_1, (CompanyOccupation.occupation[parent.getItemAtPosition(position).toString()]!!).keys.toList())
-
+                binding.jobs2 = (CompanyOccupation.occupation[parent.getItemAtPosition(position).toString()]!!).keys.toList()
             }
-
         }
-        view.findViewById<Spinner>(R.id.sp2).onItemSelectedListener = object: OnItemSelectedListener{
+        binding.sp2.onItemSelectedListener = object: OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
-
             override fun onItemSelected(parent: AdapterView<*>, v: View?, position: Int, id: Long) {
-                println(CompanyOccupation.occupation[view.findViewById<Spinner>(R.id.sp1).selectedItem.toString()]?.get(parent.getItemAtPosition(position).toString()))
+                val list = binding.jobs2
+                CompanyListParser.sortType = CompanyOccupation.occupation[view.findViewById<Spinner>(R.id.sp1).selectedItem.toString()]!![list!![position]!!]!!
             }
-
-        }/*
-        view.findViewById<Spinner>(R.id.sp1).adapter = ArrayAdapter(ctx, android.R.layout.simple_list_item_1, Arrays.asList("<비어 있음>"))
-        view.findViewById<Spinner>(R.id.sp2).adapter = ArrayAdapter(ctx, android.R.layout.simple_list_item_1, Arrays.asList("<비어 있음>"))*/
-        view.findViewById<Spinner>(R.id.sp3).adapter = ArrayAdapter(ctx, android.R.layout.simple_list_item_1, Arrays.asList("원티드"))
-        view.findViewById<Spinner>(R.id.sp4).adapter = ArrayAdapter(ctx, android.R.layout.simple_list_item_1, Arrays.asList("서울"))
+        }
     }
 
     override fun onDestroyView() {
