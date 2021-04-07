@@ -2,31 +2,37 @@ package com.ray.personnel.viewmodel.company.filter
 
 import android.app.Application
 import android.view.View
-import androidx.databinding.Bindable
-import androidx.databinding.BindingAdapter
-import androidx.databinding.ObservableField
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.daimajia.numberprogressbar.NumberProgressBar
 import com.ray.personnel.Global
 import com.ray.personnel.company.Company
 import com.ray.personnel.company.Location
 import com.ray.personnel.fragment.company.CompanyListFragment
-import com.ray.personnel.model.database.CompanyDatabase
-import com.ray.personnel.model.parser.CompanyListParser
+import com.ray.personnel.utils.Constants
+import com.ray.personnel.utils.PreferenceManager
+import com.ray.personnel.utils.database.CompanyDatabase
+import com.ray.personnel.utils.parser.CompanyListParser
 import com.ray.personnel.viewmodel.FragmentChangeModelInterface
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import org.json.JSONObject
+import org.jsoup.HttpStatusException
 import org.jsoup.Jsoup
 
 class CompanyFilterViewModel(application: Application): AndroidViewModel(application), FragmentChangeModelInterface {
     override var curFragment = MutableLiveData<Fragment>()
+    var latitude = MutableLiveData<String>(Global.curLocation.latitude.toString())
+    var longitude = MutableLiveData<String>(Global.curLocation.longitude.toString())
+    var warningColor = MutableLiveData<Int>()
+    var warningText = MutableLiveData<String>()
+
     val progress_max = MutableLiveData<Int>(100)
     val progress_cur = MutableLiveData<Int>(0)
+
+
     fun getCompanyList(){
         CompanyListParser.let{ parse ->
             var i = 0
@@ -42,6 +48,7 @@ class CompanyFilterViewModel(application: Application): AndroidViewModel(applica
         }
     }
 
+
     //"\.(?=(((?!\]).)*\[)|[^\[\]]*$)"
     //\.(?=(((?!\]).)*\[)|[^\[\]]*$) <- Pattern.MULTILINE (?m)
     var company_stack = 0
@@ -55,7 +62,7 @@ class CompanyFilterViewModel(application: Application): AndroidViewModel(applica
     }
     fun getCompanyDetail(c: Company){
         Observable.fromCallable {
-            val doc = JSONObject(Jsoup.connect(Company.WANTED_INFORMATION_URL + c.wanted_id).ignoreContentType(true).execute().body())
+            val doc = JSONObject(Jsoup.connect(Constants.WANTED_INFORMATION + c.job_id).ignoreContentType(true).execute().body())
             doc.optJSONObject("job").optJSONObject("detail").let { json ->
                 c.intro = json.optString("intro")
                 c.main_tasks = json.optString("main_tasks")
@@ -75,22 +82,41 @@ class CompanyFilterViewModel(application: Application): AndroidViewModel(applica
                     )
                 }
             }
-            c.distance = Location.getDistance(c.location!!.geo_location, Global.curLocation)
+            c.distance = Location.getDistance(c.location!!.geo_location, Location.GeoLocation(latitude.value!!.toDouble(), longitude.value!!.toDouble()))
             // regex로 괄호 바깥 & 따옴표 바깥에 있는 . 검색, 그뒤에는 제거함. 이후
             //TODO : 알고리즘 바꿔야함.
             c.intro = c.intro.replaceAfter(".", "").replaceBeforeLast("\n", "").replace(Regex(".+\\?"), "").replace(Regex("【[^】]*】"), "").replace(Regex("\\[[^\\]]*\\]"), "").trim()
+            c.company_id = doc.optJSONObject("job").optJSONObject("company").optInt("id").toString()
+            PreferenceManager.getString(getApplication(), Constants.TOKEN).let{ token ->
+                try {
+                    val doc2 = JSONObject(Jsoup.connect("https://www.wanted.co.kr/api/v4/companies/"+c.company_id+"/salary?period=1").cookie(Constants.TOKEN, token).ignoreContentType(true).execute().body())
+                    val length = doc2.optJSONArray("employee_histories").length()
+                    if(length > 0) {
+                        c.scale = doc2.optJSONArray("employee_histories").getJSONObject(length - 1).getInt("prsn_value")
+                        c.scale_date = doc2.optJSONArray("employee_histories").getJSONObject(doc2.optJSONArray("employee_histories").length() - 1).getString("base_ym")
+                        c.salary_normal = doc2.optJSONObject("salary").optString("formatted_avg_salary").replace("[^0-9]".toRegex(), "").toInt()
+                        c.salary_rookey = doc2.optJSONObject("salary").optString("formatted_rookey_salary").replace("[^0-9]".toRegex(), "").toInt()
+                    } else{
+                        println(c.title+"에는 정보가 담겨져 있지 않음.")
+                        println(doc2.toString())
+                    }
+                } catch (e: HttpStatusException) {
+                    println(c.title+"에는 정보가 담겨져 있지 않음.")
+                }
+            }
             c
         }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{ company ->
-            CompanyDatabase.getInstance(getApplication()).companyDao().insert(company)
-                    .subscribeOn(Schedulers.single())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe{
-                        company_stack--
-                        if(listDisposable.isDisposed && company_stack == 0){
-                            curFragment.value = CompanyListFragment()
+                CompanyDatabase.getInstance(getApplication()).companyDao().insert(company)
+                        .subscribeOn(Schedulers.single())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe {
+                            company_stack--
+                            if (listDisposable.isDisposed && company_stack == 0) {
+                                curFragment.value = CompanyListFragment()
+                            }
                         }
-                    }
-        }
+            }
+
         // listDisposable이 마지막 onNext이후 onComplete를 너무 늦게 내버린다면 stack == 0이면서 disposed = false일 수도 있음.
     }
 }

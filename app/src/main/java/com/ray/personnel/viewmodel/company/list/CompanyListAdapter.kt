@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide
 import com.like.LikeButton
 import com.like.OnLikeListener
 import com.ray.personnel.company.Company
-import com.ray.personnel.model.database.CompanyDatabase
+import com.ray.personnel.utils.database.CompanyDatabase
 import com.ray.personnel.R
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -39,7 +39,11 @@ class CompanyListAdapter(private val mContext: Context, private val companies: L
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SimpleCompanyHolder {
         val convertView = LayoutInflater.from(mContext).inflate(R.layout.company_list_item, parent, false)
-        return SimpleCompanyHolder(convertView)
+        val v = SimpleCompanyHolder(convertView)
+        if(viewType == 1) v.wrapper.setBackgroundColor(0x79ff0000)
+        else v.wrapper.setBackgroundColor(0x00000000)
+        println(viewType)
+        return v
     }
 
     override fun onBindViewHolder(holder: SimpleCompanyHolder, position: Int) {
@@ -70,6 +74,7 @@ class CompanyListAdapter(private val mContext: Context, private val companies: L
         })
     }
 
+    override fun getItemViewType(i: Int) = if(companies[i].scale > 0) 0; else 1
     override fun getItemCount() = companies.size
 
     //override fun getItemViewType(i: Int) = if(companies[i].isMilitary) 0 else 1
@@ -80,12 +85,14 @@ class CompanyListAdapter(private val mContext: Context, private val companies: L
         val title: TextView
         val department: TextView
         val favorite: LikeButton
+        val wrapper: View
 
         init {
             pane = convertView.findViewById(R.id.company_list_item_pane)
             img_thumb = convertView.findViewById(R.id.company_list_item_thumb)
             title = convertView.findViewById(R.id.company_list_item_title)
             department = convertView.findViewById(R.id.company_list_item_department)
+            wrapper = convertView.findViewById(R.id.wrapper)
             favorite = convertView.findViewById(R.id.favorite)
             val radius = 30f
             img_thumb.outlineProvider = object : ViewOutlineProvider() {

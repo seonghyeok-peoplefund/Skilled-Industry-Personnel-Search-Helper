@@ -1,4 +1,4 @@
-package com.ray.personnel.model.database
+package com.ray.personnel.utils.database
 
 import androidx.room.*
 import com.ray.personnel.company.Company

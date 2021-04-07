@@ -1,4 +1,4 @@
-package com.ray.personnel.model.parser
+package com.ray.personnel.utils.parser
 
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers

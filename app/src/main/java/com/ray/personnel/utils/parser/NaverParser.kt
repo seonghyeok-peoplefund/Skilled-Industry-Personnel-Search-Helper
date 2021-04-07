@@ -1,4 +1,4 @@
-package com.ray.personnel.model.parser
+package com.ray.personnel.utils.parser
 
 import com.ray.personnel.company.News
 import io.reactivex.Observable

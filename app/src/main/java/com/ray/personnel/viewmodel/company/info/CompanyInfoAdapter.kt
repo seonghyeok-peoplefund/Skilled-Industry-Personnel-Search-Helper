@@ -65,6 +65,8 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
             ListHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_list, parent, false))
         }
         LOCATION -> LocationHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_location, parent, false))
+        SCALE -> ScaleHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_scale, parent, false))
+        SALARY -> SalaryHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_salary, parent, false))
         else-> {
             DefaultHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_default, parent, false))
         }
@@ -77,6 +79,8 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
         PREFERRED -> PREFERRED
         NEWS -> NEWS
         LOCATION -> LOCATION
+        SCALE-> SCALE
+        SALARY-> SALARY
 
         else -> {
             DEFAULT
@@ -108,6 +112,14 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.co.kr/maps/@"+company.location!!.geo_location.latitude+","+company.location!!.geo_location.longitude+",20z"))
                     mContext.startActivity(intent)
                 }
+            }
+            SCALE -> {
+                (holder as ScaleHolder).content.text = "사원 : "+company.scale
+                holder.subcontent.text = company.scale_date.substring(0,2)+"년 "+company.scale_date.substring(2,4)+"월 기준"
+            }
+            SALARY -> {
+                (holder as SalaryHolder).content.text = "루키 : "+company.salary_rookey
+                holder.subcontent.text = "일반 : "+company.salary_normal
             }
             NEWS -> {
                 if(company.news == null){
@@ -174,17 +186,30 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
         val subcontent: TextView = v.findViewById(R.id.subcontent)
         val wrapper: ConstraintLayout = v.findViewById(R.id.wrapper)
     }
+    inner class SalaryHolder(v: View) : RecyclerView.ViewHolder(v) {
+        val content: TextView = v.findViewById(R.id.content)
+        val subcontent: TextView = v.findViewById(R.id.subcontent)
+        val wrapper: ConstraintLayout = v.findViewById(R.id.wrapper)
+    }
+
+    inner class ScaleHolder(v: View) : RecyclerView.ViewHolder(v) {
+        val content: TextView = v.findViewById(R.id.content)
+        val subcontent: TextView = v.findViewById(R.id.subcontent)
+        val wrapper: ConstraintLayout = v.findViewById(R.id.wrapper)
+    }
 
 
     companion object{
         const val DEFAULT = -1
         const val TITLE = 0
-        const val INTRO = TITLE + 1
+        const val SALARY = TITLE + 1
+        const val INTRO = SALARY + 1
         const val MAIN_TASKS = INTRO + 1
         const val REQUIREMENTS = MAIN_TASKS + 1
         const val PREFERRED = REQUIREMENTS + 1
         const val LOCATION = PREFERRED + 1
-        const val NEWS = LOCATION + 1
+        const val SCALE = LOCATION + 1
+        const val NEWS = SCALE + 1
 
         //const val BENEFITS = PREFERRED + 1
         //const val NORMAL = 0

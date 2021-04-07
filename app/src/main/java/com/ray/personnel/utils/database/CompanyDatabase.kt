@@ -1,4 +1,4 @@
-package com.ray.personnel.model.database
+package com.ray.personnel.utils.database
 
 import android.content.Context
 import androidx.room.*
@@ -7,7 +7,7 @@ import com.google.gson.reflect.TypeToken
 import com.ray.personnel.Global
 import com.ray.personnel.company.Company
 import com.ray.personnel.company.Location
-import com.ray.personnel.model.parser.CompanyListParser
+import com.ray.personnel.utils.parser.CompanyListParser
 
 
 @Database(entities = [Company::class], version = 1)

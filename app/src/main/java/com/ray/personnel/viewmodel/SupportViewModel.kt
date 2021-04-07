@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import com.ray.personnel.fragment.company.CompanyFilterFragment
 import com.ray.personnel.fragment.NullFragment
 import com.ray.personnel.R
+import com.ray.personnel.fragment.user.info.UserInfoFragment
 
 class SupportViewModel(application: Application): AndroidViewModel(application){
     val text = ObservableField<String>()
@@ -54,7 +55,7 @@ class SupportViewModel(application: Application): AndroidViewModel(application){
     fun navItemSelected(item: MenuItem): Boolean{
         when(item.itemId){
             R.id.icon_company -> curFragment.value = CompanyFilterFragment()
-            R.id.icon_account -> curFragment.value = NullFragment()
+            R.id.icon_account -> curFragment.value = UserInfoFragment()
             R.id.icon_note -> curFragment.value = NullFragment()
             else -> curFragment.value = NullFragment()
         }

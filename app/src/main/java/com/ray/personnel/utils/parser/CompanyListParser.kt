@@ -1,4 +1,4 @@
-package com.ray.personnel.model.parser
+package com.ray.personnel.utils.parser
 
 import com.ray.personnel.company.Company
 import org.json.JSONObject
@@ -51,7 +51,7 @@ object CompanyListParser : Publisher<Company>{
                         company.military_url = c.military_url
                         company.thumbURL = jsonCompany!!.getJSONArray("data").getJSONObject(i).getJSONObject("title_img")["origin"].toString()
                         company.department = jsonCompany!!.getJSONArray("data").getJSONObject(i).getString("position")
-                        company.wanted_id = jsonCompany!!.getJSONArray("data").getJSONObject(i).getString("id")
+                        company.job_id = jsonCompany!!.getJSONArray("data").getJSONObject(i).getString("id")
                         s.onNext(company)
                     }
                     i ++

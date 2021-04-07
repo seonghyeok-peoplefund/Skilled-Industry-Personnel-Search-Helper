@@ -20,13 +20,12 @@ public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
 
 
-Ray Jang  오후 6:20
-TODO : Wanted로그인+규모+금액 VS 잡플래닛 규모+금액+평점 VS 사업자번호+금액 / 분야별 번호 가져오기 (분야+상세분야->int) 위치필터링하기
 6:20
 GPS연동하기
 
-Ray Jang  오후 6:27
-검색조건 : 분야
+
+
+Filter : 맨위에 설명(산업기능요원 구인구직 검색 어플리케이션), 분야O, 상세분야O (그러나 좀더 보기쉽게), 회사위치/거리(자신위치체크필요)
 +상세분야, 위치, 자신의위치
 정렬 : 거리,북마크,평점
 

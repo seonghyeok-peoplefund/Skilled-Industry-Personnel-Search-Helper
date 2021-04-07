@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.ray.personnel.model.parser.NaverParser
+import com.ray.personnel.utils.parser.NaverParser
 import io.reactivex.Observable
 
 
@@ -28,7 +28,7 @@ data class Company constructor(var title: String) : Comparable<Company> {
     @ColumnInfo
     lateinit var military_url: String
     @ColumnInfo
-    lateinit var wanted_id: String
+    lateinit var job_id: String
     //
     //https://www.wanted.co.kr/wd/
     @ColumnInfo
@@ -56,8 +56,18 @@ data class Company constructor(var title: String) : Comparable<Company> {
     var location: Location? = null
     @ColumnInfo
     var distance: Int = 0x7fffffff
+    @ColumnInfo
+    lateinit var company_id: String
 
     //TODO : 금액, 규모
+    @ColumnInfo
+    var salary_rookey: Int = 0
+    @ColumnInfo
+    var salary_normal: Int = 0
+    @ColumnInfo
+    var scale: Int = 0
+    @ColumnInfo
+    var scale_date: String = "This company doesn't offer any information about salary/scale."
     /**
      * after @link com.ray.personnel.Activity.Info
      * these are observable - callback
@@ -99,8 +109,4 @@ data class Company constructor(var title: String) : Comparable<Company> {
     }
 
 
-
-    companion object{
-        const val WANTED_INFORMATION_URL = "https://www.wanted.co.kr/api/v4/jobs/"
-    }
 }

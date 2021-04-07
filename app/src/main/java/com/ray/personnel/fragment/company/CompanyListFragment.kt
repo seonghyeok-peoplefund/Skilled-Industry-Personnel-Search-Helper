@@ -9,11 +9,7 @@ import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.GridLayoutManager
@@ -21,12 +17,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.ray.personnel.Global.gson
 import com.ray.personnel.company.Company
-import com.ray.personnel.model.database.CompanyDatabase
+import com.ray.personnel.utils.database.CompanyDatabase
 import com.ray.personnel.R
 import com.ray.personnel.databinding.CompanyListBinding
-import com.ray.personnel.databinding.SupportLayoutBinding
 import com.ray.personnel.fragment.FragmentChangeInterface
-import com.ray.personnel.viewmodel.SupportViewModel
 import com.ray.personnel.viewmodel.company.list.CompanyListAdapter
 import com.ray.personnel.viewmodel.company.list.CompanyListViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
