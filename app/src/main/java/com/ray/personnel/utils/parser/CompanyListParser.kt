@@ -52,6 +52,7 @@ object CompanyListParser : Publisher<Company>{
                         company.thumbURL = jsonCompany!!.getJSONArray("data").getJSONObject(i).getJSONObject("title_img")["origin"].toString()
                         company.department = jsonCompany!!.getJSONArray("data").getJSONObject(i).getString("position")
                         company.job_id = jsonCompany!!.getJSONArray("data").getJSONObject(i).getString("id")
+                        company.sortType = sortType
                         s.onNext(company)
                     }
                     i ++
@@ -71,6 +72,9 @@ object CompanyListParser : Publisher<Company>{
         if(progress <= SEARCH_FINISHED) {
             println("걸린 시간 : "+(System.currentTimeMillis() - time_currnet) / 1000.0+"초 걸림.")
             subscribe(s)
+        }
+        if(progress == SEARCH_FINISHED){
+            progress = 0
         }
     }
 

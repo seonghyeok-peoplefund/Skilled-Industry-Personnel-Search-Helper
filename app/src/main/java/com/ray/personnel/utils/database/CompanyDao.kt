@@ -11,15 +11,18 @@ interface CompanyDao{
     @Query("SELECT * FROM company")
     fun getAll(): Single<List<Company>>
 
+    @Query("SELECT * FROM company WHERE sortType = :sortType")
+    fun getAllCompanies(sortType: Int): Single<List<Company>>
+
     @Update
     fun updateAll(companies: List<Company>): Completable
 
-    @Query("SELECT * FROM company ORDER BY distance ASC")
-    fun getAllByDistance(): Single<List<Company>>
+    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY distance ASC")
+    fun getAllByDistance(sortType: Int): Single<List<Company>>
 
 
-    @Query("SELECT COUNT(*) FROM company")
-    fun getSize(): Single<Int>
+    @Query("SELECT COUNT(*) FROM company WHERE sortType = :sortType")
+    fun getSize(sortType: Int): Single<Int>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertBackground(company: Company)

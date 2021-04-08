@@ -5,7 +5,8 @@ class CompanyOccupation {
         val occupation :Map<String, Map<String, Int>> =
                 mapOf(
                         "NONE" to mapOf("NONE" to -1),
-                        "개발" to mapOf("서버 개발자" to 872,
+                        "개발" to mapOf("NONE" to -1,
+                                "서버 개발자" to 872,
                                 "웹 개발자" to 873,
                                 "프론트엔드 개발자" to 669,
                                 "자바 개발자" to 660,
@@ -72,55 +73,55 @@ class CompanyOccupation {
                                 "사내 심리상담가" to 10121,
                                 "공연 기획자" to 10119),
                         "마케팅/광고" to mapOf(
-
+                                "NONE" to -1
                         ),
                         "디자인" to mapOf(
-
+                                "NONE" to -1
                         ),
                         "영업" to mapOf(
-
+                                "NONE" to -1
                         ),
                         "고객서비스/리테일" to mapOf(
-
+                                "NONE" to -1
                         ),
                         "미디어" to mapOf(
-
+                                "NONE" to -1
                         ),
                         "인사" to mapOf(
-
+                                "NONE" to -1
                         ),
                         "게임 제작" to mapOf(
-
+                                "NONE" to -1
                         ),
                         "금융" to mapOf(
-
+                                "NONE" to -1
                         ),
                         "물류/무역" to mapOf(
-
+                                "NONE" to -1
                         ),
                         "엔지니어링/설계" to mapOf(
-
+                                "NONE" to -1
                         ),
                         "의료/제약/바이오" to mapOf(
-
+                                "NONE" to -1
                         ),
                         "제조/생산" to mapOf(
-
+                                "NONE" to -1
                         ),
                         "교육" to mapOf(
-
+                                "NONE" to -1
                         ),
                         "식/음료" to mapOf(
-
+                                "NONE" to -1
                         ),
                         "법률/법집행기관" to mapOf(
-
+                                "NONE" to -1
                         ),
                         "건설/시설" to mapOf(
-
+                                "NONE" to -1
                         ),
                         "공공/복지" to mapOf(
-
+                                "NONE" to -1
                         )
 
 

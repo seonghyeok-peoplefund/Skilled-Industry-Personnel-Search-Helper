@@ -11,5 +11,7 @@ import com.ray.personnel.viewmodel.FragmentChangeModelInterface
 
 class UserInfoViewModel(application: Application): AndroidViewModel(application), FragmentChangeModelInterface {
     override var curFragment = MutableLiveData<Fragment>()
+    override val permissionRequest = MutableLiveData<List<String>>()
+    override val permissionResult = MutableLiveData<List<String>>()
     val webViewUrl = MutableLiveData<String>(Constants.WANTED_LOGIN)
 }

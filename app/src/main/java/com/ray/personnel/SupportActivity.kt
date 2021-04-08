@@ -14,14 +14,13 @@ import androidx.lifecycle.Observer
 import com.ray.personnel.viewmodel.SupportViewModel
 import com.ray.personnel.databinding.SupportLayoutBinding
 import com.ray.personnel.fragment.FragmentChangeInterface
-import com.ray.personnel.fragment.company.CompanyFilterFragment
-import com.ray.personnel.fragment.company.CompanyListFragment
 
 
 class SupportActivity : AppCompatActivity() {
 
     val binding: SupportLayoutBinding by lazy { SupportLayoutBinding.inflate(layoutInflater) }
     val model: SupportViewModel by viewModels()
+    lateinit var curFrg: FragmentChangeInterface
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,16 +54,7 @@ class SupportActivity : AppCompatActivity() {
                 .addToBackStack(null)
         if(element != null) transaction.addSharedElement(element, ViewCompat.getTransitionName(element)!!)
         transaction.commit()
-        if(destination is FragmentChangeInterface){
-            val isAttached = Observer<Any?>{
-                val navObserver = Observer<Fragment> { id -> let {
-                    loadFragmentAnimation(id)
-                    destination.model.curFragment = MutableLiveData()} }
-                destination.model.curFragment.observe(this, navObserver)
-                destination.isAttached = MutableLiveData()
-            }
-            destination.isAttached.observe(this, isAttached)
-        }
+        if(destination is FragmentChangeInterface) observeFragment(destination)
     }
     fun loadFragmentAnimation(destination: Fragment){
         val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
@@ -72,18 +62,43 @@ class SupportActivity : AppCompatActivity() {
         transaction.replace(R.id.container, destination)
                 .addToBackStack(null)
         transaction.commit()
+        if(destination is FragmentChangeInterface) observeFragment(destination)
+    }
 
-
-        if(destination is FragmentChangeInterface){
-            val isAttached = Observer<Any?>{
-                val navObserver = Observer<Fragment> { id -> let {
-                    loadFragmentAnimation(id)
-                    destination.model.curFragment = MutableLiveData()} }
-                destination.model.curFragment.observe(this, navObserver)
-                destination.isAttached = MutableLiveData()
+    fun observeFragment(frg : FragmentChangeInterface){
+        curFrg = frg
+        val isAttached = Observer<Any?>{
+            val navObserver = Observer<Fragment> { id -> let {
+                loadFragmentAnimation(id)
+                //frg.model.curFragment = MutableLiveData()
+            } }
+            frg.model.curFragment.observe(this, navObserver)
+            frg.isAttached = MutableLiveData()
+            val permissionObserver = Observer<List<String>>{ permissions ->
+                frg.model.permissionResult.value = Global.requestPermission(this, *permissions.toTypedArray())
             }
-            destination.isAttached.observe(this, isAttached)
+            frg.model.permissionRequest.observe(this, permissionObserver)
         }
+        frg.isAttached.observe(this, isAttached)
+
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        /*
+        val accepted = ArrayList<String>()
+        val denied = ArrayList<String>()
+        when (requestCode) {
+            100 -> {
+                if ((grantResults.isNotEmpty())) {
+                    grantResults.forEachIndexed{ i, result ->
+                        if(result == PackageManager.PERMISSION_GRANTED) accepted.add(permissions[i])
+                        //else denied.add(permissions[i])
+                    }
+                }
+            }
+        }*/
+        curFrg.model.permissionResult.value = permissions.toList()
 
     }
 }

@@ -1,20 +1,25 @@
 package com.ray.personnel.viewmodel.company.filter
 
+import android.Manifest
 import android.app.Application
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.ray.personnel.Global
 import com.ray.personnel.company.Company
 import com.ray.personnel.company.Location
+import com.ray.personnel.company.Location.Companion.getLocationWithCheckNetworkAndGPS
 import com.ray.personnel.fragment.company.CompanyListFragment
 import com.ray.personnel.utils.Constants
 import com.ray.personnel.utils.PreferenceManager
 import com.ray.personnel.utils.database.CompanyDatabase
 import com.ray.personnel.utils.parser.CompanyListParser
 import com.ray.personnel.viewmodel.FragmentChangeModelInterface
+import de.timonknispel.ktloadingbutton.KTLoadingButton
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -24,28 +29,44 @@ import org.jsoup.Jsoup
 
 class CompanyFilterViewModel(application: Application): AndroidViewModel(application), FragmentChangeModelInterface {
     override var curFragment = MutableLiveData<Fragment>()
+    override val permissionRequest = MutableLiveData<List<String>>()
+    override val permissionResult = MutableLiveData<List<String>>()
     var latitude = MutableLiveData<String>(Global.curLocation.latitude.toString())
     var longitude = MutableLiveData<String>(Global.curLocation.longitude.toString())
     var warningColor = MutableLiveData<Int>()
     var warningText = MutableLiveData<String>()
+    var find = false
 
     val progress_max = MutableLiveData<Int>(100)
     val progress_cur = MutableLiveData<Int>(0)
 
+    fun useGPS(v: View){
+        permissionRequest.value = listOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+        if(find)
+        Single.fromCallable{getLocationWithCheckNetworkAndGPS(getApplication())}.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+                { loc ->
+                    latitude.value = loc?.latitude.toString()
+                    longitude.value = loc?.longitude.toString()
+                    (v as KTLoadingButton).doResult(true)
+                },
+                {err ->
+                    (v as KTLoadingButton).doResult(false)
+                    err.printStackTrace()
+                }
+        )
+        else (v as KTLoadingButton).reset()
+    }
 
     fun getCompanyList(){
-        CompanyListParser.let{ parse ->
-            var i = 0
-            listDisposable = Observable.fromPublisher(parse).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe { progress_max.value = 100; progress_cur.value = 0 }
-                    .subscribe(
-                            { p ->
-                                getCompanyDetail(p)
-                                company_stack ++
-                                progress_cur.value = progress_cur.value?.plus(1) },
-                            { err -> progress_cur.value = 0; println("onError - $err") },
-                            { progress_cur.value = progress_cur.value?.plus(1) })
-        }
+        listDisposable = Observable.fromPublisher(CompanyListParser).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { progress_max.value = 100; progress_cur.value = 0 }
+                .subscribe(
+                        { p ->
+                            getCompanyDetail(p)
+                            company_stack ++
+                            progress_cur.value = progress_cur.value?.plus(1) },
+                        { err -> progress_cur.value = 0; println("onError - $err") },
+                        { progress_cur.value = progress_cur.value?.plus(1) })
     }
 
 
@@ -54,10 +75,21 @@ class CompanyFilterViewModel(application: Application): AndroidViewModel(applica
     var company_stack = 0
     lateinit var listDisposable: Disposable
     fun doFilter(v: View){
-        CompanyDatabase.getInstance(getApplication()).companyDao().getSize().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{ size ->
+        //v.isClickable = false
+        CompanyDatabase.getInstance(getApplication()).companyDao().getSize(CompanyListParser.sortType).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{ size ->
             //왜 여러번될까
             if(size == 0) getCompanyList()
-            else curFragment.value = CompanyListFragment()
+            else updateDistance()
+        }
+    }
+    fun updateDistance(){
+        CompanyDatabase.getInstance(getApplication()).companyDao().getAll().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe { companies ->
+            companies.forEach{ company ->
+                company.distance = Location.getDistance(company.location!!.geo_location, Location.GeoLocation(latitude.value!!.toDouble(), longitude.value!!.toDouble()))
+            }
+            CompanyDatabase.getInstance(getApplication()).companyDao().updateAll(companies).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe {
+                curFragment.value = CompanyListFragment()
+            }
         }
     }
     fun getCompanyDetail(c: Company){

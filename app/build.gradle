@@ -51,9 +51,10 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
     implementation "androidx.room:room-rxjava2:$room_version"
     //깃헙에서 가져온 라이브러
-    implementation 'com.github.stfalcon:StfalconPriceRangeBar:0.1.2'
-    implementation 'com.daimajia.numberprogressbar:library:1.4@aar'
-    implementation 'com.github.jd-alexander:LikeButton:0.2.3'
+    implementation 'com.github.timonknispel:KTLoadingButton:1.2.0' // 로딩버튼
+    implementation 'com.github.stfalcon:StfalconPriceRangeBar:0.1.2' // 진행바(분포표)
+    implementation 'com.daimajia.numberprogressbar:library:1.4@aar' // 진행바
+    implementation 'com.github.jd-alexander:LikeButton:0.2.3' // 좋아요
     //일반 라이브러리
     implementation 'org.jsoup:jsoup:1.13.1'
     //준필수 라이브러리

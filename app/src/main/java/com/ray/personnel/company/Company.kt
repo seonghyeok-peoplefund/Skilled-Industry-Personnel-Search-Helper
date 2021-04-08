@@ -24,6 +24,8 @@ data class Company constructor(var title: String) : Comparable<Company> {
      * !! loaded from First Parser - Parser, WantedParser !!
      */
     @ColumnInfo
+    var sortType: Int = 0
+    @ColumnInfo
     lateinit var department: String
     @ColumnInfo
     lateinit var military_url: String

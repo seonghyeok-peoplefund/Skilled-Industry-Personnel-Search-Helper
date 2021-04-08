@@ -21,6 +21,7 @@ import com.ray.personnel.utils.database.CompanyDatabase
 import com.ray.personnel.R
 import com.ray.personnel.databinding.CompanyListBinding
 import com.ray.personnel.fragment.FragmentChangeInterface
+import com.ray.personnel.utils.parser.CompanyListParser
 import com.ray.personnel.viewmodel.company.list.CompanyListAdapter
 import com.ray.personnel.viewmodel.company.list.CompanyListViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -59,7 +60,7 @@ class CompanyListFragment() : Fragment(), FragmentChangeInterface {
     }
 
     private fun getCompany(view: View){
-        CompanyDatabase.getInstance(ctx).companyDao().getAllByDistance()
+        CompanyDatabase.getInstance(ctx).companyDao().getAllByDistance(CompanyListParser.sortType)
                 .subscribeOn(Schedulers.single())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe{ arr ->

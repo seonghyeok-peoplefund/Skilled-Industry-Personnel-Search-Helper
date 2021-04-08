@@ -1,5 +1,6 @@
 package com.ray.personnel.fragment.company
 
+import android.Manifest
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -58,6 +59,22 @@ class CompanyFilterFragment : Fragment(), FragmentChangeInterface {
             model.warningColor.value = (0xff shl 24) or 0x000000
             model.warningText.value = "Wanted가 로그인되어있습니다."
         }
+
+
+
+        var permissionGPS = arrayListOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+
+        val permissionObserver = Observer<List<String>> { permissions ->
+            permissions.forEach{ permission ->
+                permissionGPS.remove(permission)
+                if(permissionGPS.size == 0) {
+                    model.find = true
+                    return@Observer
+                }
+            }
+        }
+        model.permissionResult.observe(viewLifecycleOwner, permissionObserver)
+
     }
 
     fun initAdapter(view: View){
@@ -66,32 +83,43 @@ class CompanyFilterFragment : Fragment(), FragmentChangeInterface {
         var position2 = PreferenceManager.getInt(ctx, Constants.JOB_CLASSIFIED)
         if(position1 == -1) position1 = 0
         if(position2 == -1) position2 = 0
-        binding.jobs1 = CompanyOccupation.occupation.keys.toList()
-        binding.jobs2 = CompanyOccupation.occupation[CompanyOccupation.occupation.keys.toList()[position1]]!!.keys.toList()
-        if(position2 > 0) CompanyListParser.sortType = CompanyOccupation.occupation[CompanyOccupation.occupation.keys.toList()[position1]]!![binding.jobs2!![position2]!!]!!
+        if(binding.jobs1.isNullOrEmpty()) {
+            binding.jobs1 = CompanyOccupation.occupation.keys.toList()
+            binding.sp1.post { binding.sp1.setSelection(position1); }
+        }
+        if(binding.jobs2.isNullOrEmpty()) {
+            binding.jobs2 = CompanyOccupation.occupation[CompanyOccupation.occupation.keys.toList()[position1]]!!.keys.toList()
+            binding.sp2.post { binding.sp2.setSelection(position2);}
+        }
+
+        if(position1 > 0 && position2 > 0) CompanyListParser.sortType = CompanyOccupation.occupation[CompanyOccupation.occupation.keys.toList()[position1]]!![binding.jobs2!![position2]!!]!!
         binding.sp1.onItemSelectedListener = object: OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
             override fun onItemSelected(parent: AdapterView<*>, v: View?, position: Int, id: Long) {
-                binding.jobs2 = (CompanyOccupation.occupation[parent.getItemAtPosition(position).toString()]!!).keys.toList()
-                PreferenceManager.setInt(ctx, Constants.JOB, position)
-                CompanyListParser.sortType = CompanyOccupation.occupation[binding.sp1.selectedItem.toString()]!![binding.jobs2!![0]!!]!!
-                println(PreferenceManager.getInt(ctx, Constants.JOB))
+                if(position > 0) {
+                    binding.jobs2 = (CompanyOccupation.occupation[parent.getItemAtPosition(position).toString()]!!).keys.toList()
+                    PreferenceManager.setInt(ctx, Constants.JOB, position)
+                    CompanyListParser.sortType = CompanyOccupation.occupation[binding.sp1.selectedItem.toString()]!![binding.jobs2!![0]!!]!!
+                }
+                println(PreferenceManager.getInt(ctx, Constants.JOB).toString()+" but "+position)
                 println(PreferenceManager.getInt(ctx, Constants.JOB_CLASSIFIED))
+                println(CompanyListParser.sortType)
             }
         }
         binding.sp2.onItemSelectedListener = object: OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
             override fun onItemSelected(parent: AdapterView<*>, v: View?, position: Int, id: Long) {
-                CompanyListParser.sortType = CompanyOccupation.occupation[binding.sp1.selectedItem.toString()]!![binding.jobs2!![position]!!]!!
-                PreferenceManager.setInt(ctx, Constants.JOB_CLASSIFIED, position)
+                if(position > 0) {
+                    CompanyListParser.sortType = CompanyOccupation.occupation[binding.sp1.selectedItem.toString()]!![binding.jobs2!![position]!!]!!
+                    PreferenceManager.setInt(ctx, Constants.JOB_CLASSIFIED, position)
+                }
                 println(PreferenceManager.getInt(ctx, Constants.JOB))
-                println(PreferenceManager.getInt(ctx, Constants.JOB_CLASSIFIED))
+                println(PreferenceManager.getInt(ctx, Constants.JOB_CLASSIFIED).toString()+" but "+position)
+                println(CompanyListParser.sortType)
             }
         }
-        binding.sp1.post { binding.sp1.setSelection(position1); }
-        binding.sp2.post { binding.sp2.setSelection(position2); }
     }
 
     override fun onDestroyView() {

@@ -17,11 +17,14 @@ import com.like.OnLikeListener
 import com.ray.personnel.company.Company
 import com.ray.personnel.utils.database.CompanyDatabase
 import com.ray.personnel.R
+import com.ray.personnel.utils.Constants
+import com.ray.personnel.utils.PreferenceManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 class CompanyListAdapter(private val mContext: Context, private val companies: List<Company>) : RecyclerView.Adapter<CompanyListAdapter.SimpleCompanyHolder>() {
     var onItemClickListener: OnItemClickListener? = null
+    var isLogined = PreferenceManager.getString(mContext, Constants.TOKEN)?.isNotEmpty()?:false
 
     interface OnItemClickListener {
         fun onItemClick(view: View, company: Company)
@@ -42,7 +45,6 @@ class CompanyListAdapter(private val mContext: Context, private val companies: L
         val v = SimpleCompanyHolder(convertView)
         if(viewType == 1) v.wrapper.setBackgroundColor(0x79ff0000)
         else v.wrapper.setBackgroundColor(0x00000000)
-        println(viewType)
         return v
     }
 
@@ -74,7 +76,7 @@ class CompanyListAdapter(private val mContext: Context, private val companies: L
         })
     }
 
-    override fun getItemViewType(i: Int) = if(companies[i].scale > 0) 0; else 1
+    override fun getItemViewType(i: Int) = if(!isLogined || companies[i].scale > 0) 0; else 1
     override fun getItemCount() = companies.size
 
     //override fun getItemViewType(i: Int) = if(companies[i].isMilitary) 0 else 1
