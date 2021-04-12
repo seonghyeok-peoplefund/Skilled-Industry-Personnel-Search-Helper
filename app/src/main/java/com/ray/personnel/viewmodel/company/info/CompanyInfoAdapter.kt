@@ -40,21 +40,6 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
     }
 
     fun filter(charText: String) {
-        /*
-        var charText = charText
-        charText = charText.toLowerCase(Locale.getDefault())
-        items.clear()
-        if (charText.length == 0) {
-            items.addAll(arrayList)
-        } else {
-            for (recent in arrayList) {
-                val name: String = recent.getAddress()
-                if (name.toLowerCase().contains(charText)) {
-                    items.add(recent)
-                }
-            }
-        }
-        notifyDataSetChanged()*/
         println("search $charText")
     }
 

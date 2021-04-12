@@ -46,7 +46,7 @@ class CompanyFilterFragment : Fragment(), FragmentChangeInterface {
         super.onViewCreated(view, savedInstanceState)
         binding.viewmodel = model
         binding.lifecycleOwner = this
-        initAdapter(view)
+        model.checkLogin()
         model.progress_cur.observe(viewLifecycleOwner, Observer<Int>{ id  -> binding.progress.progress = id })
         model.progress_max.observe(viewLifecycleOwner, Observer<Int>{ id  -> binding.progress.max = id })
 
@@ -64,52 +64,6 @@ class CompanyFilterFragment : Fragment(), FragmentChangeInterface {
         model.permissionResult.observe(viewLifecycleOwner, permissionObserver)
 
     }
-
-    fun initAdapter(view: View){
-
-        var position1 = PreferenceManager.getInt(ctx, Constants.JOB)
-        var position2 = PreferenceManager.getInt(ctx, Constants.JOB_CLASSIFIED)
-        if(position1 == -1) position1 = 0
-        if(position2 == -1) position2 = 0
-        if(binding.jobs1.isNullOrEmpty()) {
-            binding.jobs1 = CompanyOccupation.occupation.keys.toList()
-            binding.sp1.post { binding.sp1.setSelection(position1); }
-        }
-        if(binding.jobs2.isNullOrEmpty()) {
-            binding.jobs2 = CompanyOccupation.occupation[CompanyOccupation.occupation.keys.toList()[position1]]!!.keys.toList()
-            binding.sp2.post { binding.sp2.setSelection(position2);}
-        }
-
-        if(position1 > 0 && position2 > 0) CompanyListParser.sortType = CompanyOccupation.occupation[CompanyOccupation.occupation.keys.toList()[position1]]!![binding.jobs2!![position2]!!]!!
-        binding.sp1.onItemSelectedListener = object: OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-            override fun onItemSelected(parent: AdapterView<*>, v: View?, position: Int, id: Long) {
-                if(position > 0) {
-                    binding.jobs2 = (CompanyOccupation.occupation[parent.getItemAtPosition(position).toString()]!!).keys.toList()
-                    PreferenceManager.setInt(ctx, Constants.JOB, position)
-                    CompanyListParser.sortType = CompanyOccupation.occupation[binding.sp1.selectedItem.toString()]!![binding.jobs2!![0]!!]!!
-                }
-                println(PreferenceManager.getInt(ctx, Constants.JOB).toString()+" but "+position)
-                println(PreferenceManager.getInt(ctx, Constants.JOB_CLASSIFIED))
-                println(CompanyListParser.sortType)
-            }
-        }
-        binding.sp2.onItemSelectedListener = object: OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-            override fun onItemSelected(parent: AdapterView<*>, v: View?, position: Int, id: Long) {
-                if(position > 0) {
-                    CompanyListParser.sortType = CompanyOccupation.occupation[binding.sp1.selectedItem.toString()]!![binding.jobs2!![position]!!]!!
-                    PreferenceManager.setInt(ctx, Constants.JOB_CLASSIFIED, position)
-                }
-                println(PreferenceManager.getInt(ctx, Constants.JOB))
-                println(PreferenceManager.getInt(ctx, Constants.JOB_CLASSIFIED).toString()+" but "+position)
-                println(CompanyListParser.sortType)
-            }
-        }
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:custom="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <import type="java.util.List" />
-        <variable
-            name="jobs1"
-            type="List&lt;String>" />
-        <variable
-            name="jobs2"
-            type="List&lt;String>" />
         <variable
             name="viewmodel"
             type="com.ray.personnel.viewmodel.company.filter.CompanyFilterViewModel"/>
@@ -89,11 +81,13 @@
                 app:layout_constraintLeft_toLeftOf="parent"/>
 
 
-            <Spinner
+            <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/sp1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:entries="@{jobs1}"
+                android:entries="@{viewmodel.jobs1}"
+                app:selectedValue="@{viewmodel.jobs1value}"
+                app:onItemSelected="@{viewmodel.jobs1listener}"
                 android:textSize="8pt"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
@@ -112,11 +106,13 @@
                 app:layout_constraintRight_toLeftOf="@id/sp2" />
 
 
-            <Spinner
+            <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/sp2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:entries="@{jobs2}"
+                android:entries="@{viewmodel.jobs2}"
+                app:selectedValue="@{viewmodel.jobs2value}"
+                app:onItemSelected="@{viewmodel.jobs2listener}"
                 android:textSize="8pt"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"

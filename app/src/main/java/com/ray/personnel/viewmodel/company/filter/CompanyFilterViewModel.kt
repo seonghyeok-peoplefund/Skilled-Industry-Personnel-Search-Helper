@@ -3,6 +3,7 @@ package com.ray.personnel.viewmodel.company.filter
 import android.Manifest
 import android.app.Application
 import android.view.View
+import android.widget.AdapterView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.AndroidViewModel
@@ -10,6 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.ray.personnel.Global
 import com.ray.personnel.company.Company
+import com.ray.personnel.company.CompanyOccupation
 import com.ray.personnel.company.Location
 import com.ray.personnel.company.Location.Companion.getLocationWithCheckNetworkAndGPS
 import com.ray.personnel.fragment.company.CompanyListFragment
@@ -32,71 +34,85 @@ class CompanyFilterViewModel(application: Application): AndroidViewModel(applica
     override var curFragment = MutableLiveData<Fragment>()
     override val permissionRequest = MutableLiveData<List<String>>()
     override val permissionResult = MutableLiveData<List<String>>()
+    val jobs1 = MutableLiveData<List<String>>()
+    val jobs2 = MutableLiveData<List<String>>()
+    val jobs1value = MutableLiveData<Int>()
+    val jobs2value = MutableLiveData<Int>()
+    val jobs1listener = MutableLiveData<AdapterView.OnItemSelectedListener>()
+    val jobs2listener = MutableLiveData<AdapterView.OnItemSelectedListener>()
     var latitude = MutableLiveData<String>(Global.curLocation.latitude.toString())
     var longitude = MutableLiveData<String>(Global.curLocation.longitude.toString())
     var warningColor = MutableLiveData<Int>()
     var warningText = MutableLiveData<String>()
-    var find = false
-
     val progress_max = MutableLiveData<Int>(100)
     val progress_cur = MutableLiveData<Int>(0)
 
+    lateinit var listDisposable: Disposable
+    private var company_stack = 0
+    var find = false
+
+    private val beDisposed = ArrayList<Disposable>()
+
     fun useGPS(v: View){
         permissionRequest.value = listOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
-        if(find)
-        Single.fromCallable{getLocationWithCheckNetworkAndGPS(getApplication())}.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
-                { loc ->
-                    latitude.value = loc?.latitude.toString()
-                    longitude.value = loc?.longitude.toString()
-                    (v as KTLoadingButton).doResult(true)
-                },
-                {err ->
-                    (v as KTLoadingButton).doResult(false)
-                    err.printStackTrace()
-                }
-        )
+        if(find) {
+            beDisposed.add(Single.fromCallable { getLocationWithCheckNetworkAndGPS(getApplication()) }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+                    { loc ->
+                        latitude.value = loc?.latitude.toString()
+                        longitude.value = loc?.longitude.toString()
+                        (v as KTLoadingButton).doResult(true)
+                    },
+                    { err ->
+                        (v as KTLoadingButton).doResult(false)
+                        err.printStackTrace()
+                    }
+            ))
+        }
         else (v as KTLoadingButton).reset()
     }
 
     fun getCompanyList(){
-        if(CompanyListParser.isParsing())
+        if(CompanyListParser.isNotParsing()) {
             listDisposable = Observable.fromPublisher(CompanyListParser).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe { progress_max.value = 100; progress_cur.value = 0 }
+                    .doOnSubscribe {
+                        progress_max.value = 100; progress_cur.value = 0
+                        warningColor.value = (0xff shl 24) or 0x000000
+                        warningText.value = "Parsing 시작.\n20초~60초 가량 기다려주세요."
+                    }
                     .subscribe(
                             { p ->
                                 getCompanyDetail(p)
-                                company_stack ++
-                                progress_cur.value = progress_cur.value?.plus(1) },
+                                company_stack++
+                                progress_cur.value = progress_cur.value?.plus(1)
+                            },
                             { err -> progress_cur.value = 0; println("onError - $err") },
-                            { progress_cur.value = progress_cur.value?.plus(1) })
-        else Toast.makeText(getApplication(), "현재 정보를 로딩중입니다. 잠시 기다려주세요.", Toast.LENGTH_SHORT)
+                            { progress_cur.value = progress_cur.value?.plus(1)
+                                warningText.value = "대기중" })
+        }
+        //else Toast.makeText(getApplication(), "현재 정보를 로딩중입니다. 잠시 기다려주세요.", Toast.LENGTH_SHORT)
     }
 
 
     //"\.(?=(((?!\]).)*\[)|[^\[\]]*$)"
     //\.(?=(((?!\]).)*\[)|[^\[\]]*$) <- Pattern.MULTILINE (?m)
-    var company_stack = 0
-    lateinit var listDisposable: Disposable
     fun doFilter(v: View){
-        //v.isClickable = false
-        CompanyDatabase.getInstance(getApplication()).companyDao().getSize(CompanyListParser.sortType).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{ size ->
-            //왜 여러번될까
+        beDisposed.add(CompanyDatabase.getInstance(getApplication()).companyDao().getSize(CompanyListParser.sortType).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{ size ->
             if(size == 0) getCompanyList()
             else updateDistance()
-        }
+        })
     }
     fun updateDistance(){
-        CompanyDatabase.getInstance(getApplication()).companyDao().getAll().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe { companies ->
+        beDisposed.add(CompanyDatabase.getInstance(getApplication()).companyDao().getAll().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe { companies ->
             companies.forEach{ company ->
                 company.distance = Location.getDistance(company.location!!.geo_location, Location.GeoLocation(latitude.value!!.toDouble(), longitude.value!!.toDouble()))
             }
-            CompanyDatabase.getInstance(getApplication()).companyDao().updateAll(companies).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe {
+            beDisposed.add(CompanyDatabase.getInstance(getApplication()).companyDao().updateAll(companies).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe {
                 curFragment.value = CompanyListFragment()
-            }
-        }
+            })
+        })
     }
     fun getCompanyDetail(c: Company){
-        Observable.fromCallable {
+        beDisposed.add(Observable.fromCallable {
             val doc = JSONObject(Jsoup.connect(Constants.WANTED_INFORMATION + c.job_id).ignoreContentType(true).execute().body())
             doc.optJSONObject("job").optJSONObject("detail").let { json ->
                 c.intro = json.optString("intro")
@@ -141,7 +157,7 @@ class CompanyFilterViewModel(application: Application): AndroidViewModel(applica
             }
             c
         }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{ company ->
-                CompanyDatabase.getInstance(getApplication()).companyDao().insert(company)
+            beDisposed.add(CompanyDatabase.getInstance(getApplication()).companyDao().insert(company)
                         .subscribeOn(Schedulers.single())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
@@ -149,13 +165,17 @@ class CompanyFilterViewModel(application: Application): AndroidViewModel(applica
                             if (listDisposable.isDisposed && company_stack == 0) {
                                 curFragment.value = CompanyListFragment()
                             }
-                        }
-            }
-
+                        })
+            })
         // listDisposable이 마지막 onNext이후 onComplete를 너무 늦게 내버린다면 stack == 0이면서 disposed = false일 수도 있음.
     }
 
     init{
+        initSpinner()
+        checkLogin()
+    }
+
+    fun checkLogin(){
         if(PreferenceManager.getString(getApplication(), Constants.TOKEN).isNullOrEmpty()) {
             warningColor.value = (0xff shl 24) or 0xff2020
             warningText.value = "주의 : Wanted로그인이 되어있지 않습니다.\n연봉 및 규모 검색기능이 비활성화됩니다."
@@ -164,5 +184,48 @@ class CompanyFilterViewModel(application: Application): AndroidViewModel(applica
             warningColor.value = (0xff shl 24) or 0x000000
             warningText.value = "Wanted가 로그인되어있습니다."
         }
+    }
+    fun initSpinner(){
+        var position1 = PreferenceManager.getInt(getApplication(), Constants.JOB)
+        var position2 = PreferenceManager.getInt(getApplication(), Constants.JOB_CLASSIFIED)
+        if(position1 == -1) position1 = 0
+        if(position2 == -1) position2 = 0
+
+        jobs1.value = CompanyOccupation.occupation.keys.toList()
+        jobs2.value = CompanyOccupation.occupation.values.toTypedArray()[position1].keys.toList()
+        if(position1 > 0 && position2 > 0)
+            CompanyListParser.sortType = CompanyOccupation.occupation.values.toTypedArray()[position1].values.toTypedArray()[position2]
+        jobs1value.value = position1
+        jobs2value.value = position2
+
+
+        jobs1listener.value = object: AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+            override fun onItemSelected(parent: AdapterView<*>, v: View?, position: Int, id: Long) {
+                //if(position > 0) {
+                    jobs2.value = CompanyOccupation.occupation.values.toTypedArray()[position].keys.toList()
+                    PreferenceManager.setInt(getApplication(), Constants.JOB, position)
+                    CompanyListParser.sortType = CompanyOccupation.occupation.values.toTypedArray()[position].values.toTypedArray()[0]
+                //}
+                jobs2value.value = 0
+            }
+        }
+        jobs2listener.value = object: AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+            override fun onItemSelected(parent: AdapterView<*>, v: View?, position: Int, id: Long) {
+                //if(position > 0) {
+                    CompanyListParser.sortType = CompanyOccupation.occupation.values.toTypedArray()[jobs1value.value!!].values.toTypedArray()[position]
+                    PreferenceManager.setInt(getApplication(), Constants.JOB_CLASSIFIED, position)
+                //}
+            }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        for(disposed in beDisposed) disposed.dispose()
+        listDisposable.dispose()
     }
 }
