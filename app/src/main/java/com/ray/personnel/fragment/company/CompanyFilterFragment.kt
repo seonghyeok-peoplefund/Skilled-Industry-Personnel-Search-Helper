@@ -50,18 +50,6 @@ class CompanyFilterFragment : Fragment(), FragmentChangeInterface {
         model.progress_cur.observe(viewLifecycleOwner, Observer<Int>{ id  -> binding.progress.progress = id })
         model.progress_max.observe(viewLifecycleOwner, Observer<Int>{ id  -> binding.progress.max = id })
 
-
-        if(PreferenceManager.getString(ctx, Constants.TOKEN).isNullOrEmpty()) {
-            model.warningColor.value = (0xff shl 24) or 0xff2020
-            model.warningText.value = "주의 : Wanted로그인이 되어있지 않습니다.\n연봉 및 규모 검색기능이 비활성화됩니다."
-        }
-        else {
-            model.warningColor.value = (0xff shl 24) or 0x000000
-            model.warningText.value = "Wanted가 로그인되어있습니다."
-        }
-
-
-
         var permissionGPS = arrayListOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
 
         val permissionObserver = Observer<List<String>> { permissions ->

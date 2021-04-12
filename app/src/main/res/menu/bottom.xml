@@ -11,11 +11,11 @@
         android:id="@+id/icon_note"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_sticky_note"
-        android:title="Something1" />
+        android:title="Empty Page" />
     <item
         android:id="@+id/icon_account"
         app:showAsAction="ifRoom"
         android:enabled="true"
         android:icon="@drawable/ic_account_circle"
-        android:title="Something2" />
+        android:title="Login" />
 </menu>

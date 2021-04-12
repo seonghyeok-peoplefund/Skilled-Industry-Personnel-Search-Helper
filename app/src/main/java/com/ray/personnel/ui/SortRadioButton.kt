@@ -1,8 +1,13 @@
 package com.ray.personnel.ui
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.View
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.SimpleTarget
 import com.ray.personnel.R
 
 
@@ -10,7 +15,6 @@ class SortRadioButton : androidx.appcompat.widget.AppCompatImageButton, View.OnC
     val n = num++
     var isAscendant = true
     var isButtonChecked = false
-    private var listener: SortRadioListener? = null
     private val CHECK by lazy{ intArrayOf(R.attr.isButtonChecked) }
 
     constructor(context: Context) : super(context) {}
@@ -40,10 +44,6 @@ class SortRadioButton : androidx.appcompat.widget.AppCompatImageButton, View.OnC
         return super.onCreateDrawableState(extraSpace)
     }
 
-    fun setOnClickListener(listener: SortRadioListener){
-        this.listener = listener
-    }
-
     override fun onClick(p0: View?) {
         if(parent is SortRadioGroup && parent != null) {
             if (isButtonChecked) {
@@ -55,18 +55,14 @@ class SortRadioButton : androidx.appcompat.widget.AppCompatImageButton, View.OnC
             }
             //refreshDrawableState()
             //invalidate()
-            listener?.onClick(this, isAscendant)
+            (parent as SortRadioGroup).isClicked(this)
         }
     }
-
     init{
         setOnClickListener(this)
     }
     companion object{
         var num = 0
-    }
-    interface SortRadioListener{
-        fun onClick(v: View, isAscendant: Boolean)
     }
 
 }

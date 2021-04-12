@@ -33,8 +33,8 @@ object CompanyListParser : Publisher<Company>{
         val time_currnet: Long = System.currentTimeMillis()
         when(progress){
             NO_PROGRESS -> {
-                MilitaryParser.init()
                 progress++
+                MilitaryParser.init()
             }
             PARSING_WANTED -> {
                 jsonCompany = JSONObject(Jsoup.connect(wanted_url).ignoreContentType(true).execute().body())
@@ -80,4 +80,6 @@ object CompanyListParser : Publisher<Company>{
 
     private fun isParsingFinished() = (jsonCompany != null && jsonCompany!!.getJSONObject("links")["next"].toString() == "null")
 
+    fun isParsing() = progress > NO_PROGRESS && progress < SEARCH_FINISHED
+    fun isNotParsing() = !isParsing()
 }

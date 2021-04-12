@@ -3,6 +3,7 @@ package com.ray.personnel.viewmodel.company.filter
 import android.Manifest
 import android.app.Application
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -58,15 +59,17 @@ class CompanyFilterViewModel(application: Application): AndroidViewModel(applica
     }
 
     fun getCompanyList(){
-        listDisposable = Observable.fromPublisher(CompanyListParser).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { progress_max.value = 100; progress_cur.value = 0 }
-                .subscribe(
-                        { p ->
-                            getCompanyDetail(p)
-                            company_stack ++
-                            progress_cur.value = progress_cur.value?.plus(1) },
-                        { err -> progress_cur.value = 0; println("onError - $err") },
-                        { progress_cur.value = progress_cur.value?.plus(1) })
+        if(CompanyListParser.isParsing())
+            listDisposable = Observable.fromPublisher(CompanyListParser).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe { progress_max.value = 100; progress_cur.value = 0 }
+                    .subscribe(
+                            { p ->
+                                getCompanyDetail(p)
+                                company_stack ++
+                                progress_cur.value = progress_cur.value?.plus(1) },
+                            { err -> progress_cur.value = 0; println("onError - $err") },
+                            { progress_cur.value = progress_cur.value?.plus(1) })
+        else Toast.makeText(getApplication(), "현재 정보를 로딩중입니다. 잠시 기다려주세요.", Toast.LENGTH_SHORT)
     }
 
 
@@ -150,5 +153,16 @@ class CompanyFilterViewModel(application: Application): AndroidViewModel(applica
             }
 
         // listDisposable이 마지막 onNext이후 onComplete를 너무 늦게 내버린다면 stack == 0이면서 disposed = false일 수도 있음.
+    }
+
+    init{
+        if(PreferenceManager.getString(getApplication(), Constants.TOKEN).isNullOrEmpty()) {
+            warningColor.value = (0xff shl 24) or 0xff2020
+            warningText.value = "주의 : Wanted로그인이 되어있지 않습니다.\n연봉 및 규모 검색기능이 비활성화됩니다."
+        }
+        else {
+            warningColor.value = (0xff shl 24) or 0x000000
+            warningText.value = "Wanted가 로그인되어있습니다."
+        }
     }
 }

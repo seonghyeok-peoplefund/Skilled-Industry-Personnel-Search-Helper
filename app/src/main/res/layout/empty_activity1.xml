@@ -27,6 +27,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
+
         <com.ray.personnel.ui.SortRadioButton
             android:id="@+id/rg_btn1"
             android:layout_width="0dp"
@@ -34,7 +35,7 @@
             android:layout_weight="1"
             android:src="@drawable/radio_button_like"
             android:gravity="center"
-            android:background="@drawable/radio_button_rippled"
+            android:background="@drawable/radio_button_rippled_left"
             android:padding="15dp"
             app:isButtonChecked="true"/>
         <com.ray.personnel.ui.SortRadioButton
@@ -44,7 +45,7 @@
             android:layout_weight="1"
             android:src="@drawable/radio_button_salary"
             android:gravity="center"
-            android:background="@drawable/radio_button_rippled"
+            android:background="@drawable/radio_button_background"
             android:padding="15dp"/>
         <com.ray.personnel.ui.SortRadioButton
             android:id="@+id/rg_btn3"
@@ -53,7 +54,7 @@
             android:layout_weight="1"
             android:src="@drawable/radio_button_distance"
             android:gravity="center"
-            android:background="@drawable/radio_button_rippled"
+            android:background="@drawable/radio_button_rippled_right"
             android:padding="15dp"/>
 
     </com.ray.personnel.ui.SortRadioGroup>

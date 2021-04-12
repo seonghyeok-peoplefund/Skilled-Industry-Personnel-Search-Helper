@@ -18,8 +18,22 @@ interface CompanyDao{
     fun updateAll(companies: List<Company>): Completable
 
     @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY distance ASC")
-    fun getAllByDistance(sortType: Int): Single<List<Company>>
+    fun getAllByDistanceAsc(sortType: Int): Single<List<Company>>
 
+    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY distance DESC")
+    fun getAllByDistanceDesc(sortType: Int): Single<List<Company>>
+
+    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY salary_rookey ASC")
+    fun getAllBySalaryAsc(sortType: Int): Single<List<Company>>
+
+    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY salary_rookey DESC")
+    fun getAllBySalaryDesc(sortType: Int): Single<List<Company>>
+
+    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY isLiked ASC")
+    fun getAllByLikeAsc(sortType: Int): Single<List<Company>>
+
+    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY isLiked DESC")
+    fun getAllByLikeDesc(sortType: Int): Single<List<Company>>
 
     @Query("SELECT COUNT(*) FROM company WHERE sortType = :sortType")
     fun getSize(sortType: Int): Single<Int>

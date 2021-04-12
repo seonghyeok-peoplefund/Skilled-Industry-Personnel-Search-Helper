@@ -22,7 +22,7 @@ import com.ray.personnel.utils.PreferenceManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class CompanyListAdapter(private val mContext: Context, private val companies: List<Company>) : RecyclerView.Adapter<CompanyListAdapter.SimpleCompanyHolder>() {
+class CompanyListAdapter(private val mContext: Context, var companies: List<Company>) : RecyclerView.Adapter<CompanyListAdapter.SimpleCompanyHolder>() {
     var onItemClickListener: OnItemClickListener? = null
     var isLogined = PreferenceManager.getString(mContext, Constants.TOKEN)?.isNotEmpty()?:false
 
@@ -31,7 +31,6 @@ class CompanyListAdapter(private val mContext: Context, private val companies: L
     }
 
     fun setOnItemClickListener(listener: (View, Company) -> Unit) {
-
         onItemClickListener = object: OnItemClickListener {
             override fun onItemClick(view: View, company: Company) {
                 listener(view, company)
@@ -109,9 +108,5 @@ class CompanyListAdapter(private val mContext: Context, private val companies: L
         }
     }
 
-    companion object{
-        //const val NORMAL = 0
-        //const val = NORMAL + 1
-    }
 
 }

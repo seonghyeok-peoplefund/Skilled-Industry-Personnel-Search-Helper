@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item app:isButtonChecked= "false"
-        android:drawable = "@drawable/ic_dot"></item>
+        android:drawable = "@drawable/ic_location"></item>
     <item app:isButtonChecked= "true" app:isAscendant = "true"
         android:drawable = "@drawable/ic_down"></item>
     <item app:isButtonChecked= "true" app:isAscendant = "false"

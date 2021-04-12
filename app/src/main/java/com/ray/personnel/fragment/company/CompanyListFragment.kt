@@ -36,7 +36,6 @@ class CompanyListFragment() : Fragment(), FragmentChangeInterface {
     private val binding get() = _binding!!
     override val model: CompanyListViewModel by activityViewModels()
 
-    lateinit var companies: List<Company>
     override fun onAttach(context: Context) {
         super.onAttach(context)
         ctx = context
@@ -53,48 +52,16 @@ class CompanyListFragment() : Fragment(), FragmentChangeInterface {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setRecyclerView(view)
-        setSpinner(view)
-        getCompany(view)
         binding.viewmodel = model
         binding.lifecycleOwner = this
-    }
-
-    private fun getCompany(view: View){
-        CompanyDatabase.getInstance(ctx).companyDao().getAllByDistance(CompanyListParser.sortType)
-                .subscribeOn(Schedulers.single())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe{ arr ->
-                    companies = arr
-                    view.findViewById<RecyclerView>(R.id.list).adapter = CompanyListAdapter(ctx, arr)
-                    (view.findViewById<RecyclerView>(R.id.list).adapter as CompanyListAdapter).setOnItemClickListener { view: View, company: Company -> run{
-                        val i = Intent(ctx, CompanyInfo::class.java)
-                        i.putExtra("Company", gson.toJson(company))
-                        startActivity(i)
-                        activity?.overridePendingTransition(R.anim.activity_slide_in, R.anim.activity_slide_out)
-                    }}
-                }
-    }
-    private fun setSpinner(view: View) {
-        /*
-        view.findViewById<Spinner>(R.id.company_list_sp1).adapter = ArrayAdapter(ctx, android.R.layout.simple_list_item_1, Arrays.asList("중소기업", "중견기업", "대기업"))
-        view.findViewById<Spinner>(R.id.company_list_sp2).adapter = ArrayAdapter(ctx, android.R.layout.simple_list_item_1, Arrays.asList("1km", "5km", "10km", "50km", "100km", "그 외"))
-        view.findViewById<Spinner>(R.id.company_list_sp3).adapter = ArrayAdapter(ctx, android.R.layout.simple_list_item_1, Arrays.asList("5점", "4점", "3점", "2점", "1점"))
-
-        view.findViewById<Spinner>(R.id.company_list_sp2).onItemSelectedListener = object:
-            AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-            override fun onItemSelected(parent: AdapterView<*>?, v: View?, position: Int, id: Long) {
-
-            }
-        }*/
+        model.getAllByDistanceAsc()
     }
 
     private fun setRecyclerView(view: View) {
-        with(view.findViewById<RecyclerView>(R.id.list)){
+        with(binding.list){
             layoutManager = GridLayoutManager(ctx, 2)
             addItemDecoration(getGridDecoration())
+            adapter = CompanyListAdapter(ctx, emptyList())
         }
     }
 
