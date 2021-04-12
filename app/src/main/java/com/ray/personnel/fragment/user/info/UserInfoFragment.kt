@@ -14,6 +14,8 @@ import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
+import com.ray.personnel.R
+import com.ray.personnel.SupportActivity
 import com.ray.personnel.databinding.UserInfoBinding
 import com.ray.personnel.fragment.FragmentChangeInterface
 import com.ray.personnel.fragment.company.CompanyFilterFragment
@@ -28,7 +30,6 @@ class UserInfoFragment : Fragment(), FragmentChangeInterface {
     private var _binding: UserInfoBinding? = null
     private val binding get() = _binding!!
     override val model: UserInfoViewModel by activityViewModels()
-//remember_token
     override fun onAttach(context: Context) {
         super.onAttach(context)
         ctx = context
@@ -42,10 +43,6 @@ class UserInfoFragment : Fragment(), FragmentChangeInterface {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        /*
-        로그인 정보 가져옴.
-        없으면 원티드 로그인 ㄱㄱ
-         */
         var webview = binding.webview
         webview.getSettings().setJavaScriptEnabled(true)
         webview.setWebViewClient(WebViewClient())
@@ -65,6 +62,7 @@ class UserInfoFragment : Fragment(), FragmentChangeInterface {
             getCookie(view?.url, Constants.TOKEN)?.let{ token ->
                 PreferenceManager.setString(ctx, Constants.TOKEN, token)
                 model.curFragment.value = CompanyFilterFragment()
+                (activity as SupportActivity).binding.nav.selectedItemId = R.id.icon_company
             }
             return true
         }

@@ -72,6 +72,10 @@ class CompanyFilterViewModel(application: Application): AndroidViewModel(applica
     }
 
     fun getCompanyList(){
+        if(CompanyListParser.sortType == -1) {
+            Toast.makeText(getApplication(), "분야를 선택해주세요.", Toast.LENGTH_SHORT).show()
+            return;
+        }
         if(CompanyListParser.isNotParsing()) {
             listDisposable = Observable.fromPublisher(CompanyListParser).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe {
@@ -85,11 +89,13 @@ class CompanyFilterViewModel(application: Application): AndroidViewModel(applica
                                 company_stack++
                                 progress_cur.value = progress_cur.value?.plus(1)
                             },
-                            { err -> progress_cur.value = 0; println("onError - $err") },
-                            { progress_cur.value = progress_cur.value?.plus(1)
-                                warningText.value = "대기중" })
+                            { err -> progress_cur.value = 0;
+                                Toast.makeText(getApplication(), err.toString(), Toast.LENGTH_SHORT).show(); },
+                            {
+                                warningText.value = "대기중"
+                                progress_cur.value = 0})
         }
-        //else Toast.makeText(getApplication(), "현재 정보를 로딩중입니다. 잠시 기다려주세요.", Toast.LENGTH_SHORT)
+        else Toast.makeText(getApplication(), "현재 정보를 로딩중입니다. 잠시 기다려주세요.", Toast.LENGTH_SHORT).show()
     }
 
 
@@ -178,7 +184,7 @@ class CompanyFilterViewModel(application: Application): AndroidViewModel(applica
     fun checkLogin(){
         if(PreferenceManager.getString(getApplication(), Constants.TOKEN).isNullOrEmpty()) {
             warningColor.value = (0xff shl 24) or 0xff2020
-            warningText.value = "주의 : Wanted로그인이 되어있지 않습니다.\n연봉 및 규모 검색기능이 비활성화됩니다."
+            warningText.value = "주의 : Wanted로그인이 되어있지 않습니다.\n연봉 및 규모 검색기능이 비활성화됩니다.\n로그인은 우측 하단 Login 페이지를 통해 하실 수 있습니다."
         }
         else {
             warningColor.value = (0xff shl 24) or 0x000000
@@ -203,22 +209,20 @@ class CompanyFilterViewModel(application: Application): AndroidViewModel(applica
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
             override fun onItemSelected(parent: AdapterView<*>, v: View?, position: Int, id: Long) {
-                //if(position > 0) {
-                    jobs2.value = CompanyOccupation.occupation.values.toTypedArray()[position].keys.toList()
-                    PreferenceManager.setInt(getApplication(), Constants.JOB, position)
-                    CompanyListParser.sortType = CompanyOccupation.occupation.values.toTypedArray()[position].values.toTypedArray()[0]
-                //}
-                jobs2value.value = 0
+                jobs1value.value = position
+                jobs2.value = CompanyOccupation.occupation.values.toTypedArray()[position].keys.toList()
+                PreferenceManager.setInt(getApplication(), Constants.JOB, position)
+                CompanyListParser.sortType = CompanyOccupation.occupation.values.toTypedArray()[position].values.toTypedArray()[0]
+
             }
         }
         jobs2listener.value = object: AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
             override fun onItemSelected(parent: AdapterView<*>, v: View?, position: Int, id: Long) {
-                //if(position > 0) {
-                    CompanyListParser.sortType = CompanyOccupation.occupation.values.toTypedArray()[jobs1value.value!!].values.toTypedArray()[position]
-                    PreferenceManager.setInt(getApplication(), Constants.JOB_CLASSIFIED, position)
-                //}
+                jobs2value.value = position
+                CompanyListParser.sortType = CompanyOccupation.occupation.values.toTypedArray()[jobs1value.value!!].values.toTypedArray()[position]
+                PreferenceManager.setInt(getApplication(), Constants.JOB_CLASSIFIED, position)
             }
         }
     }

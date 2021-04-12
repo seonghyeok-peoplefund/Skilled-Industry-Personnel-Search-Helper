@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.palette.graphics.Palette
@@ -59,10 +60,12 @@ class CompanyInfo : AppCompatActivity() {
 
     private fun loadInformation(){
 
-        company.observableNews.subscribe{ arr ->
+        company.observableNews.subscribe({ arr ->
             company.news = arr
             (activity.list.adapter as CompanyInfoAdapter).refresh(CompanyInfoAdapter.NEWS)
+        }, {err -> Toast.makeText(this, "인터넷 연결이 올바르지 않습니다.", Toast.LENGTH_SHORT).show(); Toast.makeText(this, err.toString(), Toast.LENGTH_LONG).show()
         }
+        )
     }
     // Set the background and text colors of a toolbar given a
     // bitmap image to match
@@ -111,6 +114,7 @@ class CompanyInfo : AppCompatActivity() {
         System.out.println("결과 -> "+Integer.toHexString(color))
         return color
     }
+    /*
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.top, menu)
 
@@ -127,17 +131,18 @@ class CompanyInfo : AppCompatActivity() {
             })
         }
         return true
-    }
+    }*/
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
+            /*
             R.id.search -> {
                 return true
             }
             R.id.menu -> {
                 activity.drawer.openDrawer(Gravity.RIGHT)
                 return true
-            }
+            }*/
             android.R.id.home ->{
                 finish()
                 overridePendingTransition(R.anim.activity_slide_enter,R.anim.activity_slide_exit)

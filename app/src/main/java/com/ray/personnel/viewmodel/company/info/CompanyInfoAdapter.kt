@@ -39,10 +39,6 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
         notifyItemChanged(position)
     }
 
-    fun filter(charText: String) {
-        println("search $charText")
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when(viewType){
         TITLE -> SubtitledHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_subtitled, parent, false))
         NEWS -> NewsHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_news, parent, false))
@@ -52,6 +48,7 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
         LOCATION -> LocationHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_location, parent, false))
         SCALE -> ScaleHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_scale, parent, false))
         SALARY -> SalaryHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_salary, parent, false))
+        NEWS_INTRO -> NewsIntroHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_news_intro, parent, false))
         else-> {
             DefaultHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_default, parent, false))
         }
@@ -63,6 +60,7 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
         REQUIREMENTS -> REQUIREMENTS
         PREFERRED -> PREFERRED
         NEWS -> NEWS
+        NEWS_INTRO -> NEWS_INTRO
         LOCATION -> LOCATION
         SCALE-> SCALE
         SALARY-> SALARY
@@ -99,12 +97,15 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
                 }
             }
             SCALE -> {
-                (holder as ScaleHolder).content.text = "사원 : "+company.scale
+                (holder as ScaleHolder).content.text = "사원 : "+company.scale+" 명"
                 holder.subcontent.text = company.scale_date.substring(0,2)+"년 "+company.scale_date.substring(2,4)+"월 기준"
             }
             SALARY -> {
-                (holder as SalaryHolder).content.text = "루키 : "+company.salary_rookey
-                holder.subcontent.text = "일반 : "+company.salary_normal
+                (holder as SalaryHolder).content.text = "루키 : "+company.salary_rookey + " 만원"
+                holder.subcontent.text = "일반 : "+company.salary_normal+" 만원"
+            }
+            NEWS_INTRO -> {
+                (holder as NewsIntroHolder).content.text = "\""+company.title+"\"의 최근 정보"
             }
             NEWS -> {
                 if(company.news == null){
@@ -119,7 +120,7 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
         }
     }
 
-    override fun getItemCount() = 100
+    override fun getItemCount() = FINAL
 
     inner class SubtitledHolder(v: View) : RecyclerView.ViewHolder(v) {
         val content: TextView = v.findViewById(R.id.content)
@@ -182,6 +183,9 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
         val subcontent: TextView = v.findViewById(R.id.subcontent)
         val wrapper: ConstraintLayout = v.findViewById(R.id.wrapper)
     }
+    inner class NewsIntroHolder(v: View) : RecyclerView.ViewHolder(v) {
+        val content: TextView = v.findViewById(R.id.content)
+    }
 
 
     companion object{
@@ -194,7 +198,9 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
         const val PREFERRED = REQUIREMENTS + 1
         const val LOCATION = PREFERRED + 1
         const val SCALE = LOCATION + 1
-        const val NEWS = SCALE + 1
+        const val NEWS_INTRO = SCALE + 1
+        const val NEWS = NEWS_INTRO + 1
+        const val FINAL = NEWS + 1
 
         //const val BENEFITS = PREFERRED + 1
         //const val NORMAL = 0

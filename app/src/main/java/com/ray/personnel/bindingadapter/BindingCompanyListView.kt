@@ -1,16 +1,13 @@
-package com.ray.personnel.utils.bindingadapter
+package com.ray.personnel.bindingadapter
 
 import android.content.Intent
 import android.view.View
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ray.personnel.Global
-import com.ray.personnel.R
 import com.ray.personnel.company.Company
 import com.ray.personnel.fragment.company.CompanyInfo
-import com.ray.personnel.ui.SortRadioGroup
 import com.ray.personnel.viewmodel.company.list.CompanyListAdapter
-import java.util.concurrent.Callable
 
 
 @BindingAdapter("onChanged")

@@ -6,6 +6,7 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.ray.personnel.utils.parser.NaverParser
 import io.reactivex.Observable
+import io.reactivex.Single
 
 
 @Entity
@@ -69,13 +70,13 @@ data class Company constructor(var title: String) : Comparable<Company> {
     @ColumnInfo
     var scale: Int = 0
     @ColumnInfo
-    var scale_date: String = "This company doesn't offer any information about salary/scale."
+    var scale_date: String = "0000"
     /**
      * after @link com.ray.personnel.Activity.Info
      * these are observable - callback
      * do not need to save in database
      */
-    val observableNews: Observable<ArrayList<News>>
+    val observableNews: Single<ArrayList<News>>
         get() = NaverParser.Builder.build(title)
     @Ignore
     var news: ArrayList<News>? = null

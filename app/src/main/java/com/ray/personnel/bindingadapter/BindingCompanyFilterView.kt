@@ -1,10 +1,8 @@
-package com.ray.personnel.utils.bindingadapter
+package com.ray.personnel.bindingadapter
 
 import android.widget.AdapterView
-import android.widget.TextView
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.databinding.BindingAdapter
-import androidx.databinding.InverseBindingAdapter
 
 
 @BindingAdapter("selectedValue")

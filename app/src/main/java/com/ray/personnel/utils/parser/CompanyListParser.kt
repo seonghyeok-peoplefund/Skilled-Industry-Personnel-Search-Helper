@@ -15,7 +15,7 @@ object CompanyListParser : Publisher<Company>{
     const val PARSING_WANTED = NO_PROGRESS + 1
     const val CHECKING_MILITARY = PARSING_WANTED + 1
     const val SEARCH_FINISHED = CHECKING_MILITARY + 1
-    var sortType = 677
+    var sortType = -1
 
     private val wanted_url: String
         get() = "https://www.wanted.co.kr/api/v4/jobs?country=kr&locations=all&years=-1&limit=$MAX_SEARCH_COUNT&offset=$itemCount&job_sort=job.latest_order&tag_type_id=$sortType"

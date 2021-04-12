@@ -30,7 +30,6 @@ class SupportActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         val navObserver = Observer<Fragment> { frg ->
             let {
-                println("Tab차원에서 "+frg.javaClass.name+" 으로 이동")
                 loadFragmentAnimation(frg) }
         }
         model.curFragment.observe(this, navObserver)
@@ -39,7 +38,8 @@ class SupportActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.top, menu)
-        return model.onCreateOptionsMenu(menu)
+        //return model.onCreateOptionsMenu(menu)
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem)
@@ -101,4 +101,6 @@ class SupportActivity : AppCompatActivity() {
         curFrg.model.permissionResult.value = permissions.toList()
 
     }
+
+
 }

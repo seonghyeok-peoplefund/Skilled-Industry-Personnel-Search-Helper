@@ -22,6 +22,7 @@ class SupportViewModel(application: Application): AndroidViewModel(application){
     String>()
      */
 
+    /*
     fun onCreateOptionsMenu(menu: Menu?): Boolean {
         with((menu!!.findItem(R.id.search).actionView) as SearchView){
             setOnQueryTextListener(object: SearchView.OnQueryTextListener{
@@ -35,8 +36,9 @@ class SupportViewModel(application: Application): AndroidViewModel(application){
             })
         }
         return true
-    }
+    }*/
     fun onOptionsItemSelected(item: MenuItem) = when(item.itemId) {
+        /*
         R.id.search -> {
             true
         }
@@ -48,7 +50,7 @@ class SupportViewModel(application: Application): AndroidViewModel(application){
             //finish()
             curFragment.value = CompanyFilterFragment()
             true
-        }
+        }*/
         else -> null
     }
 

@@ -2,6 +2,7 @@ package com.ray.personnel.utils.parser
 
 import com.ray.personnel.company.News
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.json.JSONObject
@@ -16,8 +17,8 @@ class NaverParser {
         private const val clientId = "5FXvyzH2ML2T8clAPX0c"
         private const val clientSecret = "GQNsUUbmfW"
         private const val NEWS_DEFAULT_ITEM_COUNT = 5
-        fun build(content: String, itemCount: Int = NEWS_DEFAULT_ITEM_COUNT): Observable<ArrayList<News>> =
-                Observable.fromCallable(parse(content, itemCount)).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+        fun build(content: String, itemCount: Int = NEWS_DEFAULT_ITEM_COUNT): Single<ArrayList<News>> =
+                Single.fromCallable(parse(content, itemCount)).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
 
         private fun parse(keyword: String, itemCount: Int): Callable<ArrayList<News>> = Callable<ArrayList<News>>{
             val text = URLEncoder.encode(keyword, "UTF-8") //검색어";
