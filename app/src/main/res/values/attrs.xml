@@ -7,4 +7,13 @@
         <attr name="animCircleLoadingView_failureMarkTintColor" format="color" localization="suggested" />
         <attr name="animCircleLoadingView_textColor" format="color" localization="suggested" />
     </declare-styleable>
+    <declare-styleable name="SortRadioButton">
+        <attr name="isAscendant" format="boolean" />
+        <attr name="isButtonChecked" format="boolean" />
+        <!--
+        <attr name="srcNormal" format="reference" />
+        <attr name="srcAscendant" format="reference" />
+        <attr name="srcDescendant" format="reference" />
+        -->
+    </declare-styleable>
 </resources>

@@ -75,6 +75,7 @@ class CompanyListFragment() : Fragment(), FragmentChangeInterface {
                 }
     }
     private fun setSpinner(view: View) {
+        /*
         view.findViewById<Spinner>(R.id.company_list_sp1).adapter = ArrayAdapter(ctx, android.R.layout.simple_list_item_1, Arrays.asList("중소기업", "중견기업", "대기업"))
         view.findViewById<Spinner>(R.id.company_list_sp2).adapter = ArrayAdapter(ctx, android.R.layout.simple_list_item_1, Arrays.asList("1km", "5km", "10km", "50km", "100km", "그 외"))
         view.findViewById<Spinner>(R.id.company_list_sp3).adapter = ArrayAdapter(ctx, android.R.layout.simple_list_item_1, Arrays.asList("5점", "4점", "3점", "2점", "1점"))
@@ -87,7 +88,7 @@ class CompanyListFragment() : Fragment(), FragmentChangeInterface {
             override fun onItemSelected(parent: AdapterView<*>?, v: View?, position: Int, id: Long) {
 
             }
-        }
+        }*/
     }
 
     private fun setRecyclerView(view: View) {
