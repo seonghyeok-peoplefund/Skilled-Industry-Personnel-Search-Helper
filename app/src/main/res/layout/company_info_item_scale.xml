@@ -8,39 +8,91 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
-    android:background="?attr/selectableItemBackground">
+    android:foreground="?attr/selectableItemBackground">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/whity"/>
 
     <ImageView
         android:id="@+id/scale"
         android:scaleType="centerCrop"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintBottom_toBottomOf="@+id/subcontent"
+        app:layout_constraintBottom_toBottomOf="@+id/pane1"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/content"
+        app:layout_constraintTop_toTopOf="@+id/pane1"
         app:srcCompat="@drawable/ic_people"
         android:layout_height="0dp"
         android:layout_width="0dp"
         android:padding="10dp"/>
 
-    <TextView
-        android:id="@+id/content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/pane1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#000000"
-        android:textSize="11pt"
-        android:text="TextView"
         app:layout_constraintLeft_toRightOf="@+id/scale"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/subcontent"/>
-    <TextView
-        android:id="@+id/subcontent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#404040"
-        android:textSize="8pt"
-        android:text="TextView"
-        app:layout_constraintLeft_toRightOf="@+id/scale"
-        app:layout_constraintTop_toBottomOf="@+id/content"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginLeft="5dp"/>
+        app:layout_constraintRight_toLeftOf="@+id/pane2">
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textSize="11pt"
+            android:text="TextView"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/subcontent"/>
+        <TextView
+            android:id="@+id/subcontent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#404040"
+            android:textSize="8pt"
+            android:text="TextView"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginLeft="5dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/pane2"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/pane1"
+        android:layout_marginLeft="10dp">
+
+        <TextView
+            android:id="@+id/fourth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textSize="7pt"
+            android:text="TextView"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/third"/>
+        <TextView
+            android:id="@+id/third"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#404040"
+            android:textSize="7pt"
+            android:text="TextView"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fourth"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

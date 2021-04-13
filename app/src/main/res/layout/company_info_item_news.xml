@@ -19,7 +19,15 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_margin="2dp"
         android:paddingLeft="5dp"
-        android:background="?attr/selectableItemBackground">
+        android:foreground="?attr/selectableItemBackground">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/whity"/>
         <TextView
             android:id="@+id/news1_title"
             android:layout_width="wrap_content"
@@ -61,7 +69,15 @@
         app:layout_constraintTop_toBottomOf="@+id/layout1"
         android:layout_margin="2dp"
         android:paddingLeft="5dp"
-        android:background="?attr/selectableItemBackground">
+        android:foreground="?attr/selectableItemBackground">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/whity"/>
         <TextView
             android:id="@+id/news2_title"
             android:layout_width="wrap_content"
@@ -104,7 +120,15 @@
         app:layout_constraintTop_toBottomOf="@+id/layout2"
         android:layout_margin="2dp"
         android:paddingLeft="5dp"
-        android:background="?attr/selectableItemBackground">
+        android:foreground="?attr/selectableItemBackground">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/whity"/>
         <TextView
             android:id="@+id/news3_title"
             android:layout_width="wrap_content"
@@ -147,7 +171,15 @@
         app:layout_constraintTop_toBottomOf="@+id/layout3"
         android:layout_margin="2dp"
         android:paddingLeft="5dp"
-        android:background="?attr/selectableItemBackground">
+        android:foreground="?attr/selectableItemBackground">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/whity"/>
         <TextView
             android:id="@+id/news4_title"
             android:layout_width="wrap_content"
@@ -190,7 +222,15 @@
         app:layout_constraintTop_toBottomOf="@+id/layout4"
         android:layout_margin="2dp"
         android:paddingLeft="5dp"
-        android:background="?attr/selectableItemBackground">
+        android:foreground="?attr/selectableItemBackground">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/whity"/>
         <TextView
             android:id="@+id/news5_title"
             android:layout_width="wrap_content"

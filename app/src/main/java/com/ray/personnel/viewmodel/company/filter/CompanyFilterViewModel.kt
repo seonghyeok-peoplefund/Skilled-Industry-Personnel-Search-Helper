@@ -16,6 +16,7 @@ import com.ray.personnel.company.Location
 import com.ray.personnel.company.Location.Companion.getLocationWithCheckNetworkAndGPS
 import com.ray.personnel.fragment.company.CompanyListFragment
 import com.ray.personnel.utils.Constants
+import com.ray.personnel.utils.Constants.Companion.MILITARY_SEARCH
 import com.ray.personnel.utils.PreferenceManager
 import com.ray.personnel.utils.database.CompanyDatabase
 import com.ray.personnel.utils.parser.CompanyListParser
@@ -161,6 +162,10 @@ class CompanyFilterViewModel(application: Application): AndroidViewModel(applica
                     println(c.title+"에는 정보가 담겨져 있지 않음.")
                 }
             }
+
+            val data = Jsoup.connect(MILITARY_SEARCH + c.military_url).ignoreContentType(true).get().body().select("table.table_row")[1].select("tr")[4].select("td")
+            c.scale_normal = data[0].text()
+            c.scale_fourth = data[1].text()
             c
         }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{ company ->
             beDisposed.add(CompanyDatabase.getInstance(getApplication()).companyDao().insert(company)

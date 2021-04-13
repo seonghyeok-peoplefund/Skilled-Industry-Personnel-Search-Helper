@@ -1,28 +1,45 @@
 package com.ray.personnel.ui
 
+import android.R.attr.strokeColor
+import android.R.attr.strokeWidth
 import android.content.Context
+import android.content.res.ColorStateList
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.SimpleTarget
+import androidx.core.content.ContextCompat
 import com.ray.personnel.R
+import com.ray.personnel.utils.ImageManager
 
 
 class SortRadioButton : androidx.appcompat.widget.AppCompatImageButton, View.OnClickListener {
-    val n = num++
     var isAscendant = true
     var isButtonChecked = false
     private val CHECK by lazy{ intArrayOf(R.attr.isButtonChecked) }
+    lateinit var up: Bitmap
+    lateinit var down: Bitmap
 
-    constructor(context: Context) : super(context) {}
+    constructor(context: Context) : super(context) {
+        init()
+    }
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         isButtonChecked = context.obtainStyledAttributes(attrs, R.styleable.SortRadioButton).getBoolean(R.styleable.SortRadioButton_isButtonChecked, false)
+        init()
     }
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         isButtonChecked = context.obtainStyledAttributes(attrs, R.styleable.SortRadioButton).getBoolean(R.styleable.SortRadioButton_isButtonChecked, false)
+        init()
+    }
+
+    fun init(){
+        up = ImageManager.drawableToBitmap(ContextCompat.getDrawable(context, R.drawable.ic_up2)!!)
+        down = ImageManager.drawableToBitmap(ContextCompat.getDrawable(context, R.drawable.ic_down2)!!)
     }
     override fun getAccessibilityClassName(): CharSequence {
         return SortRadioButton::class.java.name
@@ -61,8 +78,13 @@ class SortRadioButton : androidx.appcompat.widget.AppCompatImageButton, View.OnC
     init{
         setOnClickListener(this)
     }
-    companion object{
-        var num = 0
+
+    override fun onDraw(canvas: Canvas?) {
+        if(isButtonChecked){
+            if(isAscendant) canvas?.drawBitmap(down, (width - down.width) - ImageManager.pxToDp(7, context), (height - down.height) / 2.toFloat(), null)
+            else canvas?.drawBitmap(up, (width - up.width) - ImageManager.pxToDp(7, context), (height - up.height) / 2.toFloat(), null)
+        }
+        super.onDraw(canvas)
     }
 
 }

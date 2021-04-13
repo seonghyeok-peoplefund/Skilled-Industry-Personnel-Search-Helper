@@ -62,7 +62,6 @@ data class Company constructor(var title: String) : Comparable<Company> {
     @ColumnInfo
     lateinit var company_id: String
 
-    //TODO : 금액, 규모
     @ColumnInfo
     var salary_rookey: Int = 0
     @ColumnInfo
@@ -71,6 +70,11 @@ data class Company constructor(var title: String) : Comparable<Company> {
     var scale: Int = 0
     @ColumnInfo
     var scale_date: String = "0000"
+
+    @ColumnInfo
+    lateinit var scale_normal: String
+    @ColumnInfo
+    lateinit var scale_fourth: String
     /**
      * after @link com.ray.personnel.Activity.Info
      * these are observable - callback

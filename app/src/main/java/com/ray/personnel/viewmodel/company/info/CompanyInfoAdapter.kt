@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ray.personnel.company.Company
 import com.ray.personnel.company.News
 import com.ray.personnel.R
+import com.ray.personnel.utils.Constants
 import kotlin.collections.ArrayList
 
 class CompanyInfoAdapter(private val mContext: Context, private val company: Company) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -75,6 +76,10 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
             TITLE -> {
                 (holder as SubtitledHolder).content.text = company.title
                 (holder as SubtitledHolder).subcontent.text = company.department
+                holder.wrapper.setOnClickListener {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Constants.WANTED_RECRUIT + company.job_id))
+                    mContext.startActivity(intent)
+                }
             }
             INTRO -> {
                 (holder as DefaultHolder).content.text = company.intro
@@ -99,10 +104,20 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
             SCALE -> {
                 (holder as ScaleHolder).content.text = "사원 : "+company.scale+" 명"
                 holder.subcontent.text = company.scale_date.substring(0,2)+"년 "+company.scale_date.substring(2,4)+"월 기준"
+                holder.third.text = "현역복무 : "+company.scale_normal
+                holder.fourth.text = "보충복무 : "+company.scale_fourth
+                holder.wrapper.setOnClickListener {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Constants.MILITARY_SEARCH + company.military_url))
+                    mContext.startActivity(intent)
+                }
             }
             SALARY -> {
                 (holder as SalaryHolder).content.text = "루키 : "+company.salary_rookey + " 만원"
                 holder.subcontent.text = "일반 : "+company.salary_normal+" 만원"
+                holder.wrapper.setOnClickListener {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Constants.WANTED_INTRO + company.company_id))
+                    mContext.startActivity(intent)
+                }
             }
             NEWS_INTRO -> {
                 (holder as NewsIntroHolder).content.text = "\""+company.title+"\"의 최근 정보"
@@ -125,6 +140,7 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
     inner class SubtitledHolder(v: View) : RecyclerView.ViewHolder(v) {
         val content: TextView = v.findViewById(R.id.content)
         val subcontent: TextView = v.findViewById(R.id.subcontent)
+        val wrapper: ConstraintLayout = v.findViewById(R.id.wrapper)
     }
 
     inner class DefaultHolder(v: View) : RecyclerView.ViewHolder(v) {
@@ -181,6 +197,8 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
     inner class ScaleHolder(v: View) : RecyclerView.ViewHolder(v) {
         val content: TextView = v.findViewById(R.id.content)
         val subcontent: TextView = v.findViewById(R.id.subcontent)
+        val third: TextView = v.findViewById(R.id.third)
+        val fourth: TextView = v.findViewById(R.id.fourth)
         val wrapper: ConstraintLayout = v.findViewById(R.id.wrapper)
     }
     inner class NewsIntroHolder(v: View) : RecyclerView.ViewHolder(v) {

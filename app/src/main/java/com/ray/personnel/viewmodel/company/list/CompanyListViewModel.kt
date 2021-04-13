@@ -26,30 +26,21 @@ class CompanyListViewModel(application: Application): AndroidViewModel(applicati
     override val permissionRequest = MutableLiveData<List<String>>()
     override val permissionResult = MutableLiveData<List<String>>()
     val companies = MutableLiveData<List<Company>>()
-    val sortText = MutableLiveData<String>("Sorted by distance")
 
     val sortListener = object: SortRadioGroup.SortRadioListener{
         override fun onClick(index: Int, isAscendant: Boolean) {
             when(index){
                 DISTANCE -> {
-                    println("sort by 1")
                     if(isAscendant) getAllByDistanceAsc()
                     else getAllByDistanceDesc()
-                    sortText.value = "Sorted by distance"
                 }
                 SALARY -> {
-                    println("sort by 2")
                     if(isAscendant) getAllBySalaryAsc()
                     else getAllBySalaryDesc()
-                    sortText.value = "Sorted by salary"
-
                 }
                 LIKE -> {
-                    println("sort by 3")
                     if(isAscendant) getAllByLikeAsc()
                     else getAllByLikeDesc()
-                    sortText.value = "Sorted by liked"
-
                 }
             }
         }
