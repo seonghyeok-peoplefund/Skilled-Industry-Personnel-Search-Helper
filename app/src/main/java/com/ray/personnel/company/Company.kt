@@ -72,9 +72,9 @@ data class Company constructor(var title: String) : Comparable<Company> {
     var scale_date: String = "0000"
 
     @ColumnInfo
-    lateinit var scale_normal: String
+    var scale_normal: Int = 0
     @ColumnInfo
-    lateinit var scale_fourth: String
+    var scale_fourth: Int = 0
     /**
      * after @link com.ray.personnel.Activity.Info
      * these are observable - callback

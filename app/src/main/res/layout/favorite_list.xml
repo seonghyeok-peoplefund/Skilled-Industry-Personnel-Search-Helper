@@ -3,7 +3,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.ray.personnel.viewmodel.company.list.CompanyListViewModel"/>
+            type="com.ray.personnel.viewmodel.favorite.FavoriteListViewModel"/>
     </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"

@@ -1,4 +1,4 @@
-package com.ray.personnel.viewmodel.company.list
+package com.ray.personnel.viewmodel.favorite
 
 import android.app.Application
 import android.content.Intent
@@ -21,7 +21,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 
-class CompanyListViewModel(application: Application): AndroidViewModel(application), FragmentChangeModelInterface {
+class FavoriteListViewModel(application: Application): AndroidViewModel(application), FragmentChangeModelInterface {
     override var curFragment = MutableLiveData<Fragment>()
     override val permissionRequest = MutableLiveData<List<String>>()
     override val permissionResult = MutableLiveData<List<String>>()
@@ -48,7 +48,7 @@ class CompanyListViewModel(application: Application): AndroidViewModel(applicati
     }
 
     fun getAllByDistanceAsc(){
-        CompanyDatabase.getInstance(getApplication()).companyDao().getAllByDistanceAsc(CompanyListParser.sortType)
+        CompanyDatabase.getInstance(getApplication()).companyDao().getLikedByDistanceAsc()
                 .subscribeOn(Schedulers.single())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe{ arr ->
@@ -59,7 +59,7 @@ class CompanyListViewModel(application: Application): AndroidViewModel(applicati
     }
 
     private fun getAllByDistanceDesc(){
-        CompanyDatabase.getInstance(getApplication()).companyDao().getAllByDistanceDesc(CompanyListParser.sortType)
+        CompanyDatabase.getInstance(getApplication()).companyDao().getLikedByDistanceDesc()
                 .subscribeOn(Schedulers.single())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe{ arr ->
@@ -70,7 +70,7 @@ class CompanyListViewModel(application: Application): AndroidViewModel(applicati
     }
 
     private fun getAllBySalaryAsc(){
-        CompanyDatabase.getInstance(getApplication()).companyDao().getAllBySalaryAsc(CompanyListParser.sortType)
+        CompanyDatabase.getInstance(getApplication()).companyDao().getLikedBySalaryAsc()
                 .subscribeOn(Schedulers.single())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe{ arr ->
@@ -81,7 +81,7 @@ class CompanyListViewModel(application: Application): AndroidViewModel(applicati
     }
 
     private fun getAllBySalaryDesc(){
-        CompanyDatabase.getInstance(getApplication()).companyDao().getAllBySalaryDesc(CompanyListParser.sortType)
+        CompanyDatabase.getInstance(getApplication()).companyDao().getLikedBySalaryDesc()
                 .subscribeOn(Schedulers.single())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe{ arr ->
@@ -92,7 +92,7 @@ class CompanyListViewModel(application: Application): AndroidViewModel(applicati
     }
 
     private fun getAllByPercentAsc(){
-        CompanyDatabase.getInstance(getApplication()).companyDao().getAllByPercentAsc(CompanyListParser.sortType)
+        CompanyDatabase.getInstance(getApplication()).companyDao().getLikedByPercentAsc()
                 .subscribeOn(Schedulers.single())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe{ arr ->
@@ -103,7 +103,7 @@ class CompanyListViewModel(application: Application): AndroidViewModel(applicati
     }
 
     private fun getAllByPercentDesc(){
-        CompanyDatabase.getInstance(getApplication()).companyDao().getAllByPercentDesc(CompanyListParser.sortType)
+        CompanyDatabase.getInstance(getApplication()).companyDao().getLikedByPercentDesc()
                 .subscribeOn(Schedulers.single())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe{ arr ->
@@ -112,6 +112,8 @@ class CompanyListViewModel(application: Application): AndroidViewModel(applicati
                     else isNothing.value = View.INVISIBLE
                 }
     }
+
+
 
     companion object{
         private const val DISTANCE = 0

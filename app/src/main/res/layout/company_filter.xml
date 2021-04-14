@@ -266,7 +266,7 @@
             android:onClick="@{(v) -> viewmodel.doFilter(v)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:srcCompat="@android:drawable/ic_media_play" />
+            app:srcCompat="@drawable/ic_search_company" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

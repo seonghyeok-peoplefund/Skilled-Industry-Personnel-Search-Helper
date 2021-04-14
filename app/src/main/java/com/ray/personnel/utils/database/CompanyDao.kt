@@ -17,24 +17,6 @@ interface CompanyDao{
     @Update
     fun updateAll(companies: List<Company>): Completable
 
-    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY distance ASC")
-    fun getAllByDistanceAsc(sortType: Int): Single<List<Company>>
-
-    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY distance DESC")
-    fun getAllByDistanceDesc(sortType: Int): Single<List<Company>>
-
-    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY salary_rookey ASC")
-    fun getAllBySalaryAsc(sortType: Int): Single<List<Company>>
-
-    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY salary_rookey DESC")
-    fun getAllBySalaryDesc(sortType: Int): Single<List<Company>>
-
-    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY isLiked ASC")
-    fun getAllByLikeAsc(sortType: Int): Single<List<Company>>
-
-    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY isLiked DESC")
-    fun getAllByLikeDesc(sortType: Int): Single<List<Company>>
-
     @Query("SELECT COUNT(*) FROM company WHERE sortType = :sortType")
     fun getSize(sortType: Int): Single<Int>
 
@@ -58,4 +40,43 @@ interface CompanyDao{
 
     @Query("DELETE FROM company")
     fun deleteAll(): Completable
+
+    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY distance ASC")
+    fun getAllByDistanceAsc(sortType: Int): Single<List<Company>>
+
+    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY distance DESC")
+    fun getAllByDistanceDesc(sortType: Int): Single<List<Company>>
+
+    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY salary_rookey ASC")
+    fun getAllBySalaryAsc(sortType: Int): Single<List<Company>>
+
+    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY salary_rookey DESC")
+    fun getAllBySalaryDesc(sortType: Int): Single<List<Company>>
+
+    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY scale_fourth - (3 * scale_normal) DESC")
+    fun getAllByPercentAsc(sortType: Int): Single<List<Company>>
+
+    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY scale_fourth - (3 * scale_normal) ASC")
+    fun getAllByPercentDesc(sortType: Int): Single<List<Company>>
+
+    @Query("SELECT * FROM company WHERE isLiked = 1 ORDER BY distance ASC")
+    fun getLikedByDistanceAsc(): Single<List<Company>>
+
+    @Query("SELECT * FROM company WHERE isLiked = 1 ORDER BY distance DESC")
+    fun getLikedByDistanceDesc(): Single<List<Company>>
+
+    @Query("SELECT * FROM company WHERE isLiked = 1 ORDER BY salary_rookey ASC")
+    fun getLikedBySalaryAsc(): Single<List<Company>>
+
+    @Query("SELECT * FROM company WHERE isLiked = 1 ORDER BY salary_rookey DESC")
+    fun getLikedBySalaryDesc(): Single<List<Company>>
+
+    @Query("SELECT * FROM company WHERE isLiked = 1 ORDER BY scale_fourth - (3 * scale_normal) DESC")
+    fun getLikedByPercentAsc(): Single<List<Company>>
+
+    @Query("SELECT * FROM company WHERE isLiked = 1 ORDER BY scale_fourth - (3 * scale_normal) ASC")
+    fun getLikedByPercentDesc(): Single<List<Company>>
+
+// @Query("SELECT * FROM company WHERE isLiked = 1 ORDER BY CASE WHEN scale_fourth / IF(scale_normal == 0, 1, scale_normal) DESC")
+//@Query("SELECT * FROM company WHERE isLiked = 1 ORDER BY COALESCE(scale_fourth / NULLIF(scale_normal, 0), scale_fourth * 2) DESC")
 }

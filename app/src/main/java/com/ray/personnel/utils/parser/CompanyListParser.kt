@@ -15,13 +15,15 @@ object CompanyListParser : Publisher<Company>{
     const val PARSING_WANTED = NO_PROGRESS + 1
     const val CHECKING_MILITARY = PARSING_WANTED + 1
     const val SEARCH_FINISHED = CHECKING_MILITARY + 1
+    const val END = SEARCH_FINISHED + 1
     var sortType = -1
 
     private val wanted_url: String
         get() = "https://www.wanted.co.kr/api/v4/jobs?country=kr&locations=all&years=-1&limit=$MAX_SEARCH_COUNT&offset=$itemCount&job_sort=job.latest_order&tag_type_id=$sortType"
     private var progress = NO_PROGRESS
     private var jsonCompany: JSONObject? = null
-    private var itemCount: Int = 0
+    var itemCount: Int = 0
+    private set
 
     /**
      * step 1 - init Parser, parse military information
@@ -69,11 +71,11 @@ object CompanyListParser : Publisher<Company>{
             }
             else -> s.onError(IOException("어케한거여"))
         }
-        if(progress <= SEARCH_FINISHED) {
+        if(progress < END) {
             println("걸린 시간 : "+(System.currentTimeMillis() - time_currnet) / 1000.0+"초 걸림.")
             subscribe(s)
         }
-        if(progress == SEARCH_FINISHED){
+        if(progress == END){
             progress = 0
         }
     }

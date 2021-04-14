@@ -94,7 +94,9 @@ class CompanyFilterViewModel(application: Application): AndroidViewModel(applica
                                 Toast.makeText(getApplication(), err.toString(), Toast.LENGTH_SHORT).show(); },
                             {
                                 warningText.value = "대기중"
-                                progress_cur.value = 0})
+                                progress_cur.value = 0
+                                if(CompanyListParser.itemCount == 0) curFragment.value = CompanyListFragment()
+                                })
         }
         else Toast.makeText(getApplication(), "현재 정보를 로딩중입니다. 잠시 기다려주세요.", Toast.LENGTH_SHORT).show()
     }
@@ -164,8 +166,8 @@ class CompanyFilterViewModel(application: Application): AndroidViewModel(applica
             }
 
             val data = Jsoup.connect(MILITARY_SEARCH + c.military_url).ignoreContentType(true).get().body().select("table.table_row")[1].select("tr")[4].select("td")
-            c.scale_normal = data[0].text()
-            c.scale_fourth = data[1].text()
+            c.scale_normal = data[0].text().filter{ it.isDigit() }.toInt()
+            c.scale_fourth = data[1].text().filter{ it.isDigit() }.toInt()
             c
         }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{ company ->
             beDisposed.add(CompanyDatabase.getInstance(getApplication()).companyDao().insert(company)

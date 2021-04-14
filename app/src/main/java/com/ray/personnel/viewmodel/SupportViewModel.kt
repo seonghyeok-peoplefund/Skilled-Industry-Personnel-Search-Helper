@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import com.ray.personnel.fragment.company.CompanyFilterFragment
 import com.ray.personnel.fragment.NullFragment
 import com.ray.personnel.R
+import com.ray.personnel.fragment.favorite.FavoriteListFragment
 import com.ray.personnel.fragment.user.info.UserInfoFragment
 
 class SupportViewModel(application: Application): AndroidViewModel(application){
@@ -58,7 +59,7 @@ class SupportViewModel(application: Application): AndroidViewModel(application){
         when(item.itemId){
             R.id.icon_company -> curFragment.value = CompanyFilterFragment()
             R.id.icon_account -> curFragment.value = UserInfoFragment()
-            R.id.icon_note -> curFragment.value = NullFragment()
+            R.id.icon_favorite -> curFragment.value = FavoriteListFragment()
             else -> curFragment.value = NullFragment()
         }
         return true

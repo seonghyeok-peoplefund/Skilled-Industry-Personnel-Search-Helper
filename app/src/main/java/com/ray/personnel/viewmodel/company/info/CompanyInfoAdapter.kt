@@ -104,8 +104,8 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
             SCALE -> {
                 (holder as ScaleHolder).content.text = "사원 : "+company.scale+" 명"
                 holder.subcontent.text = company.scale_date.substring(0,2)+"년 "+company.scale_date.substring(2,4)+"월 기준"
-                holder.third.text = "현역복무 : "+company.scale_normal
-                holder.fourth.text = "보충복무 : "+company.scale_fourth
+                holder.third.text = "현역복무 : "+company.scale_normal+"명"
+                holder.fourth.text = "보충복무 : "+company.scale_fourth+"명"
                 holder.wrapper.setOnClickListener {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Constants.MILITARY_SEARCH + company.military_url))
                     mContext.startActivity(intent)

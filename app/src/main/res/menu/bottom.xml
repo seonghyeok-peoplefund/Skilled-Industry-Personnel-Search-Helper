@@ -8,10 +8,10 @@
         android:title="Company"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/icon_note"
+        android:id="@+id/icon_favorite"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_sticky_note"
-        android:title="Empty Page" />
+        android:icon="@drawable/ic_favorite_border"
+        android:title="Favorite" />
     <item
         android:id="@+id/icon_account"
         app:showAsAction="ifRoom"
