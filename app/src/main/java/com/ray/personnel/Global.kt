@@ -18,7 +18,6 @@ import java.io.FileWriter
 
 object Global : Application() {
     val gson = GsonBuilder().create()
-    val curLocation = Location.GeoLocation(37.49588155109891, 127.03185679685451)
 
     fun saveFile(text: String){
         try {
