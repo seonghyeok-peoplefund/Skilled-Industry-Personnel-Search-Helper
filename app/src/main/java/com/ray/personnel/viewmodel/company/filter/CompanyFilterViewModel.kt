@@ -30,6 +30,7 @@ import io.reactivex.schedulers.Schedulers
 import org.json.JSONObject
 import org.jsoup.HttpStatusException
 import org.jsoup.Jsoup
+import java.io.IOException
 
 class CompanyFilterViewModel(application: Application): AndroidViewModel(application), FragmentChangeModelInterface {
     override var curFragment = MutableLiveData<Fragment>()
@@ -77,6 +78,10 @@ class CompanyFilterViewModel(application: Application): AndroidViewModel(applica
             Toast.makeText(getApplication(), "분야를 선택해주세요.", Toast.LENGTH_SHORT).show()
             return;
         }
+        if(latitude.value.isNullOrBlank() || longitude.value.isNullOrBlank()){
+            Toast.makeText(getApplication(), "위치를 선택해주세요.", Toast.LENGTH_SHORT).show()
+            return;
+        }
         if(CompanyListParser.isNotParsing()) {
             listDisposable = Observable.fromPublisher(CompanyListParser).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe {
@@ -122,52 +127,57 @@ class CompanyFilterViewModel(application: Application): AndroidViewModel(applica
     }
     fun getCompanyDetail(c: Company){
         beDisposed.add(Observable.fromCallable {
-            val doc = JSONObject(Jsoup.connect(Constants.WANTED_INFORMATION + c.job_id).ignoreContentType(true).execute().body())
-            doc.optJSONObject("job").optJSONObject("detail").let { json ->
-                c.intro = json.optString("intro")
-                c.main_tasks = json.optString("main_tasks")
-                c.requirements = json.optString("requirements")
-                c.preferred = json.optString("preferred_points")
-                c.benefits = json.optString("benefits")
-            }
-            c.location = Location().apply {
-                doc.optJSONObject("job").optJSONObject("address").let { json ->
-                    location = json.optString("country")
-                    full_location = json.optString("full_location")
-                    geo_location = Location.GeoLocation(
-                            json.optJSONObject("geo_location").optJSONObject("location")
-                                    .optDouble("lat"),
-                            json.optJSONObject("geo_location").optJSONObject("location")
-                                    .optDouble("lng")
-                    )
+            try{
+                val doc = JSONObject(Jsoup.connect(Constants.WANTED_INFORMATION + c.job_id).ignoreContentType(true).execute().body())
+                doc.optJSONObject("job").optJSONObject("detail").let { json ->
+                    c.intro = json.optString("intro")
+                    c.main_tasks = json.optString("main_tasks")
+                    c.requirements = json.optString("requirements")
+                    c.preferred = json.optString("preferred_points")
+                    c.benefits = json.optString("benefits")
                 }
-            }
-            c.distance = Location.getDistance(c.location!!.geo_location, Location.GeoLocation(latitude.value!!.toDouble(), longitude.value!!.toDouble()))
-            // regex로 괄호 바깥 & 따옴표 바깥에 있는 . 검색, 그뒤에는 제거함. 이후
-            //TODO : 알고리즘 바꿔야함.
-            c.intro = c.intro.replaceAfter(".", "").replaceBeforeLast("\n", "").replace(Regex(".+\\?"), "").replace(Regex("【[^】]*】"), "").replace(Regex("\\[[^\\]]*\\]"), "").trim()
-            c.company_id = doc.optJSONObject("job").optJSONObject("company").optInt("id").toString()
-            PreferenceManager.getString(getApplication(), Constants.TOKEN).let{ token ->
-                try {
-                    val doc2 = JSONObject(Jsoup.connect("https://www.wanted.co.kr/api/v4/companies/"+c.company_id+"/salary?period=1").cookie(Constants.TOKEN, token).ignoreContentType(true).execute().body())
-                    val length = doc2.optJSONArray("employee_histories").length()
-                    if(length > 0) {
-                        c.scale = doc2.optJSONArray("employee_histories").getJSONObject(length - 1).getInt("prsn_value")
-                        c.scale_date = doc2.optJSONArray("employee_histories").getJSONObject(doc2.optJSONArray("employee_histories").length() - 1).getString("base_ym")
-                        c.salary_normal = doc2.optJSONObject("salary").optString("formatted_avg_salary").replace("[^0-9]".toRegex(), "").toInt()
-                        c.salary_rookey = doc2.optJSONObject("salary").optString("formatted_rookey_salary").replace("[^0-9]".toRegex(), "").toInt()
-                    } else{
-                        println(c.title+"에는 정보가 담겨져 있지 않음.")
-                        println(doc2.toString())
+                c.location = Location().apply {
+                    doc.optJSONObject("job").optJSONObject("address").let { json ->
+                        location = json.optString("country")
+                        full_location = json.optString("full_location")
+                        geo_location = Location.GeoLocation(
+                                json.optJSONObject("geo_location").optJSONObject("location")
+                                        .optDouble("lat"),
+                                json.optJSONObject("geo_location").optJSONObject("location")
+                                        .optDouble("lng")
+                        )
                     }
-                } catch (e: HttpStatusException) {
-                    println(c.title+"에는 정보가 담겨져 있지 않음.")
                 }
-            }
+                c.distance = Location.getDistance(c.location!!.geo_location, Location.GeoLocation(latitude.value!!.toDouble(), longitude.value!!.toDouble()))
+                // regex로 괄호 바깥 & 따옴표 바깥에 있는 . 검색, 그뒤에는 제거함. 이후
+                //TODO : 알고리즘 바꿔야함.
+                c.intro = c.intro.replaceAfter(".", "").replaceBeforeLast("\n", "").replace(Regex(".+\\?"), "").replace(Regex("【[^】]*】"), "").replace(Regex("\\[[^\\]]*\\]"), "").trim()
+                c.company_id = doc.optJSONObject("job").optJSONObject("company").optInt("id").toString()
+                PreferenceManager.getString(getApplication(), Constants.TOKEN).let{ token ->
+                    try {
+                        val doc2 = JSONObject(Jsoup.connect("https://www.wanted.co.kr/api/v4/companies/"+c.company_id+"/salary?period=1").cookie(Constants.TOKEN, token).ignoreContentType(true).execute().body())
+                        val length = doc2.optJSONArray("employee_histories").length()
+                        if(length > 0) {
+                            c.scale = doc2.optJSONArray("employee_histories").getJSONObject(length - 1).getInt("prsn_value")
+                            c.scale_date = doc2.optJSONArray("employee_histories").getJSONObject(doc2.optJSONArray("employee_histories").length() - 1).getString("base_ym")
+                            c.salary_normal = doc2.optJSONObject("salary").optString("formatted_avg_salary").replace("[^0-9]".toRegex(), "").toInt()
+                            c.salary_rookey = doc2.optJSONObject("salary").optString("formatted_rookey_salary").replace("[^0-9]".toRegex(), "").toInt()
+                        } else{
+                            println(c.title+"에는 정보가 담겨져 있지 않음.")
+                            println(doc2.toString())
+                        }
+                    } catch (e: HttpStatusException) {
+                        println(c.title+"에는 정보가 담겨져 있지 않음.")
+                    }
+                }
 
-            val data = Jsoup.connect(MILITARY_SEARCH + c.military_url).ignoreContentType(true).get().body().select("table.table_row")[1].select("tr")[4].select("td")
-            c.scale_normal = data[0].text().filter{ it.isDigit() }.toInt()
-            c.scale_fourth = data[1].text().filter{ it.isDigit() }.toInt()
+                val data = Jsoup.connect(MILITARY_SEARCH + c.military_url).ignoreContentType(true).get().body().select("table.table_row")[1].select("tr")[4].select("td")
+                c.scale_normal = data[0].text().filter{ it.isDigit() }.toInt()
+                c.scale_fourth = data[1].text().filter{ it.isDigit() }.toInt()
+            } catch(e: IOException){
+                Toast.makeText(getApplication(), "인터넷이 원활하지 않습니다.", Toast.LENGTH_LONG).show()
+                e.printStackTrace()
+            }
             c
         }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{ company ->
             beDisposed.add(CompanyDatabase.getInstance(getApplication()).companyDao().insert(company)
@@ -237,6 +247,6 @@ class CompanyFilterViewModel(application: Application): AndroidViewModel(applica
     override fun onCleared() {
         super.onCleared()
         for(disposed in beDisposed) disposed.dispose()
-        listDisposable.dispose()
+        if(::listDisposable.isInitialized)listDisposable.dispose()
     }
 }

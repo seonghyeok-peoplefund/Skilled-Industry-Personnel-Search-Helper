@@ -33,49 +33,61 @@ object CompanyListParser : Publisher<Company>{
      */
     override fun subscribe(s: Subscriber<in Company>) {
         val time_currnet: Long = System.currentTimeMillis()
-        when(progress){
-            NO_PROGRESS -> {
-                progress++
-                MilitaryParser.init()
-            }
-            PARSING_WANTED -> {
-                jsonCompany = JSONObject(Jsoup.connect(wanted_url).ignoreContentType(true).execute().body())
-                progress++
-            }
-            CHECKING_MILITARY -> {
-                var i = 0
-                while (i < MAX_SEARCH_COUNT) {
-                    if (jsonCompany!!.isNull("data")) break
-                    if (jsonCompany!!.getJSONArray("data").isNull(i)) break
-                    val name = jsonCompany!!.getJSONArray("data").getJSONObject(i).getJSONObject("company")["name"].toString().replace("\\([^\\)]*\\)".toRegex(), "")
-                    MilitaryParser.getMilitaryCompany(name)?.also{ c ->
-                        val company = c.copy()
-                        company.military_url = c.military_url
-                        company.thumbURL = jsonCompany!!.getJSONArray("data").getJSONObject(i).getJSONObject("title_img")["origin"].toString()
-                        company.department = jsonCompany!!.getJSONArray("data").getJSONObject(i).getString("position")
-                        company.job_id = jsonCompany!!.getJSONArray("data").getJSONObject(i).getString("id")
-                        company.sortType = sortType
-                        s.onNext(company)
-                    }
-                    i ++
+        try {
+            when (progress) {
+                NO_PROGRESS -> {
+                    progress++
+                    MilitaryParser.init()
                 }
-                itemCount += i
-                if(isParsingFinished()) progress++
-                else progress--
+                PARSING_WANTED -> {
+                    jsonCompany = JSONObject(
+                        Jsoup.connect(wanted_url).ignoreContentType(true).execute().body()
+                    )
+                    progress++
+                }
+                CHECKING_MILITARY -> {
+                    var i = 0
+                    while (i < MAX_SEARCH_COUNT) {
+                        if (jsonCompany!!.isNull("data")) break
+                        if (jsonCompany!!.getJSONArray("data").isNull(i)) break
+                        val name = jsonCompany!!.getJSONArray("data").getJSONObject(i)
+                            .getJSONObject("company")["name"].toString()
+                            .replace("\\([^\\)]*\\)".toRegex(), "")
+                        MilitaryParser.getMilitaryCompany(name)?.also { c ->
+                            val company = c.copy()
+                            company.military_url = c.military_url
+                            company.thumbURL = jsonCompany!!.getJSONArray("data").getJSONObject(i)
+                                .getJSONObject("title_img")["origin"].toString()
+                            company.department = jsonCompany!!.getJSONArray("data").getJSONObject(i)
+                                .getString("position")
+                            company.job_id =
+                                jsonCompany!!.getJSONArray("data").getJSONObject(i).getString("id")
+                            company.sortType = sortType
+                            s.onNext(company)
+                        }
+                        i++
+                    }
+                    itemCount += i
+                    if (isParsingFinished()) progress++
+                    else progress--
+                }
+                SEARCH_FINISHED -> {
+                    jsonCompany = null
+                    progress++
+                    s.onComplete()
+                    println("wanted 개수 : $itemCount, military 개수 : " + MilitaryParser.sortedCompany.size)
+                }
+                else -> s.onError(IOException("어케한거여"))
             }
-            SEARCH_FINISHED -> {
-                jsonCompany = null
-                progress++
-                s.onComplete()
-                println("wanted 개수 : $itemCount, military 개수 : "+MilitaryParser.sortedCompany.size)
+            if (progress < END) {
+                println("걸린 시간 : " + (System.currentTimeMillis() - time_currnet) / 1000.0 + "초 걸림.")
+                subscribe(s)
             }
-            else -> s.onError(IOException("어케한거여"))
-        }
-        if(progress < END) {
-            println("걸린 시간 : "+(System.currentTimeMillis() - time_currnet) / 1000.0+"초 걸림.")
-            subscribe(s)
-        }
-        if(progress == END){
+            if (progress == END) {
+                progress = 0
+            }
+        } catch(e: IOException){
+            s.onError(e)
             progress = 0
         }
     }
