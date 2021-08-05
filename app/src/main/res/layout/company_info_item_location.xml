@@ -18,19 +18,11 @@
         android:layout_marginRight="15dp"
         android:layout_marginTop="7dp"
         android:background="@color/whity"
-        app:layout_constraintTop_toBottomOf="@+id/wrapper_inner"
+        app:layout_constraintTop_toBottomOf="@+id/subcontent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/wrapper_inner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/outline">
 
         <ImageView
             android:id="@+id/location"
@@ -63,7 +55,6 @@
             android:text="TextView"
             app:layout_constraintLeft_toRightOf="@+id/location"
             app:layout_constraintTop_toBottomOf="@+id/content"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/outline"
             android:layout_marginLeft="5dp"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

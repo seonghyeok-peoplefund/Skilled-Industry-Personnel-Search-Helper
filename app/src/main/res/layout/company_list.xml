@@ -40,65 +40,56 @@
                     android:textSize="9pt"
                     android:textColor="@color/black"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/sort_group"
+                    app:layout_constraintBottom_toTopOf="@+id/radioGroup"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"/>
 
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/sort_group"
+                <com.ray.personnel.ui.SortRadioGroup
+                    android:id="@+id/radioGroup"
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:paddingTop="5dp"
                     android:paddingBottom="15dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:background="@drawable/background_border"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv1"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv1">
-                    <com.ray.personnel.ui.SortRadioGroup
-                        android:id="@+id/radioGroup"
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:onClick="@{viewmodel.sortListener}">
+                    app:onClick="@{viewmodel.sortListener}">
 
-                        <com.ray.personnel.ui.SortRadioButton
-                            android:id="@+id/rg_btn1"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:src="@drawable/ic_location"
-                            android:gravity="center"
-                            android:background="@drawable/radio_button_rippled_left"
-                            android:padding="10dp"
-                            app:isButtonChecked="true"/>
-                        <com.ray.personnel.ui.SortRadioButton
-                            android:id="@+id/rg_btn2"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:src="@drawable/ic_money"
-                            android:gravity="center"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:background="@drawable/radio_button_background"
-                            android:padding="10dp"/>
-                        <com.ray.personnel.ui.SortRadioButton
-                            android:id="@+id/rg_btn3"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:src="@drawable/ic_percent"
-                            android:gravity="center"
-                            android:background="@drawable/radio_button_rippled_right"
-                            android:padding="10dp"/>
+                    <com.ray.personnel.ui.SortRadioButton
+                        android:id="@+id/rg_btn1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_location"
+                        android:gravity="center"
+                        android:background="@drawable/radio_button_rippled_left"
+                        android:padding="10dp"
+                        app:isButtonChecked="true"/>
+                    <com.ray.personnel.ui.SortRadioButton
+                        android:id="@+id/rg_btn2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_money"
+                        android:gravity="center"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:background="@drawable/radio_button_background"
+                        android:padding="10dp"/>
+                    <com.ray.personnel.ui.SortRadioButton
+                        android:id="@+id/rg_btn3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_percent"
+                        android:gravity="center"
+                        android:background="@drawable/radio_button_rippled_right"
+                        android:padding="10dp"/>
 
-                    </com.ray.personnel.ui.SortRadioGroup>
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.ray.personnel.ui.SortRadioGroup>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.appbar.AppBarLayout>

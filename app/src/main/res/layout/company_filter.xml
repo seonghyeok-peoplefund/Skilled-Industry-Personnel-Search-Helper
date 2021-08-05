@@ -1,29 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="viewmodel"
-            type="com.ray.personnel.viewmodel.company.filter.CompanyFilterViewModel"/>
+                name="viewmodel"
+                type="com.ray.personnel.viewmodel.company.filter.CompanyFilterViewModel"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        android:layout_margin="15dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/title_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            android:layout_margin="15dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/progress">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
 
-            <ImageView
+        <ImageView
                 android:id="@+id/search"
                 android:scaleType="centerCrop"
                 app:layout_constraintDimensionRatio="1:1"
@@ -31,11 +24,11 @@
                 android:layout_height="0dp"
                 android:layout_width="0dp"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/progress"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/tv0"/>
 
-            <TextView
+        <TextView
                 android:layout_marginLeft="5dp"
                 android:id="@+id/tv0"
                 android:layout_width="wrap_content"
@@ -44,30 +37,19 @@
                 android:textSize="8pt"
                 android:textStyle="bold"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/progress"
                 app:layout_constraintLeft_toRightOf="@+id/search"/>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
         <com.daimajia.numberprogressbar.NumberProgressBar
-            android:id="@+id/progress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/title_container"
-            app:layout_constraintBottom_toTopOf="@+id/job_container"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_margin="10dp"/>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/job_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/progress"
-            app:layout_constraintBottom_toTopOf="@+id/v1">
-
-            <TextView
+                android:id="@+id/progress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/tv0"
+                app:layout_constraintBottom_toTopOf="@+id/tv1"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_margin="10dp"/>
+        <TextView
                 android:id="@+id/tv1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -76,12 +58,12 @@
                 android:textStyle="bold"
                 android:layout_marginLeft="5dp"
                 android:layout_marginBottom="15dp"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/progress"
                 app:layout_constraintBottom_toTopOf="@+id/sp1"
                 app:layout_constraintLeft_toLeftOf="parent"/>
 
 
-            <androidx.appcompat.widget.AppCompatSpinner
+        <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/sp1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -94,9 +76,9 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv1"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/tv2"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toTopOf="@+id/v1"/>
 
-            <TextView
+        <TextView
                 android:id="@+id/tv2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -108,7 +90,7 @@
                 app:layout_constraintTop_toTopOf="@+id/sp1" />
 
 
-            <androidx.appcompat.widget.AppCompatSpinner
+        <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/sp2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -123,47 +105,36 @@
                 app:onItemSelected="@{viewmodel.jobs2listener}"
                 app:selectedValue="@{viewmodel.jobs2value}" />
 
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
         <View
-            android:id="@+id/v1"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#808080"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/job_container"
-            app:layout_constraintBottom_toTopOf="@+id/location_container"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"/>
+                android:id="@+id/v1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#808080"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sp1"
+                app:layout_constraintBottom_toTopOf="@+id/tv3"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"/>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/location_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/v1"
-            app:layout_constraintBottom_toTopOf="@+id/v2">
 
-            <TextView
-                android:layout_marginLeft="5dp"
-                android:layout_marginBottom="10dp"
+        <TextView
                 android:id="@+id/tv3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="위치"
                 android:textSize="10pt"
                 android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/v1"
                 app:layout_constraintBottom_toTopOf="@id/et1"
                 app:layout_constraintLeft_toLeftOf="parent"/>
 
 
-            <EditText
+        <EditText
                 android:id="@+id/et1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -177,7 +148,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/tv4"
                 app:layout_constraintBottom_toTopOf="@id/gps"/>
-            <TextView
+        <TextView
                 android:id="@+id/tv4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -187,7 +158,7 @@
                 app:layout_constraintLeft_toRightOf="@id/et1"
                 app:layout_constraintRight_toLeftOf="@id/et2"
                 app:layout_constraintBottom_toTopOf="@id/gps" />
-            <EditText
+        <EditText
                 android:id="@+id/et2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -202,7 +173,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/gps" />
 
-            <de.timonknispel.ktloadingbutton.KTLoadingButton
+        <de.timonknispel.ktloadingbutton.KTLoadingButton
                 android:id="@+id/gps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -211,62 +182,51 @@
                 android:onClick="@{(v) -> viewmodel.useGPS(v)}"
                 app:layout_constraintTop_toBottomOf="@+id/et1"
                 app:layout_constraintRight_toRightOf="parent"
-                />
+                app:layout_constraintBottom_toTopOf="@+id/v2"/>
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <View
-            android:id="@+id/v2"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#808080"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/location_container"
-            app:layout_constraintBottom_toTopOf="@+id/warning_container"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"/>
+                android:id="@+id/v2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#808080"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/gps"
+                app:layout_constraintBottom_toTopOf="@+id/tv5"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"/>
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/warning_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/v2"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:layout_marginLeft="5dp"
+        <TextView
                 android:id="@+id/tv5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{viewmodel.warningText}"
                 android:textSize="10pt"
                 android:textColor="@{viewmodel.warningColor}"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="5dp"
+                app:layout_constraintTop_toBottomOf="@+id/v2"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"/>
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btn1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:text="NEXT"
-            android:textSize="12pt"
-            android:onClick="@{(v) -> viewmodel.doFilter(v)}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:srcCompat="@drawable/ic_search_company" />
+                android:id="@+id/btn1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:text="NEXT"
+                android:textSize="12pt"
+                android:onClick="@{(v) -> viewmodel.doFilter(v)}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:srcCompat="@drawable/ic_search_company" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
