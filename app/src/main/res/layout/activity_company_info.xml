@@ -40,7 +40,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="#58ffffff"
+                        android:background="@color/whiteblind"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         android:fitsSystemWindows="true"/>
@@ -71,7 +71,7 @@
                     android:id="@+id/company_info"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:textColor="#000000"
+                    android:textcolor="@color/black"
                     android:textSize="20dp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"

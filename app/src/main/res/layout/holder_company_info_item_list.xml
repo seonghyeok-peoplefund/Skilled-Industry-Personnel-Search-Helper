@@ -12,13 +12,13 @@
                 <View
                     android:layout_width="@dimen/outline_height"
                     android:layout_height="match_parent"
-                    android:background="#888888"
+                    android:background="@color/gray"
                     android:layout_margin="@dimen/margin_normal"/>
                 <TextView
                     android:id="@+id/content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#000000"
+                    android:textcolor="@color/black"
                     android:autoLink="web"
                     android:textSize="7pt"/>
         </LinearLayout>

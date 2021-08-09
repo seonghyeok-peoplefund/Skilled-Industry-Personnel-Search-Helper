@@ -7,5 +7,5 @@
             <solid android:color="#000000" />
         </shape>
     </item>
-    <item android:drawable="@color/whity" />
+    <item android:drawable="@color/pinkwhite" />
 </ripple>
