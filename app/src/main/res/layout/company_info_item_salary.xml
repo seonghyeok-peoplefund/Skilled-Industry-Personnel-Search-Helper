@@ -6,16 +6,16 @@
         android:id="@+id/wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/margin_normal"
         android:foreground="?attr/selectableItemBackground">
 
         <View
             android:id="@+id/outline"
             android:layout_width="match_parent"
             android:layout_height="@dimen/outline_height"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginTop="7dp"
+            android:layout_marginStart="@dimen/margin_big"
+            android:layout_marginEnd="@dimen/margin_big"
+            android:layout_marginTop="@dimen/margin_normal"
             android:background="@color/whity"
             app:layout_constraintTop_toBottomOf="@+id/salary_subcontent"
             app:layout_constraintStart_toStartOf="parent"
@@ -52,6 +52,6 @@
             app:layout_constraintStart_toEndOf="@+id/salary_image"
             app:layout_constraintTop_toBottomOf="@+id/salary_content"
             app:layout_constraintBottom_toTopOf="@+id/outline"
-            android:layout_marginStart="5dp"/>
+            android:layout_marginStart="@dimen/margin_small"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
