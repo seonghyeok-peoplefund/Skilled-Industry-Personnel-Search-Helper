@@ -4,13 +4,13 @@ plugins {
     id 'kotlin-kapt'
 }
 android {
-    compileSdk 31
-    buildToolsVersion '31.0.0'
+    compileSdk 30
+    buildToolsVersion '30.0.3'
 
     defaultConfig {
         applicationId "com.ray.personnel"
         minSdkVersion 21
-        targetSdk 31
+        targetSdk 30
         versionCode 4
         versionName "1.03"
 
@@ -39,7 +39,6 @@ android {
 dependencies {
     // Lifecycle components
     def archLifecycleVersion = '2.3.1'
-    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0" //지원중단.
     implementation "androidx.lifecycle:lifecycle-common-java8:$archLifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$archLifecycleVersion"
     kapt "com.android.databinding:compiler:4.0.1"
@@ -52,7 +51,6 @@ dependencies {
     implementation "androidx.room:room-rxjava2:$room_version"
     //깃헙에서 가져온 라이브러
     implementation 'com.github.timonknispel:KTLoadingButton:1.2.0' // 로딩버튼
-    implementation 'com.github.stfalcon:StfalconPriceRangeBar:0.1.2' // 진행바(분포표)
     implementation 'com.daimajia.numberprogressbar:library:1.4@aar' // 진행바
     implementation 'com.github.jd-alexander:LikeButton:0.2.3' // 좋아요
     //일반 라이브러리
@@ -60,7 +58,7 @@ dependencies {
     //준필수 라이브러리
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.github.bumptech.glide:glide:4.12.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+    kapt 'com.github.bumptech.glide:compiler:4.12.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
     //기본라이브러리
