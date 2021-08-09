@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="16dp"
-            android:paddingTop="5dp"
+            android:paddingTop="@dimen/padding_small"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/company_list_item_thumb" />
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:textColor="#8e8e8e"
             android:textSize="14dp"
-            android:paddingBottom="5dp"
+            android:paddingBottom="@dimen/padding_small"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/company_list_item_title" />

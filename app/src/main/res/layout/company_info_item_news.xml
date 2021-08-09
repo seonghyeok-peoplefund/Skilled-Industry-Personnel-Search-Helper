@@ -10,7 +10,7 @@
         android:layout_marginBottom="@dimen/margin_small"
         android:layout_marginStart="@dimen/margin_big"
         android:layout_marginEnd="@dimen/margin_big"
-        android:paddingStart="5dp"
+        android:paddingStart="@dimen/padding_small"
         android:foreground="?attr/selectableItemBackground">
             <TextView
                 android:id="@+id/news_title"
