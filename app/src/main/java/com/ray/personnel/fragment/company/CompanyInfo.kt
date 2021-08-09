@@ -18,10 +18,10 @@ import com.ray.personnel.Global.gson
 import com.ray.personnel.company.Company
 import com.ray.personnel.R
 import com.ray.personnel.viewmodel.company.info.CompanyInfoAdapter
-import com.ray.personnel.databinding.CompanyInfoBinding
+import com.ray.personnel.databinding.ActivityCompanyInfoBinding
 
 class CompanyInfo : AppCompatActivity() {
-    val activity: CompanyInfoBinding by lazy{ CompanyInfoBinding.inflate(layoutInflater) }
+    val activity: ActivityCompanyInfoBinding by lazy{ ActivityCompanyInfoBinding.inflate(layoutInflater) }
     val company: Company by lazy{ getCompanyFromIntent() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

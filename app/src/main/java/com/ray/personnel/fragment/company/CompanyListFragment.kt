@@ -19,7 +19,7 @@ import com.ray.personnel.Global.gson
 import com.ray.personnel.company.Company
 import com.ray.personnel.utils.database.CompanyDatabase
 import com.ray.personnel.R
-import com.ray.personnel.databinding.CompanyListBinding
+import com.ray.personnel.databinding.FrgCompanyListBinding
 import com.ray.personnel.fragment.FragmentChangeInterface
 import com.ray.personnel.utils.parser.CompanyListParser
 import com.ray.personnel.viewmodel.company.list.CompanyListAdapter
@@ -32,7 +32,7 @@ import java.util.*
 class CompanyListFragment() : Fragment(), FragmentChangeInterface {
     lateinit var ctx: Context
     override var isAttached: MutableLiveData<Any?> = MutableLiveData()
-    private var _binding: CompanyListBinding? = null
+    private var _binding: FrgCompanyListBinding? = null
     private val binding get() = _binding!!
     override val model: CompanyListViewModel by activityViewModels()
 
@@ -44,7 +44,7 @@ class CompanyListFragment() : Fragment(), FragmentChangeInterface {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
-        _binding = CompanyListBinding.inflate(inflater, container, false)
+        _binding = FrgCompanyListBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
     }
