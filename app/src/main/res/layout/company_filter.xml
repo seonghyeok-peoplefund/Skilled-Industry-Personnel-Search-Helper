@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
             name="viewmodel"
@@ -155,10 +155,10 @@
             android:layout_height="wrap_content"
             android:text="-"
             android:textSize="10pt"
-            app:layout_constraintTop_toBottomOf="@+id/location_title"
+            app:layout_constraintTop_toTopOf="@+id/location_latitude"
             app:layout_constraintStart_toEndOf="@id/location_latitude"
             app:layout_constraintEnd_toStartOf="@id/location_longitude"
-            app:layout_constraintBottom_toTopOf="@id/location_gps" />
+            app:layout_constraintBottom_toBottomOf="@id/location_latitude" />
         <EditText
             android:id="@+id/location_longitude"
             android:layout_width="0dp"
@@ -169,10 +169,10 @@
             android:text="@={viewmodel.longitude}"
             android:layout_marginStart="@dimen/margin_big"
             android:layout_marginEnd="@dimen/margin_big"
-            app:layout_constraintTop_toBottomOf="@+id/location_title"
+            app:layout_constraintTop_toTopOf="@+id/location_latitude"
             app:layout_constraintStart_toEndOf="@+id/location_divider"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/location_gps" />
+            app:layout_constraintBottom_toBottomOf="@id/location_latitude" />
 
         <de.timonknispel.ktloadingbutton.KTLoadingButton
             android:id="@+id/location_gps"
@@ -211,6 +211,7 @@
             android:textColor="@{viewmodel.warningColor}"
             android:layout_marginTop="@dimen/margin_big"
             android:layout_marginStart="@dimen/margin_small"
+            tools:text="Wanted 로그인 여부를 알려줌"
             app:layout_constraintTop_toBottomOf="@+id/divider2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
