@@ -39,7 +39,6 @@ dependencies {
     def archLifecycleVersion = '2.3.1'
     implementation "androidx.lifecycle:lifecycle-common-java8:$archLifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$archLifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$archLifecycleVersion"
 
     def room_version = "2.3.0"
 
