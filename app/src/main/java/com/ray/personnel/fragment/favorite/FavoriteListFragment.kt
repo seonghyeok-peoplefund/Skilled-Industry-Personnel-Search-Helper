@@ -19,8 +19,8 @@ import com.ray.personnel.Global.gson
 import com.ray.personnel.company.Company
 import com.ray.personnel.utils.database.CompanyDatabase
 import com.ray.personnel.R
-import com.ray.personnel.databinding.FrgCompanyListBinding
-import com.ray.personnel.databinding.FrgFavoriteListBinding
+import com.ray.personnel.databinding.FragmentCompanyListBinding
+import com.ray.personnel.databinding.FragmentFavoriteListBinding
 import com.ray.personnel.fragment.FragmentChangeInterface
 import com.ray.personnel.utils.parser.CompanyListParser
 import com.ray.personnel.viewmodel.company.list.CompanyListAdapter
@@ -34,7 +34,7 @@ import java.util.*
 class FavoriteListFragment() : Fragment(), FragmentChangeInterface {
     lateinit var ctx: Context
     override var isAttached: MutableLiveData<Any?> = MutableLiveData()
-    private var _binding: FrgFavoriteListBinding? = null
+    private var _binding: FragmentFavoriteListBinding? = null
     private val binding get() = _binding!!
     override val model: FavoriteListViewModel by activityViewModels()
 
@@ -46,7 +46,7 @@ class FavoriteListFragment() : Fragment(), FragmentChangeInterface {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
-        _binding = FrgFavoriteListBinding.inflate(inflater, container, false)
+        _binding = FragmentFavoriteListBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
     }

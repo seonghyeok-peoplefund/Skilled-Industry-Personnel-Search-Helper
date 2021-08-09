@@ -13,7 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
 import com.ray.personnel.company.CompanyOccupation
 import com.ray.personnel.utils.parser.CompanyListParser
-import com.ray.personnel.databinding.FrgCompanyFilterBinding
+import com.ray.personnel.databinding.FragmentCompanyFilterBinding
 import com.ray.personnel.fragment.FragmentChangeInterface
 import com.ray.personnel.viewmodel.company.filter.CompanyFilterViewModel
 import androidx.lifecycle.Observer
@@ -27,7 +27,7 @@ class CompanyFilterFragment : Fragment(), FragmentChangeInterface {
 
 
     lateinit var ctx: Context
-    private var _binding: FrgCompanyFilterBinding? = null
+    private var _binding: FragmentCompanyFilterBinding? = null
     private val binding get() = _binding!!
     override val model: CompanyFilterViewModel by activityViewModels()
 
@@ -38,7 +38,7 @@ class CompanyFilterFragment : Fragment(), FragmentChangeInterface {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
-        _binding = FrgCompanyFilterBinding.inflate(inflater, container, false)
+        _binding = FragmentCompanyFilterBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
     }
