@@ -11,7 +11,7 @@
         <ImageView
             android:id="@+id/company_list_item_thumb"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="@dimen/company_list_item_thumb"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

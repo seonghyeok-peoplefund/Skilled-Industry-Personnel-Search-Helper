@@ -10,7 +10,7 @@
             android:layout_margin="10dp"
             android:paddingStart="10dp">
                 <View
-                    android:layout_width="2dp"
+                    android:layout_width="@dimen/outline_height"
                     android:layout_height="match_parent"
                     android:background="#888888"
                     android:layout_margin="10dp"/>

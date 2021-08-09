@@ -172,25 +172,25 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
     }
 
     inner class LocationHolder(v: View) : RecyclerView.ViewHolder(v) {
-        val content: TextView = v.findViewById(R.id.content)
-        val subcontent: TextView = v.findViewById(R.id.subcontent)
+        val content: TextView = v.findViewById(R.id.location_content)
+        val subcontent: TextView = v.findViewById(R.id.location_subcontent)
         val wrapper: ConstraintLayout = v.findViewById(R.id.wrapper)
     }
     inner class SalaryHolder(v: View) : RecyclerView.ViewHolder(v) {
-        val content: TextView = v.findViewById(R.id.content)
-        val subcontent: TextView = v.findViewById(R.id.subcontent)
+        val content: TextView = v.findViewById(R.id.salary_content)
+        val subcontent: TextView = v.findViewById(R.id.salary_subcontent)
         val wrapper: ConstraintLayout = v.findViewById(R.id.wrapper)
     }
 
     inner class ScaleHolder(v: View) : RecyclerView.ViewHolder(v) {
-        val content: TextView = v.findViewById(R.id.content)
-        val subcontent: TextView = v.findViewById(R.id.subcontent)
+        val content: TextView = v.findViewById(R.id.scale_content)
+        val subcontent: TextView = v.findViewById(R.id.scale_subcontent)
         val third: TextView = v.findViewById(R.id.personnel_subcontent)
         val fourth: TextView = v.findViewById(R.id.personnel_content)
         val wrapper: ConstraintLayout = v.findViewById(R.id.wrapper)
     }
     inner class NewsIntroHolder(v: View) : RecyclerView.ViewHolder(v) {
-        val content: TextView = v.findViewById(R.id.content)
+        val content: TextView = v.findViewById(R.id.news_content)
     }
 
 

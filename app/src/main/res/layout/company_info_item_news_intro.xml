@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="11pt"
-            android:text="해당 회사의 최근 정보"
+            android:text="@string/news_intro_content"
             app:layout_constraintStart_toEndOf="@+id/news_intro_image"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/news_intro_subcontent"/>
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:textColor="#404040"
             android:textSize="8pt"
-            android:text="from naver api"
+            android:text="@string/news_intro_subcontent"
             app:layout_constraintStart_toEndOf="@+id/news_intro_image"
             app:layout_constraintTop_toBottomOf="@+id/news_intro_content"
             app:layout_constraintBottom_toBottomOf="parent"
