@@ -17,64 +17,72 @@
             android:layout_marginTop="@dimen/margin_normal"
             android:layout_marginEnd="@dimen/margin_big"
             android:background="@color/whity"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/scale_subcontent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scale_subcontent"/>
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <ImageView
             android:id="@+id/scale_image"
             android:scaleType="centerCrop"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintTop_toTopOf="@+id/scale_content"
-            app:layout_constraintBottom_toBottomOf="@+id/scale_subcontent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/scale_subcontent"
             app:srcCompat="@drawable/ic_people"
             android:layout_height="0dp"
             android:layout_width="0dp"
             android:padding="10dp"/>
         <TextView
             android:id="@+id/scale_content"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="11pt"
-            app:layout_constraintStart_toEndOf="@+id/scale_image"
+            android:singleLine="true"
+            android:ellipsize="none"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/scale_subcontent"
-            app:layout_constraintEnd_toStartOf="@+id/personnel_content"/>
+            app:layout_constraintStart_toEndOf="@+id/scale_image"
+            app:layout_constraintEnd_toStartOf="@+id/personnel_content"
+            app:layout_constraintBottom_toTopOf="@+id/scale_subcontent"/>
         <TextView
             android:id="@+id/scale_subcontent"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="#404040"
             android:textSize="8pt"
-            app:layout_constraintStart_toEndOf="@+id/scale_image"
+            android:maxLines="1"
             app:layout_constraintTop_toBottomOf="@+id/scale_content"
+            app:layout_constraintStart_toEndOf="@+id/scale_image"
+            app:layout_constraintEnd_toStartOf="@+id/personnel_subcontent"
             app:layout_constraintBottom_toTopOf="@+id/outline"
-            app:layout_constraintEnd_toEndOf="@+id/scale_content"
             android:layout_marginStart="@dimen/margin_small"/>
 
         <TextView
             android:id="@+id/personnel_content"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="7pt"
+            android:singleLine="true"
+            android:ellipsize="none"
             android:layout_marginStart="@dimen/margin_normal"
+            app:layout_constraintTop_toTopOf="@+id/scale_image"
             app:layout_constraintStart_toEndOf="@+id/scale_content"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/personnel_subcontent"/>
         <TextView
             android:id="@+id/personnel_subcontent"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="#404040"
             android:textSize="7pt"
+            android:maxLines="1"
             android:layout_marginStart="@dimen/margin_normal"
-            app:layout_constraintStart_toEndOf="@+id/scale_content"
             app:layout_constraintTop_toBottomOf="@+id/personnel_content"
-            app:layout_constraintBottom_toBottomOf="@+id/scale_subcontent"/>
+            app:layout_constraintStart_toEndOf="@+id/scale_subcontent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/scale_image"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
