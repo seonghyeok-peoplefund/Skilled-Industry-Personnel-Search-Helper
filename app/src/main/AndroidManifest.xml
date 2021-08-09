@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_company_round"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.산업기능요원"
+        android:theme="@style/Theme.RayTheme"
         android:requestLegacyExternalStorage="true">
         <activity
             android:name=".SupportActivity">
