@@ -41,17 +41,17 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when(viewType){
-        TITLE -> SubtitledHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_subtitled, parent, false))
-        NEWS -> NewsHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_news, parent, false))
+        TITLE -> SubtitledHolder(LayoutInflater.from(mContext).inflate(R.layout.holder_company_info_item_subtitled, parent, false))
+        NEWS -> NewsHolder(LayoutInflater.from(mContext).inflate(R.layout.holder_company_info_item_news, parent, false))
         MAIN_TASKS, REQUIREMENTS, PREFERRED -> {
-            ListHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_list, parent, false))
+            ListHolder(LayoutInflater.from(mContext).inflate(R.layout.holder_company_info_item_list, parent, false))
         }
-        LOCATION -> LocationHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_location, parent, false))
-        SCALE -> ScaleHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_scale, parent, false))
-        SALARY -> SalaryHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_salary, parent, false))
-        NEWS_INTRO -> NewsIntroHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_news_intro, parent, false))
+        LOCATION -> LocationHolder(LayoutInflater.from(mContext).inflate(R.layout.holder_company_info_item_location, parent, false))
+        SCALE -> ScaleHolder(LayoutInflater.from(mContext).inflate(R.layout.holder_company_info_item_scale, parent, false))
+        SALARY -> SalaryHolder(LayoutInflater.from(mContext).inflate(R.layout.holder_company_info_item_salary, parent, false))
+        NEWS_INTRO -> NewsIntroHolder(LayoutInflater.from(mContext).inflate(R.layout.holder_company_info_item_news_intro, parent, false))
         else-> {
-            DefaultHolder(LayoutInflater.from(mContext).inflate(R.layout.company_info_item_default, parent, false))
+            DefaultHolder(LayoutInflater.from(mContext).inflate(R.layout.holder_company_info_item_default, parent, false))
         }
     }
 

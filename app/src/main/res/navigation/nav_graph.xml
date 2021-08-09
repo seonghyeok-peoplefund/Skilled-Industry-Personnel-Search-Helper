@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/FirstFragment"
         android:label="CompanyFilter"
-        tools:layout="@layout/company_filter">
+        tools:layout="@layout/frg_company_filter">
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
@@ -18,7 +18,7 @@
         android:id="@+id/SecondFragment"
         android:name="com.ray.personnel.fragment.company.CompanyListFragment"
         android:label="CompanyList"
-        tools:layout="@layout/company_list">
+        tools:layout="@layout/frg_company_list">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
