@@ -85,9 +85,6 @@ class CompanyInfo : AppCompatActivity() {
                                     palette?.mutedSwatch?.rgb ?: Color.WHITE)
                             activity.toolbarLayout.setContentScrimColor(backColor)
                             activity.toolbarLayout.setStatusBarScrimColor(backColor)
-                            activity.drawerInner.setBackgroundColor(
-                                    (0x7f shl 24) or (backColor shl 8 shr 8)
-                            )
                             //activity.toolbar.setBackgroundColor(backColor)
                         }
                     }

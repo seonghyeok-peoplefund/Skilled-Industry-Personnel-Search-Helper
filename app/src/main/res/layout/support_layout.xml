@@ -8,57 +8,37 @@
             type="com.ray.personnel.viewmodel.SupportViewModel"/>
     </data>
 
-    <androidx.drawerlayout.widget.DrawerLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:fitsSystemWindows="true"
-        android:id="@+id/drawer">
-
-        <androidx.appcompat.widget.LinearLayoutCompat
+        android:background="#96DBB4">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:fitsSystemWindows="true"
-            android:background="#96DBB4">
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="?attr/actionBarSize"
-                android:title = "DEFAULT"
-                android:background="#96DBB4"
-                app:contentInsetStart="30dp"/>
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/container"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:layout_height="0dp"
-                android:background="#FFFFFF">
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/bottom_navigationbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:tabStripEnabled="true"
-                app:itemTextColor="@color/tabs_color"
-                app:itemIconTint="@color/tabs_color"
-                android:onNavigationItemSelectedListener="@{viewmodel::navItemSelected}"
-                app:menu="@menu/bottom" />
-
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            android:background="#96DBB4"
+            app:contentInsetStart="30dp"/>
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/drawer_inner"
-            android:paddingTop="20dp"
-            android:layout_width="200dp"
-            android:layout_height="match_parent"
-            android:background="#5FAFEA"
-            android:layout_gravity="right"
-            android:fitsSystemWindows="true" >
-
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:background="#FFFFFF">
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.drawerlayout.widget.DrawerLayout>
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigationbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tabStripEnabled="true"
+            app:itemTextColor="@color/tabs_color"
+            app:itemIconTint="@color/tabs_color"
+            android:onNavigationItemSelectedListener="@{viewmodel::navItemSelected}"
+            app:menu="@menu/bottom" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </layout>

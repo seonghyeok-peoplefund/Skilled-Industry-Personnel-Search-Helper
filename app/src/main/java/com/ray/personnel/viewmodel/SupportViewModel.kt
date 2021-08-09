@@ -1,15 +1,12 @@
 package com.ray.personnel.viewmodel
 
 import android.app.Application
-import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.widget.SearchView
 import androidx.databinding.ObservableField
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.ray.personnel.fragment.company.CompanyFilterFragment
-import com.ray.personnel.fragment.NullFragment
 import com.ray.personnel.R
 import com.ray.personnel.fragment.favorite.FavoriteListFragment
 import com.ray.personnel.fragment.user.info.UserInfoFragment
@@ -60,7 +57,6 @@ class SupportViewModel(application: Application): AndroidViewModel(application){
             R.id.icon_company -> curFragment.value = CompanyFilterFragment()
             R.id.icon_account -> curFragment.value = UserInfoFragment()
             R.id.icon_favorite -> curFragment.value = FavoriteListFragment()
-            else -> curFragment.value = NullFragment()
         }
         return true
     }

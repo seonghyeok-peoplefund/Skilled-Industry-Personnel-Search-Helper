@@ -2,8 +2,6 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <data>
-    </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/wrapper"
         android:layout_width="match_parent"
@@ -43,7 +41,6 @@
             android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="11pt"
-            android:text="TextView"
             app:layout_constraintStart_toEndOf="@+id/scale_image"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/scale_subcontent"
@@ -54,7 +51,6 @@
             android:layout_height="wrap_content"
             android:textColor="#404040"
             android:textSize="8pt"
-            android:text="TextView"
             app:layout_constraintStart_toEndOf="@+id/scale_image"
             app:layout_constraintTop_toBottomOf="@+id/scale_content"
             app:layout_constraintBottom_toTopOf="@+id/outline"
@@ -67,7 +63,6 @@
             android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="7pt"
-            android:text="TextView"
             android:layout_marginStart="10dp"
             app:layout_constraintStart_toEndOf="@+id/scale_content"
             app:layout_constraintTop_toTopOf="parent"
@@ -78,7 +73,6 @@
             android:layout_height="wrap_content"
             android:textColor="#404040"
             android:textSize="7pt"
-            android:text="TextView"
             android:layout_marginStart="10dp"
             app:layout_constraintStart_toEndOf="@+id/scale_content"
             app:layout_constraintTop_toBottomOf="@+id/personnel_content"
