@@ -37,7 +37,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/nav"
+                android:id="@+id/bottom_navigationbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:tabStripEnabled="true"

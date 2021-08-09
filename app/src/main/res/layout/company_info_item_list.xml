@@ -10,7 +10,6 @@
             android:layout_margin="10dp"
             android:paddingStart="10dp">
                 <View
-                    android:id="@+id/leftview"
                     android:layout_width="2dp"
                     android:layout_height="match_parent"
                     android:background="#888888"
@@ -20,7 +19,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#000000"
-                    android:text="HELLO\nTHIS IS SOMETHING\nStack : https://github.com/RayJang"
                     android:autoLink="web"
                     android:textSize="7pt"/>
         </LinearLayout>

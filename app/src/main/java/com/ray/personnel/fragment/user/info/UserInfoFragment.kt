@@ -61,7 +61,7 @@ class UserInfoFragment : Fragment(), FragmentChangeInterface {
             getCookie(view?.url, Constants.TOKEN)?.let{ token ->
                 PreferenceManager.setString(ctx, Constants.TOKEN, token)
                 model.curFragment.value = CompanyFilterFragment()
-                (activity as SupportActivity).binding.nav.selectedItemId = R.id.icon_company
+                (activity as SupportActivity).binding.bottomNavigationbar.selectedItemId = R.id.icon_company
             }
             return true
         }

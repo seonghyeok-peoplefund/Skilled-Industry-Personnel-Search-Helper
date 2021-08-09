@@ -23,67 +23,66 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/subcontent"
+            app:layout_constraintTop_toBottomOf="@+id/scale_subcontent"
             app:layout_constraintVertical_bias="0.857" />
 
         <ImageView
-            android:id="@+id/scale"
+            android:id="@+id/scale_image"
             android:scaleType="centerCrop"
             app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintTop_toTopOf="@+id/content"
-            app:layout_constraintBottom_toBottomOf="@+id/subcontent"
+            app:layout_constraintTop_toTopOf="@+id/scale_content"
+            app:layout_constraintBottom_toBottomOf="@+id/scale_subcontent"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/ic_people"
             android:layout_height="0dp"
             android:layout_width="0dp"
             android:padding="10dp"/>
         <TextView
-            android:id="@+id/content"
+            android:id="@+id/scale_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="11pt"
             android:text="TextView"
-            app:layout_constraintStart_toEndOf="@+id/scale"
+            app:layout_constraintStart_toEndOf="@+id/scale_image"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/subcontent"
-            app:layout_constraintEnd_toStartOf="@+id/fourth"/>
+            app:layout_constraintBottom_toTopOf="@+id/scale_subcontent"
+            app:layout_constraintEnd_toStartOf="@+id/personnel_content"/>
         <TextView
-            android:id="@+id/subcontent"
+            android:id="@+id/scale_subcontent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#404040"
             android:textSize="8pt"
             android:text="TextView"
-            app:layout_constraintStart_toEndOf="@+id/scale"
-            app:layout_constraintTop_toBottomOf="@+id/content"
+            app:layout_constraintStart_toEndOf="@+id/scale_image"
+            app:layout_constraintTop_toBottomOf="@+id/scale_content"
             app:layout_constraintBottom_toTopOf="@+id/outline"
-            app:layout_constraintEnd_toEndOf="@+id/content"
+            app:layout_constraintEnd_toEndOf="@+id/scale_content"
             android:layout_marginStart="5dp"/>
 
         <TextView
-            android:id="@+id/fourth"
+            android:id="@+id/personnel_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="7pt"
             android:text="TextView"
             android:layout_marginStart="10dp"
-            app:layout_constraintStart_toEndOf="@+id/content"
+            app:layout_constraintStart_toEndOf="@+id/scale_content"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/third"/>
+            app:layout_constraintBottom_toTopOf="@+id/personnel_subcontent"/>
         <TextView
-            android:id="@+id/third"
+            android:id="@+id/personnel_subcontent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#404040"
             android:textSize="7pt"
             android:text="TextView"
             android:layout_marginStart="10dp"
-            app:layout_constraintStart_toEndOf="@+id/content"
-            app:layout_constraintTop_toBottomOf="@+id/fourth"
-            app:layout_constraintBottom_toBottomOf="@+id/subcontent"/>
-
+            app:layout_constraintStart_toEndOf="@+id/scale_content"
+            app:layout_constraintTop_toBottomOf="@+id/personnel_content"
+            app:layout_constraintBottom_toBottomOf="@+id/scale_subcontent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

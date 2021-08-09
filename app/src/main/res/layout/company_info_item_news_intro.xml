@@ -11,36 +11,36 @@
         android:layout_margin="10dp">
 
         <ImageView
-            android:id="@+id/news_intro"
+            android:id="@+id/news_intro_image"
             android:scaleType="centerCrop"
             app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintBottom_toBottomOf="@+id/subcontent"
+            app:layout_constraintBottom_toBottomOf="@+id/news_intro_subcontent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/content"
+            app:layout_constraintTop_toTopOf="@+id/news_intro_content"
             app:srcCompat="@drawable/ic_news"
             android:layout_height="0dp"
             android:layout_width="0dp"
             android:padding="10dp"/>
 
         <TextView
-            android:id="@+id/content"
+            android:id="@+id/news_intro_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="11pt"
             android:text="해당 회사의 최근 정보"
-            app:layout_constraintStart_toEndOf="@+id/news_intro"
+            app:layout_constraintStart_toEndOf="@+id/news_intro_image"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/subcontent"/>
+            app:layout_constraintBottom_toTopOf="@+id/news_intro_subcontent"/>
         <TextView
-            android:id="@+id/subcontent"
+            android:id="@+id/news_intro_subcontent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#404040"
             android:textSize="8pt"
             android:text="from naver api"
-            app:layout_constraintStart_toEndOf="@+id/news_intro"
-            app:layout_constraintTop_toBottomOf="@+id/content"
+            app:layout_constraintStart_toEndOf="@+id/news_intro_image"
+            app:layout_constraintTop_toBottomOf="@+id/news_intro_content"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginStart="5dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>

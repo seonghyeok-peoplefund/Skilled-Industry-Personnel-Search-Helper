@@ -40,7 +40,7 @@ class CompanyInfo : AppCompatActivity() {
     }
 
     private fun setRecyclerView() {
-        with(activity.list){
+        with(activity.companyInfo){
             layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this@CompanyInfo)
             adapter = CompanyInfoAdapter(this@CompanyInfo, company)
         }
@@ -62,7 +62,7 @@ class CompanyInfo : AppCompatActivity() {
 
         company.observableNews.subscribe({ arr ->
             company.news = arr
-            (activity.list.adapter as CompanyInfoAdapter).refresh(CompanyInfoAdapter.NEWS)
+            (activity.companyInfo.adapter as CompanyInfoAdapter).refresh(CompanyInfoAdapter.NEWS)
         }, {err -> Toast.makeText(this, "인터넷 연결이 올바르지 않습니다.", Toast.LENGTH_SHORT).show(); Toast.makeText(this, err.toString(), Toast.LENGTH_LONG).show()
         }
         )
@@ -76,15 +76,15 @@ class CompanyInfo : AppCompatActivity() {
                 .thumbnail(0.3f)
                 .into(object : SimpleTarget<Bitmap>() {
                     override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                        activity.image.setImageBitmap(resource)
+                        activity.companyImage.setImageBitmap(resource)
                         Palette.from(resource).generate { palette ->
                             var backColor = getColorFromDarkToBright(
                                     palette?.lightVibrantSwatch?.rgb ?:
                                     palette?.lightMutedSwatch?.rgb ?:
                                     palette?.vibrantSwatch?.rgb ?:
                                     palette?.mutedSwatch?.rgb ?: Color.WHITE)
-                            activity.toolbarlayout.setContentScrimColor(backColor)
-                            activity.toolbarlayout.setStatusBarScrimColor(backColor)
+                            activity.toolbarLayout.setContentScrimColor(backColor)
+                            activity.toolbarLayout.setStatusBarScrimColor(backColor)
                             activity.drawerInner.setBackgroundColor(
                                     (0x7f shl 24) or (backColor shl 8 shr 8)
                             )
@@ -121,7 +121,7 @@ class CompanyInfo : AppCompatActivity() {
         with((menu!!.findItem(R.id.search).actionView) as SearchView){
             setOnQueryTextListener(object: SearchView.OnQueryTextListener{
                 override fun onQueryTextChange(newText: String): Boolean {
-                    (activity.list.adapter as CompanyInfoAdapter).filter(newText)
+                    (activity.companyInfo.adapter as CompanyInfoAdapter).filter(newText)
                     return true
                 }
 

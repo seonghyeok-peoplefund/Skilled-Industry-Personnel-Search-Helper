@@ -19,43 +19,41 @@
             android:layout_marginEnd="15dp"
             android:layout_marginTop="7dp"
             android:background="@color/whity"
-            app:layout_constraintTop_toBottomOf="@+id/subcontent"
+            app:layout_constraintTop_toBottomOf="@+id/location_subcontent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
 
         <ImageView
-            android:id="@+id/location"
+            android:id="@+id/location_image"
             android:scaleType="centerCrop"
             app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintBottom_toBottomOf="@+id/subcontent"
+            app:layout_constraintBottom_toBottomOf="@+id/location_subcontent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/content"
+            app:layout_constraintTop_toTopOf="@+id/location_content"
             app:srcCompat="@drawable/ic_location"
             android:layout_height="0dp"
             android:layout_width="0dp"
             android:padding="10dp"/>
 
         <TextView
-            android:id="@+id/content"
+            android:id="@+id/location_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="11pt"
-            android:text="TextView"
-            app:layout_constraintStart_toEndOf="@+id/location"
+            app:layout_constraintStart_toEndOf="@+id/location_image"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/subcontent"/>
+            app:layout_constraintBottom_toTopOf="@+id/location_subcontent"/>
         <TextView
-            android:id="@+id/subcontent"
+            android:id="@+id/location_subcontent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#404040"
             android:textSize="8pt"
-            android:text="TextView"
-            app:layout_constraintStart_toEndOf="@+id/location"
-            app:layout_constraintTop_toBottomOf="@+id/content"
+            app:layout_constraintStart_toEndOf="@+id/location_image"
+            app:layout_constraintTop_toBottomOf="@+id/location_content"
             app:layout_constraintBottom_toTopOf="@+id/outline"
             android:layout_marginStart="5dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -60,7 +60,7 @@ class FavoriteListFragment() : Fragment(), FragmentChangeInterface {
     }
 
     private fun setRecyclerView(view: View) {
-        with(binding.list){
+        with(binding.companyListRecyclerview){
             layoutManager = GridLayoutManager(ctx, 2)
             addItemDecoration(getGridDecoration())
             adapter = CompanyListAdapter(ctx, emptyList())

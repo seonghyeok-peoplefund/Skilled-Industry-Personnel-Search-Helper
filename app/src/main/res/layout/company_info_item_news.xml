@@ -5,286 +5,47 @@
     <data>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/news_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/layout2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_margin="2dp"
-            android:paddingStart="5dp"
-            android:foreground="?attr/selectableItemBackground">
+        android:layout_marginEnd="20dp"
+        android:paddingStart="5dp"
+        android:foreground="?attr/selectableItemBackground">
             <TextView
-                android:id="@+id/news1_title"
+                android:id="@+id/news_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView"
                 android:textSize="8pt"
                 android:lines="1"
                 android:textStyle="bold"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/news1_contents"
+                app:layout_constraintBottom_toTopOf="@+id/news_content"
                 app:layout_constraintStart_toStartOf="parent"/>
             <TextView
-                android:id="@+id/news1_contents"
+                android:id="@+id/news_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView\nTextView"
                 android:textSize="5pt"
                 android:lines="2"
                 android:layout_marginStart="10dp"
-                app:layout_constraintTop_toBottomOf="@+id/news1_title"
-                app:layout_constraintBottom_toTopOf="@+id/outline1"
+                app:layout_constraintTop_toBottomOf="@+id/news_title"
+                app:layout_constraintBottom_toTopOf="@+id/outline"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <View
-                android:id="@+id/outline1"
+                android:id="@+id/outline"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginTop="7dp"
                 android:background="@color/whity"
-                app:layout_constraintTop_toBottomOf="@+id/news1_contents"
+                app:layout_constraintTop_toBottomOf="@+id/news_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#808080"
-            app:layout_constraintBottom_toTopOf="@+id/layout2"
-            app:layout_constraintTop_toBottomOf="@+id/layout1"
-            android:layout_margin="10dp"/>
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/layout3"
-            app:layout_constraintTop_toBottomOf="@+id/layout1"
-            android:layout_margin="2dp"
-            android:paddingStart="5dp"
-            android:foreground="?attr/selectableItemBackground">
-
-            <TextView
-                android:id="@+id/news2_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textSize="8pt"
-                android:lines="1"
-                android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/news2_contents"
-                app:layout_constraintStart_toStartOf="parent"/>
-            <TextView
-                android:id="@+id/news2_contents"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView\nTextView"
-                android:textSize="5pt"
-                android:lines="2"
-                android:layout_marginStart="10dp"
-                app:layout_constraintTop_toBottomOf="@+id/news2_title"
-                app:layout_constraintBottom_toTopOf="@+id/outline2"
-                app:layout_constraintStart_toStartOf="parent" />
-            <View
-                android:id="@+id/outline2"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginTop="7dp"
-                android:background="@color/whity"
-                app:layout_constraintTop_toBottomOf="@+id/news2_contents"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#808080"
-            app:layout_constraintBottom_toTopOf="@+id/layout3"
-            app:layout_constraintTop_toBottomOf="@+id/layout2"
-            android:layout_margin="10dp" />
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/layout4"
-            app:layout_constraintTop_toBottomOf="@+id/layout2"
-            android:layout_margin="2dp"
-            android:paddingStart="5dp"
-            android:foreground="?attr/selectableItemBackground">
-
-
-            <TextView
-                android:id="@+id/news3_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textSize="8pt"
-                android:lines="1"
-                android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/news3_contents"
-                app:layout_constraintStart_toStartOf="parent"/>
-            <TextView
-                android:id="@+id/news3_contents"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView\nTextView"
-                android:textSize="5pt"
-                android:lines="2"
-                android:layout_marginStart="10dp"
-                app:layout_constraintTop_toBottomOf="@+id/news3_title"
-                app:layout_constraintBottom_toTopOf="@+id/outline3"
-                app:layout_constraintStart_toStartOf="parent" />
-            <View
-                android:id="@+id/outline3"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginTop="7dp"
-                android:background="@color/whity"
-                app:layout_constraintTop_toBottomOf="@+id/news3_contents"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#808080"
-            app:layout_constraintBottom_toTopOf="@+id/layout4"
-            app:layout_constraintTop_toBottomOf="@+id/layout3"
-            android:layout_margin="10dp" />
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/layout5"
-            app:layout_constraintTop_toBottomOf="@+id/layout3"
-            android:layout_margin="2dp"
-            android:paddingStart="5dp"
-            android:foreground="?attr/selectableItemBackground">
-
-            <TextView
-                android:id="@+id/news4_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textSize="8pt"
-                android:lines="1"
-                android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/news4_contents"
-                app:layout_constraintStart_toStartOf="parent"/>
-            <TextView
-                android:id="@+id/news4_contents"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView\nTextView"
-                android:textSize="5pt"
-                android:lines="2"
-                android:layout_marginStart="10dp"
-                app:layout_constraintTop_toBottomOf="@+id/news4_title"
-                app:layout_constraintBottom_toTopOf="@+id/outline4"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <View
-                android:id="@+id/outline4"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginTop="7dp"
-                android:background="@color/whity"
-                app:layout_constraintTop_toBottomOf="@+id/news4_contents"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#808080"
-            app:layout_constraintBottom_toTopOf="@+id/layout5"
-            app:layout_constraintTop_toBottomOf="@+id/layout4"
-            android:layout_margin="10dp" />
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layout4"
-            android:layout_margin="2dp"
-            android:paddingStart="5dp"
-            android:foreground="?attr/selectableItemBackground">
-
-            <TextView
-                android:id="@+id/news5_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textSize="8pt"
-                android:lines="1"
-                android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/news5_contents"
-                app:layout_constraintStart_toStartOf="parent"/>
-            <TextView
-                android:id="@+id/news5_contents"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView\nTextView"
-                android:textSize="5pt"
-                android:lines="2"
-                android:layout_marginStart="10dp"
-                app:layout_constraintTop_toBottomOf="@+id/news5_title"
-                app:layout_constraintBottom_toTopOf="@+id/outline5"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <View
-                android:id="@+id/outline5"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginTop="7dp"
-                android:background="@color/whity"
-                app:layout_constraintTop_toBottomOf="@+id/news5_contents"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>

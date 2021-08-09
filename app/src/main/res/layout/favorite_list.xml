@@ -11,8 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        android:background="#fff6f6f6"
-        android:id="@+id/company_list">
+        android:background="#fff6f6f6">
 
 
         <com.google.android.material.appbar.AppBarLayout
@@ -26,31 +25,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
-                app:layout_constraintBottom_toTopOf="@+id/list"
+                app:layout_constraintBottom_toTopOf="@+id/company_list_recyclerview"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="15dp"
-                    android:id="@+id/tv1"
+                    android:id="@+id/company_list_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Sort By"
                     android:textSize="9pt"
                     android:textColor="@color/black"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/radioGroup"
+                    app:layout_constraintBottom_toTopOf="@+id/radio_group"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
 
                 <include
-                    android:id="@+id/radioGroup"
+                    android:id="@+id/radio_group"
                     layout="@layout/sort_radio_group"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv1"
+                    app:layout_constraintTop_toBottomOf="@+id/company_list_title"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:sortListener="@{viewmodel.sortListener}"/>
 
@@ -82,7 +81,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/list"
+                    android:id="@+id/company_list_recyclerview"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     app:layout_constraintStart_toStartOf="parent"

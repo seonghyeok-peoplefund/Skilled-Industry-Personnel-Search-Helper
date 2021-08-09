@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:id="@+id/search"
+            android:id="@+id/main_image"
             android:scaleType="centerCrop"
             app:layout_constraintDimensionRatio="1:1"
             app:srcCompat="@drawable/ic_manage_search"
@@ -27,11 +27,11 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/progress"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/tv0"/>
+            app:layout_constraintEnd_toStartOf="@id/main_title"/>
 
         <TextView
             android:layout_marginStart="5dp"
-            android:id="@+id/tv0"
+            android:id="@+id/main_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="산업기능요원 구인구직 어플리케이션"
@@ -39,19 +39,20 @@
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/progress"
-            app:layout_constraintStart_toEndOf="@+id/search"/>
+            app:layout_constraintStart_toEndOf="@+id/main_image"/>
 
         <com.daimajia.numberprogressbar.NumberProgressBar
             android:id="@+id/progress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/tv0"
-            app:layout_constraintBottom_toTopOf="@+id/tv1"
+            app:layout_constraintTop_toBottomOf="@+id/main_title"
+            app:layout_constraintBottom_toTopOf="@+id/department_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_margin="10dp"/>
+
         <TextView
-            android:id="@+id/tv1"
+            android:id="@+id/department_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="분야"
@@ -60,12 +61,11 @@
             android:layout_marginStart="5dp"
             android:layout_marginBottom="15dp"
             app:layout_constraintTop_toBottomOf="@+id/progress"
-            app:layout_constraintBottom_toTopOf="@+id/sp1"
+            app:layout_constraintBottom_toTopOf="@+id/department_spinner"
             app:layout_constraintStart_toStartOf="parent"/>
 
-
         <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/sp1"
+            android:id="@+id/department_spinner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:entries="@{viewmodel.jobs1}"
@@ -74,47 +74,47 @@
             android:textSize="8pt"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            app:layout_constraintTop_toBottomOf="@+id/tv1"
+            app:layout_constraintTop_toBottomOf="@+id/department_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/tv2"
-            app:layout_constraintBottom_toTopOf="@+id/v1"/>
+            app:layout_constraintEnd_toStartOf="@id/department_divider"
+            app:layout_constraintBottom_toTopOf="@+id/divider1"/>
 
         <TextView
-            android:id="@+id/tv2"
+            android:id="@+id/department_divider"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="-"
             android:textSize="10pt"
-            app:layout_constraintBottom_toBottomOf="@+id/sp1"
-            app:layout_constraintStart_toEndOf="@id/sp1"
-            app:layout_constraintEnd_toStartOf="@id/sp2"
-            app:layout_constraintTop_toTopOf="@+id/sp1" />
+            app:layout_constraintBottom_toBottomOf="@+id/department_spinner"
+            app:layout_constraintStart_toEndOf="@id/department_spinner"
+            app:layout_constraintEnd_toStartOf="@id/department_detail_spinner"
+            app:layout_constraintTop_toTopOf="@+id/department_spinner" />
 
 
         <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/sp2"
+            android:id="@+id/department_detail_spinner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:entries="@{viewmodel.jobs2}"
             android:textSize="8pt"
-            app:layout_constraintStart_toEndOf="@+id/tv2"
+            app:layout_constraintStart_toEndOf="@+id/department_divider"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/sp1"
-            app:layout_constraintBottom_toBottomOf="@+id/sp1"
+            app:layout_constraintTop_toTopOf="@+id/department_spinner"
+            app:layout_constraintBottom_toBottomOf="@+id/department_spinner"
             app:onItemSelected="@{viewmodel.jobs2listener}"
             app:selectedValue="@{viewmodel.jobs2value}" />
 
         <View
-            android:id="@+id/v1"
+            android:id="@+id/divider1"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#808080"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sp1"
-            app:layout_constraintBottom_toTopOf="@+id/tv3"
+            app:layout_constraintTop_toBottomOf="@+id/department_spinner"
+            app:layout_constraintBottom_toTopOf="@+id/location_title"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginTop="20dp"
@@ -122,7 +122,7 @@
 
 
         <TextView
-            android:id="@+id/tv3"
+            android:id="@+id/location_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="위치"
@@ -130,13 +130,13 @@
             android:textStyle="bold"
             android:layout_marginStart="5dp"
             android:layout_marginBottom="10dp"
-            app:layout_constraintTop_toBottomOf="@+id/v1"
-            app:layout_constraintBottom_toTopOf="@id/et1"
+            app:layout_constraintTop_toBottomOf="@+id/divider1"
+            app:layout_constraintBottom_toTopOf="@id/location_latitude"
             app:layout_constraintStart_toStartOf="parent"/>
 
 
         <EditText
-            android:id="@+id/et1"
+            android:id="@+id/location_latitude"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="8pt"
@@ -145,22 +145,22 @@
             android:text="@={viewmodel.latitude}"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            app:layout_constraintTop_toBottomOf="@+id/tv3"
+            app:layout_constraintTop_toBottomOf="@+id/location_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/tv4"
-            app:layout_constraintBottom_toTopOf="@id/gps"/>
+            app:layout_constraintEnd_toStartOf="@id/location_divider"
+            app:layout_constraintBottom_toTopOf="@id/location_gps"/>
         <TextView
-            android:id="@+id/tv4"
+            android:id="@+id/location_divider"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="-"
             android:textSize="10pt"
-            app:layout_constraintTop_toBottomOf="@+id/tv3"
-            app:layout_constraintStart_toEndOf="@id/et1"
-            app:layout_constraintEnd_toStartOf="@id/et2"
-            app:layout_constraintBottom_toTopOf="@id/gps" />
+            app:layout_constraintTop_toBottomOf="@+id/location_title"
+            app:layout_constraintStart_toEndOf="@id/location_latitude"
+            app:layout_constraintEnd_toStartOf="@id/location_longitude"
+            app:layout_constraintBottom_toTopOf="@id/location_gps" />
         <EditText
-            android:id="@+id/et2"
+            android:id="@+id/location_longitude"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="8pt"
@@ -169,33 +169,33 @@
             android:text="@={viewmodel.longitude}"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            app:layout_constraintTop_toBottomOf="@+id/tv3"
-            app:layout_constraintStart_toEndOf="@+id/tv4"
+            app:layout_constraintTop_toBottomOf="@+id/location_title"
+            app:layout_constraintStart_toEndOf="@+id/location_divider"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/gps" />
+            app:layout_constraintBottom_toTopOf="@id/location_gps" />
 
         <de.timonknispel.ktloadingbutton.KTLoadingButton
-            android:id="@+id/gps"
+            android:id="@+id/location_gps"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:buttonName="위치"
             android:layout_marginTop="10dp"
             android:onClick="@{(v) -> viewmodel.useGPS(v)}"
-            app:layout_constraintTop_toBottomOf="@+id/et1"
+            app:layout_constraintTop_toBottomOf="@+id/location_latitude"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/v2"/>
+            app:layout_constraintBottom_toTopOf="@+id/divider2"/>
 
 
 
         <View
-            android:id="@+id/v2"
+            android:id="@+id/divider2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#808080"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/gps"
-            app:layout_constraintBottom_toTopOf="@+id/tv5"
+            app:layout_constraintTop_toBottomOf="@+id/location_gps"
+            app:layout_constraintBottom_toTopOf="@+id/login_description"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginTop="20dp"
@@ -203,7 +203,7 @@
 
 
         <TextView
-            android:id="@+id/tv5"
+            android:id="@+id/login_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{viewmodel.warningText}"
@@ -211,14 +211,14 @@
             android:textColor="@{viewmodel.warningColor}"
             android:layout_marginTop="20dp"
             android:layout_marginStart="5dp"
-            app:layout_constraintTop_toBottomOf="@+id/v2"
+            app:layout_constraintTop_toBottomOf="@+id/divider2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btn1"
+            android:id="@+id/search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
