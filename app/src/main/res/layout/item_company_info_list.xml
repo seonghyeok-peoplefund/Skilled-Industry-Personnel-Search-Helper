@@ -20,6 +20,6 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:autoLink="web"
-                    android:textSize="7pt"/>
+                    android:textSize="@dimen/text_normal"/>
         </LinearLayout>
 </layout>

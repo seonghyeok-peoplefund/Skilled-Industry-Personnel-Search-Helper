@@ -20,14 +20,13 @@
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
             android:background="@color/greeny"
-            app:contentInsetStart="30dp"/>
+            app:contentInsetStart="@dimen/toolbar_indentation"/>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_weight="1"
             android:layout_height="0dp"
-            android:background="@color/white">
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:background="@color/white"/>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigationbar"
