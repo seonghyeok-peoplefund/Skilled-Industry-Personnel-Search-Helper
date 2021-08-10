@@ -16,7 +16,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
 import com.ray.personnel.R
 import com.ray.personnel.SupportActivity
-import com.ray.personnel.databinding.UserInfoBinding
+import com.ray.personnel.databinding.FragmentUserInfoBinding
 import com.ray.personnel.fragment.FragmentChangeInterface
 import com.ray.personnel.fragment.company.CompanyFilterFragment
 import com.ray.personnel.utils.Constants
@@ -27,7 +27,7 @@ import com.ray.personnel.viewmodel.user.info.UserInfoViewModel
 class UserInfoFragment : Fragment(), FragmentChangeInterface {
     override var isAttached: MutableLiveData<Any?> = MutableLiveData()
     lateinit var ctx: Context
-    private var _binding: UserInfoBinding? = null
+    private var _binding: FragmentUserInfoBinding? = null
     private val binding get() = _binding!!
     override val model: UserInfoViewModel by activityViewModels()
     override fun onAttach(context: Context) {
@@ -37,7 +37,7 @@ class UserInfoFragment : Fragment(), FragmentChangeInterface {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
-        _binding = UserInfoBinding.inflate(inflater, container, false)
+        _binding = FragmentUserInfoBinding.inflate(inflater, container, false)
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,7 +61,7 @@ class UserInfoFragment : Fragment(), FragmentChangeInterface {
             getCookie(view?.url, Constants.TOKEN)?.let{ token ->
                 PreferenceManager.setString(ctx, Constants.TOKEN, token)
                 model.curFragment.value = CompanyFilterFragment()
-                (activity as SupportActivity).binding.nav.selectedItemId = R.id.icon_company
+                (activity as SupportActivity).binding.bottomNavigationbar.selectedItemId = R.id.icon_company
             }
             return true
         }

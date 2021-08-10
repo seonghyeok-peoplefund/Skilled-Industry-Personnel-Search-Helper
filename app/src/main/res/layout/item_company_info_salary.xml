@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacing_normal"
+        android:foreground="?attr/selectableItemBackground">
+
+        <View
+            android:id="@+id/outline"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/outline_height"
+            android:layout_marginStart="@dimen/spacing_big"
+            android:layout_marginEnd="@dimen/spacing_big"
+            android:layout_marginTop="@dimen/spacing_normal"
+            android:background="@color/pinkwhite"
+            app:layout_constraintTop_toBottomOf="@+id/salary_subcontent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageView
+            android:id="@+id/salary_image"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintBottom_toBottomOf="@+id/salary_subcontent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/salary_content"
+            app:srcCompat="@drawable/ic_money"
+            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:padding="@dimen/spacing_normal"/>
+
+        <TextView
+            android:id="@+id/salary_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_big"
+            android:singleLine="true"
+            android:ellipsize="none"
+            app:layout_constraintStart_toEndOf="@+id/salary_image"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/salary_subcontent"/>
+        <TextView
+            android:id="@+id/salary_subcontent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/darkgray"
+            android:textSize="@dimen/text_normal"
+            android:singleLine="true"
+            android:ellipsize="none"
+            app:layout_constraintStart_toEndOf="@+id/salary_image"
+            app:layout_constraintTop_toBottomOf="@+id/salary_content"
+            app:layout_constraintBottom_toTopOf="@+id/outline"
+            android:layout_marginStart="@dimen/spacing_small"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

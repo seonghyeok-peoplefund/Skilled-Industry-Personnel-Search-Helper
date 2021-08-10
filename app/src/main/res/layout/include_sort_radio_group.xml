@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="sortListener"
+            type="com.ray.personnel.ui.SortRadioGroup.SortRadioListener"/>
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.ray.personnel.ui.SortRadioGroup
+            android:id="@+id/radio_group"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/spacing_small"
+            android:paddingBottom="@dimen/spacing_big"
+            android:paddingStart="@dimen/spacing_big"
+            android:paddingEnd="@dimen/spacing_big"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:onClick="@{sortListener}">
+
+            <com.ray.personnel.ui.SortRadioButton
+                android:id="@+id/radio_location"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/ic_location"
+                android:gravity="center"
+                android:background="@drawable/radio_button_rippled_left"
+                android:padding="@dimen/spacing_normal"
+                app:isButtonChecked="true"/>
+            <com.ray.personnel.ui.SortRadioButton
+                android:id="@+id/radio_salary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/ic_money"
+                android:gravity="center"
+                android:foreground="?attr/selectableItemBackground"
+                android:background="@drawable/radio_button_background"
+                android:padding="@dimen/spacing_normal"/>
+            <com.ray.personnel.ui.SortRadioButton
+                android:id="@+id/radio_ratio"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/ic_percent"
+                android:gravity="center"
+                android:background="@drawable/radio_button_rippled_right"
+                android:padding="@dimen/spacing_normal"/>
+
+        </com.ray.personnel.ui.SortRadioGroup>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

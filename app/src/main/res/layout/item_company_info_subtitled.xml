@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacing_normal"
+        android:paddingStart="@dimen/spacing_normal"
+        android:foreground="?attr/selectableItemBackground">
+
+
+        <View
+            android:id="@+id/outline"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/outline_height"
+            android:layout_marginStart="@dimen/spacing_big"
+            android:layout_marginEnd="@dimen/spacing_big"
+            android:layout_marginTop="@dimen/spacing_normal"
+            android:background="@color/pinkwhite"
+            app:layout_constraintTop_toBottomOf="@+id/subcontent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_big"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/subcontent"/>
+        <TextView
+            android:id="@+id/subcontent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/text_normal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/content"
+            app:layout_constraintBottom_toTopOf="@+id/outline"
+            android:layout_marginStart="@dimen/spacing_small"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

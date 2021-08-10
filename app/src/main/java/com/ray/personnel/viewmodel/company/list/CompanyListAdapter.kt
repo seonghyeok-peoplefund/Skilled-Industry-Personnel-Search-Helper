@@ -40,7 +40,7 @@ class CompanyListAdapter(private val mContext: Context, var companies: List<Comp
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SimpleCompanyHolder {
-        val convertView = LayoutInflater.from(mContext).inflate(R.layout.company_list_item, parent, false)
+        val convertView = LayoutInflater.from(mContext).inflate(R.layout.item_company_list, parent, false)
         val v = SimpleCompanyHolder(convertView)
         if(viewType == 1) v.wrapper.setBackgroundColor(0x79ff0000)
         else v.wrapper.setBackgroundColor(0x00000000)

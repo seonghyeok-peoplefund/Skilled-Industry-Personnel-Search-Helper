@@ -11,14 +11,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.ray.personnel.databinding.ActivitySupportLayoutBinding
 import com.ray.personnel.viewmodel.SupportViewModel
-import com.ray.personnel.databinding.SupportLayoutBinding
 import com.ray.personnel.fragment.FragmentChangeInterface
 
 
 class SupportActivity : AppCompatActivity() {
 
-    val binding: SupportLayoutBinding by lazy { SupportLayoutBinding.inflate(layoutInflater) }
+    val binding: ActivitySupportLayoutBinding by lazy { ActivitySupportLayoutBinding.inflate(layoutInflater) }
     val model: SupportViewModel by viewModels()
     lateinit var curFrg: FragmentChangeInterface
 

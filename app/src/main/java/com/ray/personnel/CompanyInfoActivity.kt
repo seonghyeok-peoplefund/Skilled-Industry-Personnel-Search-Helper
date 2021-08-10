@@ -1,27 +1,23 @@
-package com.ray.personnel.fragment.company
+package com.ray.personnel
 
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.view.Gravity
-import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import androidx.palette.graphics.Palette
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.ray.personnel.Global.gson
 import com.ray.personnel.company.Company
-import com.ray.personnel.R
 import com.ray.personnel.viewmodel.company.info.CompanyInfoAdapter
-import com.ray.personnel.databinding.CompanyInfoBinding
+import com.ray.personnel.databinding.ActivityCompanyInfoBinding
 
-class CompanyInfo : AppCompatActivity() {
-    val activity: CompanyInfoBinding by lazy{ CompanyInfoBinding.inflate(layoutInflater) }
+class CompanyInfoActivity : AppCompatActivity() {
+    val activity: ActivityCompanyInfoBinding by lazy{ ActivityCompanyInfoBinding.inflate(layoutInflater) }
     val company: Company by lazy{ getCompanyFromIntent() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,9 +36,9 @@ class CompanyInfo : AppCompatActivity() {
     }
 
     private fun setRecyclerView() {
-        with(activity.list){
-            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this@CompanyInfo)
-            adapter = CompanyInfoAdapter(this@CompanyInfo, company)
+        with(activity.companyInfo){
+            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this@CompanyInfoActivity)
+            adapter = CompanyInfoAdapter(this@CompanyInfoActivity, company)
         }
     }
 
@@ -62,7 +58,7 @@ class CompanyInfo : AppCompatActivity() {
 
         company.observableNews.subscribe({ arr ->
             company.news = arr
-            (activity.list.adapter as CompanyInfoAdapter).refresh(CompanyInfoAdapter.NEWS)
+            (activity.companyInfo.adapter as CompanyInfoAdapter).refresh(CompanyInfoAdapter.NEWS)
         }, {err -> Toast.makeText(this, "인터넷 연결이 올바르지 않습니다.", Toast.LENGTH_SHORT).show(); Toast.makeText(this, err.toString(), Toast.LENGTH_LONG).show()
         }
         )
@@ -76,18 +72,15 @@ class CompanyInfo : AppCompatActivity() {
                 .thumbnail(0.3f)
                 .into(object : SimpleTarget<Bitmap>() {
                     override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                        activity.image.setImageBitmap(resource)
+                        activity.companyImage.setImageBitmap(resource)
                         Palette.from(resource).generate { palette ->
                             var backColor = getColorFromDarkToBright(
                                     palette?.lightVibrantSwatch?.rgb ?:
                                     palette?.lightMutedSwatch?.rgb ?:
                                     palette?.vibrantSwatch?.rgb ?:
                                     palette?.mutedSwatch?.rgb ?: Color.WHITE)
-                            activity.toolbarlayout.setContentScrimColor(backColor)
-                            activity.toolbarlayout.setStatusBarScrimColor(backColor)
-                            activity.drawerInner.setBackgroundColor(
-                                    (0x7f shl 24) or (backColor shl 8 shr 8)
-                            )
+                            activity.toolbarLayout.setContentScrimColor(backColor)
+                            activity.toolbarLayout.setStatusBarScrimColor(backColor)
                             //activity.toolbar.setBackgroundColor(backColor)
                         }
                     }
@@ -121,7 +114,7 @@ class CompanyInfo : AppCompatActivity() {
         with((menu!!.findItem(R.id.search).actionView) as SearchView){
             setOnQueryTextListener(object: SearchView.OnQueryTextListener{
                 override fun onQueryTextChange(newText: String): Boolean {
-                    (activity.list.adapter as CompanyInfoAdapter).filter(newText)
+                    (activity.companyInfo.adapter as CompanyInfoAdapter).filter(newText)
                     return true
                 }
 

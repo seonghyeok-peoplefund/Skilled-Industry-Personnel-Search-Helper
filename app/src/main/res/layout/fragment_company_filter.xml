@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.ray.personnel.viewmodel.company.filter.CompanyFilterViewModel"/>
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:layout_margin="@dimen/spacing_big"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/main_image"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="1:1"
+            app:srcCompat="@drawable/ic_manage_search"
+            android:layout_height="0dp"
+            android:layout_width="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/progress"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/main_title"/>
+
+        <TextView
+            android:layout_marginStart="@dimen/spacing_small"
+            android:id="@+id/main_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/main_title"
+            android:textSize="@dimen/text_normal"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/progress"
+            app:layout_constraintStart_toEndOf="@+id/main_image"/>
+
+        <com.daimajia.numberprogressbar.NumberProgressBar
+            android:id="@+id/progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/main_title"
+            app:layout_constraintBottom_toTopOf="@+id/department_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="@dimen/spacing_normal"/>
+
+        <TextView
+            android:id="@+id/department_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/department_title"
+            android:textSize="@dimen/text_normal"
+            android:textStyle="bold"
+            android:layout_marginStart="@dimen/spacing_small"
+            android:layout_marginBottom="@dimen/spacing_big"
+            app:layout_constraintTop_toBottomOf="@+id/progress"
+            app:layout_constraintBottom_toTopOf="@+id/department_spinner"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/department_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:entries="@{viewmodel.jobs1}"
+            app:selectedValue="@{viewmodel.jobs1value}"
+            app:onItemSelected="@{viewmodel.jobs1listener}"
+            android:textSize="@dimen/text_normal"
+            android:layout_marginStart="@dimen/spacing_big"
+            android:layout_marginEnd="@dimen/spacing_big"
+            app:layout_constraintTop_toBottomOf="@+id/department_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/department_divider"
+            app:layout_constraintBottom_toTopOf="@+id/divider1"/>
+
+        <TextView
+            android:id="@+id/department_divider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/divider"
+            android:textSize="@dimen/text_normal"
+            app:layout_constraintBottom_toBottomOf="@+id/department_spinner"
+            app:layout_constraintStart_toEndOf="@id/department_spinner"
+            app:layout_constraintEnd_toStartOf="@id/department_detail_spinner"
+            app:layout_constraintTop_toTopOf="@+id/department_spinner" />
+
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/department_detail_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_big"
+            android:layout_marginEnd="@dimen/spacing_big"
+            android:entries="@{viewmodel.jobs2}"
+            android:textSize="@dimen/text_normal"
+            app:layout_constraintStart_toEndOf="@+id/department_divider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/department_spinner"
+            app:layout_constraintBottom_toBottomOf="@+id/department_spinner"
+            app:onItemSelected="@{viewmodel.jobs2listener}"
+            app:selectedValue="@{viewmodel.jobs2value}" />
+
+        <View
+            android:id="@+id/divider1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_height"
+            android:background="@color/gray"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/department_spinner"
+            app:layout_constraintBottom_toTopOf="@+id/location_title"
+            android:layout_marginStart="@dimen/spacing_normal"
+            android:layout_marginEnd="@dimen/spacing_normal"
+            android:layout_marginTop="@dimen/spacing_big"
+            android:layout_marginBottom="@dimen/spacing_big"/>
+
+
+        <TextView
+            android:id="@+id/location_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/location_title"
+            android:textSize="@dimen/text_normal"
+            android:textStyle="bold"
+            android:layout_marginStart="@dimen/spacing_small"
+            android:layout_marginBottom="@dimen/spacing_normal"
+            app:layout_constraintTop_toBottomOf="@+id/divider1"
+            app:layout_constraintBottom_toTopOf="@id/location_latitude"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+
+        <EditText
+            android:id="@+id/location_latitude"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_normal"
+            android:inputType="numberDecimal"
+            android:hint="@string/location_latitude"
+            android:text="@={viewmodel.latitude}"
+            android:layout_marginStart="@dimen/spacing_big"
+            android:layout_marginEnd="@dimen/spacing_big"
+            app:layout_constraintTop_toBottomOf="@+id/location_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/location_divider"
+            app:layout_constraintBottom_toTopOf="@id/location_gps"/>
+        <TextView
+            android:id="@+id/location_divider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/divider"
+            android:textSize="@dimen/text_normal"
+            app:layout_constraintTop_toTopOf="@+id/location_latitude"
+            app:layout_constraintStart_toEndOf="@id/location_latitude"
+            app:layout_constraintEnd_toStartOf="@id/location_longitude"
+            app:layout_constraintBottom_toBottomOf="@id/location_latitude" />
+        <EditText
+            android:id="@+id/location_longitude"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_normal"
+            android:inputType="numberDecimal"
+            android:hint="@string/location_longitude"
+            android:text="@={viewmodel.longitude}"
+            android:layout_marginStart="@dimen/spacing_big"
+            android:layout_marginEnd="@dimen/spacing_big"
+            app:layout_constraintTop_toTopOf="@+id/location_latitude"
+            app:layout_constraintStart_toEndOf="@+id/location_divider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/location_latitude" />
+
+        <de.timonknispel.ktloadingbutton.KTLoadingButton
+            android:id="@+id/location_gps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:buttonName="@string/location_gps"
+            android:layout_marginTop="@dimen/spacing_normal"
+            android:onClick="@{(v) -> viewmodel.useGPS(v)}"
+            app:layout_constraintTop_toBottomOf="@+id/location_latitude"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/divider2"/>
+
+
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_height"
+            android:background="@color/gray"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/location_gps"
+            app:layout_constraintBottom_toTopOf="@+id/login_description"
+            android:layout_marginStart="@dimen/spacing_normal"
+            android:layout_marginEnd="@dimen/spacing_normal"
+            android:layout_marginTop="@dimen/spacing_big"
+            android:layout_marginBottom="@dimen/spacing_big"/>
+
+
+        <TextView
+            android:id="@+id/login_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewmodel.warningText}"
+            android:textSize="@dimen/text_normal"
+            android:textColor="@{viewmodel.warningColor}"
+            android:layout_marginTop="@dimen/spacing_big"
+            android:layout_marginStart="@dimen/spacing_small"
+            tools:text="@string/tools_login_description"
+            app:layout_constraintTop_toBottomOf="@+id/divider2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_big"
+            android:textSize="@dimen/text_big"
+            android:onClick="@{(v) -> viewmodel.doFilter(v)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/ic_search_company" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

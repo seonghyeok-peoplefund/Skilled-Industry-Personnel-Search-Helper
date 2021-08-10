@@ -9,4 +9,16 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="main_title">산업기능요원 구인구직 어플리케이션</string>
+    <string name="department_title">분야</string>
+    <string name="location_title">위치</string>
+    <string name="location_latitude">위도</string>
+    <string name="location_longitude">경도</string>
+    <string name="news_intro_content">해당 회사의 최근 정보</string>
+    <string name="news_intro_subcontent">from naver api</string>
+    <string name="sort_by">Sort By</string>
+    <string name="no_result">검색 결과 없음</string>
+    <string name="location_gps">위치</string>
+    <string name="divider">-</string>
+    <string name="tools_login_description">Wanted 로그인 여부를 알려줌</string>
 </resources>
