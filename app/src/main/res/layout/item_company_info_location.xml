@@ -41,6 +41,8 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textSize="@dimen/text_big"
+            android:singleLine="true"
+            android:ellipsize="none"
             app:layout_constraintStart_toEndOf="@+id/location_image"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/location_subcontent"/>
@@ -50,6 +52,8 @@
             android:layout_height="wrap_content"
             android:textColor="@color/darkgray"
             android:textSize="@dimen/text_normal"
+            android:singleLine="true"
+            android:ellipsize="none"
             app:layout_constraintStart_toEndOf="@+id/location_image"
             app:layout_constraintTop_toBottomOf="@+id/location_content"
             app:layout_constraintBottom_toTopOf="@+id/outline"

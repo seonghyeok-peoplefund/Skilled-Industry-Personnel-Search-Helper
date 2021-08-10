@@ -190,7 +190,7 @@ class CompanyInfoAdapter(private val mContext: Context, private val company: Com
         val wrapper: ConstraintLayout = v.findViewById(R.id.wrapper)
     }
     inner class NewsIntroHolder(v: View) : RecyclerView.ViewHolder(v) {
-        val content: TextView = v.findViewById(R.id.news_content)
+        val content: TextView = v.findViewById(R.id.news_intro_content)
     }
 
 
