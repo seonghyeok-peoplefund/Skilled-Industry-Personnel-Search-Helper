@@ -15,10 +15,10 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="@dimen/padding_small"
-            android:paddingBottom="@dimen/padding_big"
-            android:paddingStart="@dimen/padding_big"
-            android:paddingEnd="@dimen/padding_big"
+            android:paddingTop="@dimen/spacing_small"
+            android:paddingBottom="@dimen/spacing_big"
+            android:paddingStart="@dimen/spacing_big"
+            android:paddingEnd="@dimen/spacing_big"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -33,7 +33,7 @@
                 android:src="@drawable/ic_location"
                 android:gravity="center"
                 android:background="@drawable/radio_button_rippled_left"
-                android:padding="@dimen/padding_normal"
+                android:padding="@dimen/spacing_normal"
                 app:isButtonChecked="true"/>
             <com.ray.personnel.ui.SortRadioButton
                 android:id="@+id/radio_salary"
@@ -44,7 +44,7 @@
                 android:gravity="center"
                 android:foreground="?attr/selectableItemBackground"
                 android:background="@drawable/radio_button_background"
-                android:padding="@dimen/padding_normal"/>
+                android:padding="@dimen/spacing_normal"/>
             <com.ray.personnel.ui.SortRadioButton
                 android:id="@+id/radio_ratio"
                 android:layout_width="0dp"
@@ -53,7 +53,7 @@
                 android:src="@drawable/ic_percent"
                 android:gravity="center"
                 android:background="@drawable/radio_button_rippled_right"
-                android:padding="@dimen/padding_normal"/>
+                android:padding="@dimen/spacing_normal"/>
 
         </com.ray.personnel.ui.SortRadioGroup>
     </androidx.constraintlayout.widget.ConstraintLayout>

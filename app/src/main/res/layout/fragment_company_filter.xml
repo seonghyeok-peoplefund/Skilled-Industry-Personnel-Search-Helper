@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        android:layout_margin="@dimen/margin_big"
+        android:layout_margin="@dimen/spacing_big"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,7 +30,7 @@
             app:layout_constraintEnd_toStartOf="@id/main_title"/>
 
         <TextView
-            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginStart="@dimen/spacing_small"
             android:id="@+id/main_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
             app:layout_constraintBottom_toTopOf="@+id/department_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_margin="@dimen/margin_normal"/>
+            android:layout_margin="@dimen/spacing_normal"/>
 
         <TextView
             android:id="@+id/department_title"
@@ -58,8 +58,8 @@
             android:text="@string/department_title"
             android:textSize="10pt"
             android:textStyle="bold"
-            android:layout_marginStart="@dimen/margin_small"
-            android:layout_marginBottom="@dimen/margin_big"
+            android:layout_marginStart="@dimen/spacing_small"
+            android:layout_marginBottom="@dimen/spacing_big"
             app:layout_constraintTop_toBottomOf="@+id/progress"
             app:layout_constraintBottom_toTopOf="@+id/department_spinner"
             app:layout_constraintStart_toStartOf="parent"/>
@@ -72,8 +72,8 @@
             app:selectedValue="@{viewmodel.jobs1value}"
             app:onItemSelected="@{viewmodel.jobs1listener}"
             android:textSize="8pt"
-            android:layout_marginStart="@dimen/margin_big"
-            android:layout_marginEnd="@dimen/margin_big"
+            android:layout_marginStart="@dimen/spacing_big"
+            android:layout_marginEnd="@dimen/spacing_big"
             app:layout_constraintTop_toBottomOf="@+id/department_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/department_divider"
@@ -95,8 +95,8 @@
             android:id="@+id/department_detail_spinner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_big"
-            android:layout_marginEnd="@dimen/margin_big"
+            android:layout_marginStart="@dimen/spacing_big"
+            android:layout_marginEnd="@dimen/spacing_big"
             android:entries="@{viewmodel.jobs2}"
             android:textSize="8pt"
             app:layout_constraintStart_toEndOf="@+id/department_divider"
@@ -115,10 +115,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/department_spinner"
             app:layout_constraintBottom_toTopOf="@+id/location_title"
-            android:layout_marginStart="@dimen/margin_normal"
-            android:layout_marginEnd="@dimen/margin_normal"
-            android:layout_marginTop="@dimen/margin_big"
-            android:layout_marginBottom="@dimen/margin_big"/>
+            android:layout_marginStart="@dimen/spacing_normal"
+            android:layout_marginEnd="@dimen/spacing_normal"
+            android:layout_marginTop="@dimen/spacing_big"
+            android:layout_marginBottom="@dimen/spacing_big"/>
 
 
         <TextView
@@ -128,8 +128,8 @@
             android:text="@string/location_title"
             android:textSize="10pt"
             android:textStyle="bold"
-            android:layout_marginStart="@dimen/margin_small"
-            android:layout_marginBottom="@dimen/margin_normal"
+            android:layout_marginStart="@dimen/spacing_small"
+            android:layout_marginBottom="@dimen/spacing_normal"
             app:layout_constraintTop_toBottomOf="@+id/divider1"
             app:layout_constraintBottom_toTopOf="@id/location_latitude"
             app:layout_constraintStart_toStartOf="parent"/>
@@ -143,8 +143,8 @@
             android:inputType="numberDecimal"
             android:hint="@string/location_latitude"
             android:text="@={viewmodel.latitude}"
-            android:layout_marginStart="@dimen/margin_big"
-            android:layout_marginEnd="@dimen/margin_big"
+            android:layout_marginStart="@dimen/spacing_big"
+            android:layout_marginEnd="@dimen/spacing_big"
             app:layout_constraintTop_toBottomOf="@+id/location_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/location_divider"
@@ -167,8 +167,8 @@
             android:inputType="numberDecimal"
             android:hint="@string/location_longitude"
             android:text="@={viewmodel.longitude}"
-            android:layout_marginStart="@dimen/margin_big"
-            android:layout_marginEnd="@dimen/margin_big"
+            android:layout_marginStart="@dimen/spacing_big"
+            android:layout_marginEnd="@dimen/spacing_big"
             app:layout_constraintTop_toTopOf="@+id/location_latitude"
             app:layout_constraintStart_toEndOf="@+id/location_divider"
             app:layout_constraintEnd_toEndOf="parent"
@@ -179,7 +179,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:buttonName="위치"
-            android:layout_marginTop="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/spacing_normal"
             android:onClick="@{(v) -> viewmodel.useGPS(v)}"
             app:layout_constraintTop_toBottomOf="@+id/location_latitude"
             app:layout_constraintEnd_toEndOf="parent"
@@ -196,10 +196,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/location_gps"
             app:layout_constraintBottom_toTopOf="@+id/login_description"
-            android:layout_marginStart="@dimen/margin_normal"
-            android:layout_marginEnd="@dimen/margin_normal"
-            android:layout_marginTop="@dimen/margin_big"
-            android:layout_marginBottom="@dimen/margin_big"/>
+            android:layout_marginStart="@dimen/spacing_normal"
+            android:layout_marginEnd="@dimen/spacing_normal"
+            android:layout_marginTop="@dimen/spacing_big"
+            android:layout_marginBottom="@dimen/spacing_big"/>
 
 
         <TextView
@@ -209,8 +209,8 @@
             android:text="@{viewmodel.warningText}"
             android:textSize="10pt"
             android:textColor="@{viewmodel.warningColor}"
-            android:layout_marginTop="@dimen/margin_big"
-            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginTop="@dimen/spacing_big"
+            android:layout_marginStart="@dimen/spacing_small"
             tools:text="Wanted 로그인 여부를 알려줌"
             app:layout_constraintTop_toBottomOf="@+id/divider2"
             app:layout_constraintStart_toStartOf="parent"
@@ -222,7 +222,7 @@
             android:id="@+id/search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_big"
+            android:layout_margin="@dimen/spacing_big"
             android:textSize="12pt"
             android:onClick="@{(v) -> viewmodel.doFilter(v)}"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -6,8 +6,8 @@
         android:id="@+id/wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_normal"
-        android:paddingStart="@dimen/padding_normal"
+        android:layout_margin="@dimen/spacing_normal"
+        android:paddingStart="@dimen/spacing_normal"
         android:foreground="?attr/selectableItemBackground">
 
 
@@ -15,9 +15,9 @@
             android:id="@+id/outline"
             android:layout_width="match_parent"
             android:layout_height="@dimen/outline_height"
-            android:layout_marginStart="@dimen/margin_big"
-            android:layout_marginEnd="@dimen/margin_big"
-            android:layout_marginTop="@dimen/margin_normal"
+            android:layout_marginStart="@dimen/spacing_big"
+            android:layout_marginEnd="@dimen/spacing_big"
+            android:layout_marginTop="@dimen/spacing_normal"
             android:background="@color/pinkwhite"
             app:layout_constraintTop_toBottomOf="@+id/subcontent"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +42,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/content"
             app:layout_constraintBottom_toTopOf="@+id/outline"
-            android:layout_marginStart="@dimen/margin_small"/>
+            android:layout_marginStart="@dimen/spacing_small"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
