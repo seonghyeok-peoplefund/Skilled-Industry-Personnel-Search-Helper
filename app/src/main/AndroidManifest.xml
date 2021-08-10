@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.ray.personnel.fragment.company.CompanyInfo"/>
+            android:name="com.ray.personnel.CompanyInfoActivity"/>
     </application>
 
 </manifest>

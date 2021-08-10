@@ -1,26 +1,22 @@
-package com.ray.personnel.fragment.company
+package com.ray.personnel
 
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.view.Gravity
-import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import androidx.palette.graphics.Palette
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.ray.personnel.Global.gson
 import com.ray.personnel.company.Company
-import com.ray.personnel.R
 import com.ray.personnel.viewmodel.company.info.CompanyInfoAdapter
 import com.ray.personnel.databinding.ActivityCompanyInfoBinding
 
-class CompanyInfo : AppCompatActivity() {
+class CompanyInfoActivity : AppCompatActivity() {
     val activity: ActivityCompanyInfoBinding by lazy{ ActivityCompanyInfoBinding.inflate(layoutInflater) }
     val company: Company by lazy{ getCompanyFromIntent() }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,8 +37,8 @@ class CompanyInfo : AppCompatActivity() {
 
     private fun setRecyclerView() {
         with(activity.companyInfo){
-            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this@CompanyInfo)
-            adapter = CompanyInfoAdapter(this@CompanyInfo, company)
+            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this@CompanyInfoActivity)
+            adapter = CompanyInfoAdapter(this@CompanyInfoActivity, company)
         }
     }
 
