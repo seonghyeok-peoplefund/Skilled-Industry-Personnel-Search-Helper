@@ -12,7 +12,7 @@ import androidx.palette.graphics.Palette
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
-import com.ray.personnel.Global.gson
+import com.google.gson.Gson
 import com.ray.personnel.R
 import com.ray.personnel.data.Company
 import com.ray.personnel.databinding.ActivityCompanyInfoBinding
@@ -38,7 +38,7 @@ class CompanyInfoActivity : AppCompatActivity() {
 
 
     private fun getCompanyFromIntent(): Company {
-        return gson.fromJson(intent.getStringExtra("Company"), Company::class.java)
+        return Gson().fromJson(intent.getStringExtra("Company"), Company::class.java)
     }
 
     private fun setRecyclerView() {

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.view.View
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.ray.personnel.Global
 import com.ray.personnel.data.Company
 import com.ray.personnel.ui.companyinfo.CompanyInfoActivity
@@ -18,7 +19,7 @@ fun onCompanyChanged(v: RecyclerView, arr: List<Company>?){ // 원소/메소드�
         notifyDataSetChanged()
         setOnItemClickListener { view: View, company: Company -> run{
             val i = Intent(ctx, CompanyInfoActivity::class.java)
-            i.putExtra("Company", Global.gson.toJson(company))
+            i.putExtra("Company", Gson().toJson(company))
             ctx.startActivity(i)
             //v.overridePendingTransition(R.anim.activity_slide_in, R.anim.activity_slide_out)
         }}

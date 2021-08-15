@@ -3,6 +3,7 @@ package com.ray.personnel.domain.database
 import android.content.Context
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.ray.personnel.Global
 import com.ray.personnel.data.Company
@@ -34,21 +35,21 @@ abstract class CompanyDatabase : RoomDatabase() {
 class LocationConverter {
     @TypeConverter
     fun jsonToLocation(value: String?): Location? {
-        return value?.let { Global.gson.fromJson(value, Location::class.java) }
+        return value?.let { Gson().fromJson(value, Location::class.java) }
     }
 
     @TypeConverter
     fun locationToJson(location: Location?): String? {
-        return location?.let { Global.gson.toJson(location) }
+        return location?.let { Gson().toJson(location) }
     }
 
     @TypeConverter
     fun jsonToList(value: String?): List<String>? {
-        return value?.let { Global.gson.fromJson(value, object: TypeToken<List<String>>(){}.type) }
+        return value?.let { Gson().fromJson(value, object: TypeToken<List<String>>(){}.type) }
     }
 
     @TypeConverter
     fun listToJson(list: List<String>?): String? {
-        return list?.let { Global.gson.toJson(list) }
+        return list?.let { Gson().toJson(list) }
     }
 }

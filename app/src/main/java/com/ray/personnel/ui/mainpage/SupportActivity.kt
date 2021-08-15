@@ -1,11 +1,16 @@
 package com.ray.personnel.ui.mainpage
 
+import android.app.Activity
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -80,7 +85,7 @@ class SupportActivity : AppCompatActivity() {
             frg.model.curFragment.observe(this, navObserver)
             frg.isAttached = MutableLiveData()
             val permissionObserver = Observer<List<String>>{ permissions ->
-                frg.model.permissionResult.value = Global.requestPermission(this, *permissions.toTypedArray())
+                frg.model.permissionResult.value = requestPermission(this, *permissions.toTypedArray())
             }
             frg.model.permissionRequest.observe(this, permissionObserver)
         }
@@ -107,5 +112,33 @@ class SupportActivity : AppCompatActivity() {
 
     }
 
+    fun requestPermission(activity: Activity, vararg permissions: String): ArrayList<String> {
+        val result = ArrayList<String>()
+        var required = false
+        permissions.forEach{ permission ->
+            val hasPermission = ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_GRANTED
+            if(!hasPermission){
+                //거부한 적이 있다.
+                if(!required) {
+                    val denied_already = ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)
+                    if (denied_already) {
+                        Toast.makeText(activity, "이 기능이 필요합니다~~~ ㅎㅎ", Toast.LENGTH_LONG).show()
+                        ActivityCompat.requestPermissions(activity, permissions, PERMISSIONS_REQUEST_CODE)
+                    } else {
+                        ActivityCompat.requestPermissions(activity, permissions, PERMISSIONS_REQUEST_CODE)
+                    }
+                    required = true
+                }
+            } else{
+                //거부한적 없다.
+                result.add(permission)
+            }
+        }
+        return result //이미 허락된 것들 리스트를 리턴함.
+    }
+
+    companion object {
+        private const val PERMISSIONS_REQUEST_CODE = 100
+    }
 
 }
