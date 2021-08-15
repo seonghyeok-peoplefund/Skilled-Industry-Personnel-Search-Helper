@@ -1,17 +1,13 @@
 package com.ray.personnel
 
-import android.Manifest
 import android.app.Activity
 import android.app.Application
-import android.content.Context
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Environment
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.gson.GsonBuilder
-import com.ray.personnel.company.Location
 import java.io.File
 import java.io.FileWriter
 

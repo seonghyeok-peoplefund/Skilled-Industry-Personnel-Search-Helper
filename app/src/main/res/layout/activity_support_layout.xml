@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.ray.personnel.viewmodel.SupportViewModel"/>
+            type="com.ray.personnel.ui.mainpage.SupportViewModel"/>
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat

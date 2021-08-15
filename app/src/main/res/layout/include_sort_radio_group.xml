@@ -5,12 +5,12 @@
     <data>
         <variable
             name="sortListener"
-            type="com.ray.personnel.ui.SortRadioGroup.SortRadioListener"/>
+            type="com.ray.personnel.widget.SortRadioGroup.SortRadioListener"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <com.ray.personnel.ui.SortRadioGroup
+        <com.ray.personnel.widget.SortRadioGroup
             android:id="@+id/radio_group"
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -25,7 +25,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:onClick="@{sortListener}">
 
-            <com.ray.personnel.ui.SortRadioButton
+            <com.ray.personnel.widget.SortRadioButton
                 android:id="@+id/radio_location"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
                 android:background="@drawable/radio_button_rippled_left"
                 android:padding="@dimen/spacing_normal"
                 app:isButtonChecked="true"/>
-            <com.ray.personnel.ui.SortRadioButton
+            <com.ray.personnel.widget.SortRadioButton
                 android:id="@+id/radio_salary"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
                 android:foreground="?attr/selectableItemBackground"
                 android:background="@drawable/radio_button_background"
                 android:padding="@dimen/spacing_normal"/>
-            <com.ray.personnel.ui.SortRadioButton
+            <com.ray.personnel.widget.SortRadioButton
                 android:id="@+id/radio_ratio"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -55,6 +55,6 @@
                 android:background="@drawable/radio_button_rippled_right"
                 android:padding="@dimen/spacing_normal"/>
 
-        </com.ray.personnel.ui.SortRadioGroup>
+        </com.ray.personnel.widget.SortRadioGroup>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -16,14 +16,14 @@
         android:theme="@style/Theme.RayTheme"
         android:requestLegacyExternalStorage="true">
         <activity
-            android:name=".SupportActivity">
+            android:name=".ui.mainpage.SupportActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.ray.personnel.CompanyInfoActivity"/>
+            android:name="com.ray.personnel.ui.companyinfo.CompanyInfoActivity"/>
     </application>
 
 </manifest>
