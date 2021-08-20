@@ -1,34 +1,39 @@
 package com.ray.personnel.domain.database
 
 import android.content.Context
-import androidx.room.*
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
+import androidx.room.Room
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.ray.personnel.Global
 import com.ray.personnel.data.Company
 import com.ray.personnel.data.Location
 import com.ray.personnel.domain.parser.CompanyListParser
-
 
 @Database(entities = [Company::class], version = 1)
 @TypeConverters(LocationConverter::class)
 abstract class CompanyDatabase : RoomDatabase() {
     abstract fun companyDao(): CompanyDao
-    companion object{
+
+    companion object {
         private var instance: CompanyDatabase? = null
-        fun getInstance(context: Context): CompanyDatabase = instance
-                ?: run {
-            instance = Room.databaseBuilder(context.applicationContext, CompanyDatabase::class.java, "company_db_"+CompanyListParser.sortType)
+        fun getInstance(context: Context): CompanyDatabase {
+            return instance ?: run {
+                instance = Room.databaseBuilder(
+                    context.applicationContext, CompanyDatabase::class.java, "company_db_${CompanyListParser}.sortType"
+                )
                     .fallbackToDestructiveMigration()
                     .addCallback(object : Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
                         }
                     }).build()
-            instance!!
+                return instance!!
+            }
         }
-
     }
 }
 

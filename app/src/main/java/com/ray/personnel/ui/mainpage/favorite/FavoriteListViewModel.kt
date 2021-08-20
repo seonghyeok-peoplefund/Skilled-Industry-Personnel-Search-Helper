@@ -1,121 +1,57 @@
 package com.ray.personnel.ui.mainpage.favorite
 
-import android.app.Application
 import android.view.View
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import com.ray.personnel.Constants.KEY_TOKEN
 import com.ray.personnel.data.Company
-import com.ray.personnel.widget.SortRadioGroup
-import com.ray.personnel.domain.database.CompanyDatabase
-import com.ray.personnel.ui.mainpage.FragmentChangeModelInterface
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.ray.personnel.domain.database.CompanyDatabaseMethods
+import io.reactivex.functions.Consumer
 
-
-class FavoriteListViewModel(application: Application): AndroidViewModel(application),
-    FragmentChangeModelInterface {
-    override var curFragment = MutableLiveData<Fragment>()
-    override val permissionRequest = MutableLiveData<List<String>>()
-    override val permissionResult = MutableLiveData<List<String>>()
+class FavoriteListViewModel(state: SavedStateHandle) : ViewModel() {
+    val loginToken = state.getLiveData<String>(KEY_TOKEN)
     val companies = MutableLiveData<List<Company>>()
     val isNothing = MutableLiveData<Int>(View.INVISIBLE)
+    private val onSuccess: (Consumer<in List<Company>>) = Consumer { arr ->
+        companies.value = arr
+        if (arr.isEmpty()) isNothing.value = View.VISIBLE
+        else isNothing.value = View.INVISIBLE
+    }
 
-    val sortListener = object: SortRadioGroup.SortRadioListener{
-        override fun onClick(index: Int, isAscendant: Boolean) {
-            when(index){
-                DISTANCE -> {
-                    if(isAscendant) getAllByDistanceAsc()
-                    else getAllByDistanceDesc()
+    val sortListener = fun(index: Int, isAscendant: Boolean) {
+        when (index) {
+            DISTANCE -> {
+                if (isAscendant) {
+                    CompanyDatabaseMethods.getLikedByDistanceAsc(onSuccess)
+                } else {
+                    CompanyDatabaseMethods.getLikedByDistanceDesc(onSuccess)
                 }
-                SALARY -> {
-                    if(isAscendant) getAllBySalaryAsc()
-                    else getAllBySalaryDesc()
+            }
+            SALARY -> {
+                if (isAscendant) {
+                    CompanyDatabaseMethods.getLikedBySalaryAsc(onSuccess)
+                } else {
+                    CompanyDatabaseMethods.getLikedBySalaryDesc(onSuccess)
                 }
-                PERCENT -> {
-                    if(isAscendant) getAllByPercentAsc()
-                    else getAllByPercentDesc()
+            }
+            PERCENT -> {
+                if (isAscendant) {
+                    CompanyDatabaseMethods.getLikedByPercentAsc(onSuccess)
+                } else {
+                    CompanyDatabaseMethods.getLikedByPercentDesc(onSuccess)
                 }
             }
         }
     }
 
-    fun getAllByDistanceAsc(){
-        CompanyDatabase.getInstance(getApplication()).companyDao().getLikedByDistanceAsc()
-                .subscribeOn(Schedulers.single())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe{ arr ->
-                    companies.value = arr
-                    if(arr.isEmpty()) isNothing.value = View.VISIBLE
-                    else isNothing.value = View.INVISIBLE
-                }
+    fun getAllByDistanceAsc() {
+        CompanyDatabaseMethods.getLikedByDistanceAsc(onSuccess)
     }
 
-    private fun getAllByDistanceDesc(){
-        CompanyDatabase.getInstance(getApplication()).companyDao().getLikedByDistanceDesc()
-                .subscribeOn(Schedulers.single())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe{ arr ->
-                    companies.value = arr
-                    if(arr.isEmpty()) isNothing.value = View.VISIBLE
-                    else isNothing.value = View.INVISIBLE
-                }
-    }
-
-    private fun getAllBySalaryAsc(){
-        CompanyDatabase.getInstance(getApplication()).companyDao().getLikedBySalaryAsc()
-                .subscribeOn(Schedulers.single())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe{ arr ->
-                    companies.value = arr
-                    if(arr.isEmpty()) isNothing.value = View.VISIBLE
-                    else isNothing.value = View.INVISIBLE
-                }
-    }
-
-    private fun getAllBySalaryDesc(){
-        CompanyDatabase.getInstance(getApplication()).companyDao().getLikedBySalaryDesc()
-                .subscribeOn(Schedulers.single())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe{ arr ->
-                    companies.value = arr
-                    if(arr.isEmpty()) isNothing.value = View.VISIBLE
-                    else isNothing.value = View.INVISIBLE
-                }
-    }
-
-    private fun getAllByPercentAsc(){
-        CompanyDatabase.getInstance(getApplication()).companyDao().getLikedByPercentAsc()
-                .subscribeOn(Schedulers.single())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe{ arr ->
-                    companies.value = arr
-                    if(arr.isEmpty()) isNothing.value = View.VISIBLE
-                    else isNothing.value = View.INVISIBLE
-                }
-    }
-
-    private fun getAllByPercentDesc(){
-        CompanyDatabase.getInstance(getApplication()).companyDao().getLikedByPercentDesc()
-                .subscribeOn(Schedulers.single())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe{ arr ->
-                    companies.value = arr
-                    if(arr.isEmpty()) isNothing.value = View.VISIBLE
-                    else isNothing.value = View.INVISIBLE
-                }
-    }
-
-
-
-    companion object{
+    companion object {
         private const val DISTANCE = 0
         private const val SALARY = 1
         private const val PERCENT = 2
     }
 }
-
-/*
-MutableLiveData<
-String>()
- */

@@ -90,7 +90,6 @@
             app:layout_constraintEnd_toStartOf="@id/department_detail_spinner"
             app:layout_constraintTop_toTopOf="@+id/department_spinner" />
 
-
         <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/department_detail_spinner"
             android:layout_width="0dp"
@@ -120,7 +119,6 @@
             android:layout_marginTop="@dimen/spacing_big"
             android:layout_marginBottom="@dimen/spacing_big"/>
 
-
         <TextView
             android:id="@+id/location_title"
             android:layout_width="wrap_content"
@@ -133,7 +131,6 @@
             app:layout_constraintTop_toBottomOf="@+id/divider1"
             app:layout_constraintBottom_toTopOf="@id/location_latitude"
             app:layout_constraintStart_toStartOf="parent"/>
-
 
         <EditText
             android:id="@+id/location_latitude"
@@ -149,6 +146,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/location_divider"
             app:layout_constraintBottom_toTopOf="@id/location_gps"/>
+
         <TextView
             android:id="@+id/location_divider"
             android:layout_width="wrap_content"
@@ -159,6 +157,7 @@
             app:layout_constraintStart_toEndOf="@id/location_latitude"
             app:layout_constraintEnd_toStartOf="@id/location_longitude"
             app:layout_constraintBottom_toBottomOf="@id/location_latitude" />
+
         <EditText
             android:id="@+id/location_longitude"
             android:layout_width="0dp"
@@ -180,12 +179,10 @@
             android:layout_height="wrap_content"
             app:buttonName="@string/location_gps"
             android:layout_marginTop="@dimen/spacing_normal"
-            android:onClick="@{(v) -> viewmodel.useGPS(v)}"
+            android:onClick="@{(v) -> viewmodel.useGps(v)}"
             app:layout_constraintTop_toBottomOf="@+id/location_latitude"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/divider2"/>
-
-
 
         <View
             android:id="@+id/divider2"
@@ -201,7 +198,6 @@
             android:layout_marginTop="@dimen/spacing_big"
             android:layout_marginBottom="@dimen/spacing_big"/>
 
-
         <TextView
             android:id="@+id/login_description"
             android:layout_width="wrap_content"
@@ -216,8 +212,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-
-
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/search"
             android:layout_width="wrap_content"
@@ -228,7 +222,5 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/ic_search_company" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

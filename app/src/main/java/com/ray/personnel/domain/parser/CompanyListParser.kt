@@ -8,22 +8,20 @@ import org.reactivestreams.Subscriber
 import java.io.IOException
 
 object CompanyListParser : Publisher<Company>{
-
     const val MAX_SEARCH_COUNT = 100
-    const val MAX_PRESUMED_COUNT = 333
     const val NO_PROGRESS = 0
     const val PARSING_WANTED = NO_PROGRESS + 1
     const val CHECKING_MILITARY = PARSING_WANTED + 1
     const val SEARCH_FINISHED = CHECKING_MILITARY + 1
     const val END = SEARCH_FINISHED + 1
-    var sortType = -1
 
-    private val wanted_url: String
+    var sortType = -1
+    private val wantedUrl: String //TODO("긴 URL 어떻게 줄일건가?")
         get() = "https://www.wanted.co.kr/api/v4/jobs?country=kr&locations=all&years=-1&limit=$MAX_SEARCH_COUNT&offset=$itemCount&job_sort=job.latest_order&tag_type_id=$sortType"
     private var progress = NO_PROGRESS
     private var jsonCompany: JSONObject? = null
     var itemCount: Int = 0
-    private set
+        private set
 
     /**
      * step 1 - init Parser, parse military information
@@ -31,69 +29,78 @@ object CompanyListParser : Publisher<Company>{
      * step 3 - if isMilitary, add company
      * return progress and repeat step 2 - step 3.
      */
-    override fun subscribe(s: Subscriber<in Company>) {
-        val time_currnet: Long = System.currentTimeMillis()
-        try {
-            when (progress) {
-                NO_PROGRESS -> {
-                    progress++
-                    MilitaryParser.init()
+    override fun subscribe(subscriber: Subscriber<in Company>) {
+        when (progress) {
+            NO_PROGRESS -> {
+                progress++
+                try {
+                    MilitaryParser.getMilitaryInformationByJson()
+                } catch (e: IOException) {
+                    subscriber.onError(e)
+                    progress = 0
                 }
-                PARSING_WANTED -> {
-                    jsonCompany = JSONObject(
-                        Jsoup.connect(wanted_url).ignoreContentType(true).execute().body()
-                    )
-                    progress++
-                }
-                CHECKING_MILITARY -> {
-                    var i = 0
-                    while (i < MAX_SEARCH_COUNT) {
-                        if (jsonCompany!!.isNull("data")) break
-                        if (jsonCompany!!.getJSONArray("data").isNull(i)) break
-                        val name = jsonCompany!!.getJSONArray("data").getJSONObject(i)
-                            .getJSONObject("company")["name"].toString()
-                            .replace("\\([^\\)]*\\)".toRegex(), "")
-                        MilitaryParser.getMilitaryCompany(name)?.also { c ->
-                            val company = c.copy()
-                            company.military_url = c.military_url
-                            company.thumbURL = jsonCompany!!.getJSONArray("data").getJSONObject(i)
-                                .getJSONObject("title_img")["origin"].toString()
-                            company.department = jsonCompany!!.getJSONArray("data").getJSONObject(i)
-                                .getString("position")
-                            company.job_id =
-                                jsonCompany!!.getJSONArray("data").getJSONObject(i).getString("id")
-                            company.sortType = sortType
-                            s.onNext(company)
-                        }
-                        i++
+            }
+            PARSING_WANTED -> {
+                jsonCompany = JSONObject(
+                    Jsoup.connect(wantedUrl)
+                        .ignoreContentType(true)
+                        .execute()
+                        .body()
+                )
+                progress++
+            }
+            CHECKING_MILITARY -> {
+                var i = 0
+                while (i < MAX_SEARCH_COUNT) {
+                    if (jsonCompany!!.isNull("data")) break
+                    if (jsonCompany!!.getJSONArray("data")
+                            .isNull(i)
+                    ) break
+                    val name = jsonCompany!!.getJSONArray("data")
+                        .getJSONObject(i)
+                        .getJSONObject("company")["name"]
+                        .toString()
+                        .replace("\\([^\\)]*\\)".toRegex(), "")
+                    MilitaryParser.getMilitaryCompany(name)?.also { c ->
+                        val company = c.copy()
+                        company.militaryUrl = c.militaryUrl
+                        company.thumbURL = jsonCompany!!.getJSONArray("data")
+                            .getJSONObject(i)
+                            .getJSONObject("title_img")["origin"]
+                            .toString()
+                        company.department = jsonCompany!!.getJSONArray("data")
+                            .getJSONObject(i)
+                            .getString("position")
+                        company.jobId = jsonCompany!!.getJSONArray("data")
+                            .getJSONObject(i)
+                            .getString("id")
+                        company.sortType = sortType
+                        subscriber.onNext(company)
                     }
-                    itemCount += i
-                    if (isParsingFinished()) progress++
-                    else progress--
+                    i++
                 }
-                SEARCH_FINISHED -> {
-                    jsonCompany = null
-                    progress++
-                    s.onComplete()
-                    println("wanted 개수 : $itemCount, military 개수 : " + MilitaryParser.sortedCompany.size)
-                }
-                else -> s.onError(IOException("어케한거여"))
+                itemCount += i
+                if (isParsingFinished()) progress++
+                else progress--
             }
-            if (progress < END) {
-                println("걸린 시간 : " + (System.currentTimeMillis() - time_currnet) / 1000.0 + "초 걸림.")
-                subscribe(s)
+            SEARCH_FINISHED -> {
+                jsonCompany = null
+                progress++
+                subscriber.onComplete()
             }
-            if (progress == END) {
-                progress = 0
-            }
-        } catch(e: IOException){
-            s.onError(e)
+            else -> subscriber.onError(IOException("이 곳에는 진입할 수 없음."))
+        }
+        if (progress < END) {
+            subscribe(subscriber)
+        }
+        if (progress == END) {
             progress = 0
         }
     }
 
-    private fun isParsingFinished() = (jsonCompany != null && jsonCompany!!.getJSONObject("links")["next"].toString() == "null")
+    fun isParsingFinished() = (jsonCompany != null && jsonCompany!!.getJSONObject("links")["next"].toString() == "null")
 
-    fun isParsing() = progress > NO_PROGRESS && progress < SEARCH_FINISHED
+    fun isParsing() = progress in (NO_PROGRESS + 1) until SEARCH_FINISHED
+
     fun isNotParsing() = !isParsing()
 }

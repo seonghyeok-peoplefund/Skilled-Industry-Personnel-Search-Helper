@@ -4,7 +4,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.ray.personnel.ui.mainpage.login.UserInfoViewModel"/>
+            type="com.ray.personnel.ui.mainpage.login.LoginViewModel"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -24,6 +24,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            />
+            app:webViewClient="@{viewmodel.client}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

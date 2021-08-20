@@ -1,65 +1,79 @@
 package com.ray.personnel.ui.mainpage.filter
 
-import android.Manifest
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.MutableLiveData
+import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.viewModels
 import com.ray.personnel.databinding.FragmentCompanyFilterBinding
-import com.ray.personnel.ui.mainpage.FragmentChangeInterface
 import androidx.lifecycle.Observer
+import com.ray.personnel.Constants.KEY_TOKEN
+import com.ray.personnel.R
+import com.ray.personnel.domain.preference.PreferenceManager
+import com.ray.personnel.ui.mainpage.filter.list.CompanyListFragment
 
-
-class CompanyFilterFragment : Fragment(), FragmentChangeInterface {
-    override var isAttached: MutableLiveData<Any?> = MutableLiveData()
-
-
-
-    lateinit var ctx: Context
+class CompanyFilterFragment : Fragment() {
     private var _binding: FragmentCompanyFilterBinding? = null
     private val binding get() = _binding!!
-    override val model: CompanyFilterViewModel by activityViewModels()
+    private val model: CompanyFilterViewModel by viewModels()
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        ctx = context
-        isAttached.value = null
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentCompanyFilterBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewmodel = model
         binding.lifecycleOwner = this
-        model.checkLogin()
-        model.progress_cur.observe(viewLifecycleOwner, Observer<Int>{ id  -> binding.progress.progress = id })
-        model.progress_max.observe(viewLifecycleOwner, Observer<Int>{ id  -> binding.progress.max = id })
-
-        var permissionGPS = arrayListOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
-
-        val permissionObserver = Observer<List<String>> { permissions ->
-            permissions.forEach{ permission ->
-                permissionGPS.remove(permission)
-                if(permissionGPS.size == 0) {
-                    model.find = true
-                    return@Observer
-                }
-            }
+        model.progressCurrent.observe(viewLifecycleOwner) { id -> binding.progress.progress = id }
+        model.progressMax.observe(viewLifecycleOwner) { id -> binding.progress.max = id }
+        model.permissionRequested.observe(viewLifecycleOwner) {
+            TODO("권한 요청")
         }
-        model.permissionResult.observe(viewLifecycleOwner, permissionObserver)
-
+        model.moveToNextFragment.observe(viewLifecycleOwner) { move ->
+            if (move) moveToNextFragment()
+        }
+        model.toastMessage.observe(viewLifecycleOwner) { msg ->
+            if (context != null) Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+        }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun moveToNextFragment() {
+        val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
+        transaction.setCustomAnimations(
+            R.anim.activity_slide_in,
+            R.anim.activity_slide_out,
+            R.anim.activity_slide_enter,
+            R.anim.activity_slide_exit
+        )
+        val token = model.loginToken.value
+            ?: if (context != null) PreferenceManager.getString(requireContext(), KEY_TOKEN) else ""
+        transaction.replace(R.id.container, CompanyListFragment.newInstance(token))
+            .addToBackStack(null)
+        transaction.commit()
+    }
+
+    companion object {
+        private fun getInitialArgumentsBundle(token: String): Bundle {
+            return Bundle().apply {
+                putString(KEY_TOKEN, token)
+            }
+        }
+
+        fun newInstance(token: String): CompanyFilterFragment {
+            return CompanyFilterFragment().apply {
+                arguments = getInitialArgumentsBundle(token)
+            }
+        }
     }
 }
 

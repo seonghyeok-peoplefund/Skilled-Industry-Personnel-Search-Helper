@@ -1,31 +1,25 @@
 package com.ray.personnel.ui.mainpage
 
-import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import com.ray.personnel.Global
+import com.ray.personnel.Constants.KEY_TOKEN
 import com.ray.personnel.R
 import com.ray.personnel.databinding.ActivitySupportLayoutBinding
-
+import com.ray.personnel.domain.preference.PreferenceManager
+import com.ray.personnel.ui.mainpage.favorite.FavoriteListFragment
+import com.ray.personnel.ui.mainpage.filter.CompanyFilterFragment
+import com.ray.personnel.ui.mainpage.login.LoginFragment
 
 class SupportActivity : AppCompatActivity() {
-
-    val binding: ActivitySupportLayoutBinding by lazy { ActivitySupportLayoutBinding.inflate(layoutInflater) }
-    val model: SupportViewModel by viewModels()
-    lateinit var curFrg: FragmentChangeInterface
+    private val binding: ActivitySupportLayoutBinding by lazy { ActivitySupportLayoutBinding.inflate(layoutInflater) }
+    private val model: SupportViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,35 +27,33 @@ class SupportActivity : AppCompatActivity() {
         binding.viewmodel = model
         binding.lifecycleOwner = this
         setSupportActionBar(binding.toolbar)
-        val navObserver = Observer<Fragment> { frg ->
-            let {
-                loadFragmentAnimation(frg) }
+        model.selectedNavItemId.observe(this) { itemId ->
+            val token = PreferenceManager.getString(this, KEY_TOKEN)
+            when (itemId) {
+                R.id.icon_company -> {
+                    loadFragmentAnimation(CompanyFilterFragment.newInstance(token))
+                }
+                R.id.icon_account -> {
+                    loadFragmentAnimation(LoginFragment.newInstance())
+                }
+                R.id.icon_favorite -> {
+                    loadFragmentAnimation(FavoriteListFragment.newInstance(token))
+                }
+            }
         }
-        model.curFragment.observe(this, navObserver)
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.top, menu)
-        //return model.onCreateOptionsMenu(menu)
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem)
-            = model.onOptionsItemSelected(item)?: super.onOptionsItemSelected(item)
-
-
-
-
-    fun loadFragment(destination: Fragment, element: View? = null){
-        val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-                .replace(R.id.container, destination)
-                .addToBackStack(null)
-        if(element != null) transaction.addSharedElement(element, ViewCompat.getTransitionName(element)!!)
-        transaction.commit()
-        if(destination is FragmentChangeInterface) observeFragment(destination)
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        // TODO("fragment 에게 어떻게 전달?")
     }
-    fun loadFragmentAnimation(destination: Fragment){
+
+    private fun loadFragmentAnimation(destination: Fragment) {
         val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
         transaction.setCustomAnimations(
             R.anim.activity_slide_in,
@@ -70,75 +62,35 @@ class SupportActivity : AppCompatActivity() {
             R.anim.activity_slide_exit
         )
         transaction.replace(R.id.container, destination)
-                .addToBackStack(null)
+            .addToBackStack(null)
         transaction.commit()
-        if(destination is FragmentChangeInterface) observeFragment(destination)
     }
 
-    fun observeFragment(frg : FragmentChangeInterface){
-        curFrg = frg
-        val isAttached = Observer<Any?>{
-            val navObserver = Observer<Fragment> { id -> let {
-                loadFragmentAnimation(id)
-                //frg.model.curFragment = MutableLiveData()
-            } }
-            frg.model.curFragment.observe(this, navObserver)
-            frg.isAttached = MutableLiveData()
-            val permissionObserver = Observer<List<String>>{ permissions ->
-                frg.model.permissionResult.value = requestPermission(this, *permissions.toTypedArray())
-            }
-            frg.model.permissionRequest.observe(this, permissionObserver)
-        }
-        frg.isAttached.observe(this, isAttached)
-
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        /*
-        val accepted = ArrayList<String>()
-        val denied = ArrayList<String>()
-        when (requestCode) {
-            100 -> {
-                if ((grantResults.isNotEmpty())) {
-                    grantResults.forEachIndexed{ i, result ->
-                        if(result == PackageManager.PERMISSION_GRANTED) accepted.add(permissions[i])
-                        //else denied.add(permissions[i])
-                    }
-                }
-            }
-        }*/
-        curFrg.model.permissionResult.value = permissions.toList()
-
-    }
-
-    fun requestPermission(activity: Activity, vararg permissions: String): ArrayList<String> {
-        val result = ArrayList<String>()
+    private fun requestPermission(vararg permissions: String): List<String> {
+        val result = mutableListOf<String>()
         var required = false
-        permissions.forEach{ permission ->
-            val hasPermission = ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_GRANTED
-            if(!hasPermission){
+        permissions.forEach { permission ->
+            val hasPermission = ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
+            if (!hasPermission) {
                 //거부한 적이 있다.
-                if(!required) {
-                    val denied_already = ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)
-                    if (denied_already) {
-                        Toast.makeText(activity, "이 기능이 필요합니다~~~ ㅎㅎ", Toast.LENGTH_LONG).show()
-                        ActivityCompat.requestPermissions(activity, permissions, PERMISSIONS_REQUEST_CODE)
+                if (!required) {
+                    val alreadyDenied = ActivityCompat.shouldShowRequestPermissionRationale(this, permission)
+                    if (alreadyDenied) {
+                        ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_REQUEST_CODE)
                     } else {
-                        ActivityCompat.requestPermissions(activity, permissions, PERMISSIONS_REQUEST_CODE)
+                        ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_REQUEST_CODE)
                     }
                     required = true
                 }
-            } else{
+            } else {
                 //거부한적 없다.
                 result.add(permission)
             }
         }
-        return result //이미 허락된 것들 리스트를 리턴함.
+        return result
     }
 
     companion object {
         private const val PERMISSIONS_REQUEST_CODE = 100
     }
-
 }

@@ -1,10 +1,7 @@
 package com.ray.personnel
 
 object Constants {
-    private const val TAG = "Constants"
-
-    const val JOB = "job"
-    const val JOB_CLASSIFIED = "job_classified"
+    const val KEY_TOKEN = "key_token"
 
     const val TOKEN = "remember_token"
     const val WANTED_INFORMATION = "https://www.wanted.co.kr/api/v4/jobs/"
@@ -13,5 +10,4 @@ object Constants {
     const val WANTED_RECRUIT = "https://www.wanted.co.kr/wd/"
 
     const val MILITARY_SEARCH = "https://work.mma.go.kr"
-
 }

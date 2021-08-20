@@ -1,12 +1,17 @@
 package com.ray.personnel.domain.database
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
+import androidx.room.Delete
+import androidx.room.OnConflictStrategy
 import com.ray.personnel.data.Company
 import io.reactivex.Completable
 import io.reactivex.Single
 
 @Dao
-interface CompanyDao{
+interface CompanyDao {
 
     @Query("SELECT * FROM company")
     fun getAll(): Single<List<Company>>
@@ -47,16 +52,16 @@ interface CompanyDao{
     @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY distance DESC")
     fun getAllByDistanceDesc(sortType: Int): Single<List<Company>>
 
-    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY salary_rookey ASC")
+    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY salaryRookey ASC")
     fun getAllBySalaryAsc(sortType: Int): Single<List<Company>>
 
-    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY salary_rookey DESC")
+    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY salaryRookey DESC")
     fun getAllBySalaryDesc(sortType: Int): Single<List<Company>>
 
-    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY scale_fourth - (3 * scale_normal) DESC")
+    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY scaleFourth - (3 * scaleNormal) DESC")
     fun getAllByPercentAsc(sortType: Int): Single<List<Company>>
 
-    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY scale_fourth - (3 * scale_normal) ASC")
+    @Query("SELECT * FROM company WHERE sortType = :sortType ORDER BY scaleFourth - (3 * scaleNormal) ASC")
     fun getAllByPercentDesc(sortType: Int): Single<List<Company>>
 
     @Query("SELECT * FROM company WHERE isLiked = 1 ORDER BY distance ASC")
@@ -65,18 +70,15 @@ interface CompanyDao{
     @Query("SELECT * FROM company WHERE isLiked = 1 ORDER BY distance DESC")
     fun getLikedByDistanceDesc(): Single<List<Company>>
 
-    @Query("SELECT * FROM company WHERE isLiked = 1 ORDER BY salary_rookey ASC")
+    @Query("SELECT * FROM company WHERE isLiked = 1 ORDER BY salaryRookey ASC")
     fun getLikedBySalaryAsc(): Single<List<Company>>
 
-    @Query("SELECT * FROM company WHERE isLiked = 1 ORDER BY salary_rookey DESC")
+    @Query("SELECT * FROM company WHERE isLiked = 1 ORDER BY salaryRookey DESC")
     fun getLikedBySalaryDesc(): Single<List<Company>>
 
-    @Query("SELECT * FROM company WHERE isLiked = 1 ORDER BY scale_fourth - (3 * scale_normal) DESC")
+    @Query("SELECT * FROM company WHERE isLiked = 1 ORDER BY scaleFourth - (3 * scaleNormal) DESC")
     fun getLikedByPercentAsc(): Single<List<Company>>
 
-    @Query("SELECT * FROM company WHERE isLiked = 1 ORDER BY scale_fourth - (3 * scale_normal) ASC")
+    @Query("SELECT * FROM company WHERE isLiked = 1 ORDER BY scaleFourth - (3 * scaleNormal) ASC")
     fun getLikedByPercentDesc(): Single<List<Company>>
-
-// @Query("SELECT * FROM company WHERE isLiked = 1 ORDER BY CASE WHEN scale_fourth / IF(scale_normal == 0, 1, scale_normal) DESC")
-//@Query("SELECT * FROM company WHERE isLiked = 1 ORDER BY COALESCE(scale_fourth / NULLIF(scale_normal, 0), scale_fourth * 2) DESC")
 }

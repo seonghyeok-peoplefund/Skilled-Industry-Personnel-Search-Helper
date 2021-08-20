@@ -1,40 +1,30 @@
 package com.ray.personnel.ui.mainpage.filter
 
 import android.Manifest
-import android.app.Application
-import android.view.View
+import android.util.Log
 import android.widget.AdapterView
-import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import com.ray.personnel.Constants.KEY_TOKEN
 import com.ray.personnel.data.Company
-import com.ray.personnel.data.CompanyOccupation
-import com.ray.personnel.data.Location
-import com.ray.personnel.data.Location.Companion.getLocationWithCheckNetworkAndGPS
-import com.ray.personnel.ui.mainpage.filter.list.CompanyListFragment
-import com.ray.personnel.Constants
-import com.ray.personnel.Constants.MILITARY_SEARCH
-import com.ray.personnel.domain.preference.PreferenceManager
-import com.ray.personnel.domain.database.CompanyDatabase
+import com.ray.personnel.data.GeoLocation
+import com.ray.personnel.domain.LocationManager
+import com.ray.personnel.domain.database.CompanyDatabaseMethods
+import com.ray.personnel.domain.parser.CompanyDetailParser
 import com.ray.personnel.domain.parser.CompanyListParser
-import com.ray.personnel.ui.mainpage.FragmentChangeModelInterface
 import de.timonknispel.ktloadingbutton.KTLoadingButton
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import org.json.JSONObject
-import org.jsoup.HttpStatusException
-import org.jsoup.Jsoup
-import java.io.IOException
 
-class CompanyFilterViewModel(application: Application): AndroidViewModel(application),
-    FragmentChangeModelInterface {
-    override var curFragment = MutableLiveData<Fragment>()
-    override val permissionRequest = MutableLiveData<List<String>>()
-    override val permissionResult = MutableLiveData<List<String>>()
+class CompanyFilterViewModel(state: SavedStateHandle) : ViewModel() {
+    val loginToken = state.getLiveData<String>(KEY_TOKEN)
+    val moveToNextFragment = MutableLiveData<Boolean>()
+    val permissionRequested = MutableLiveData<List<String>>()
+    val currentPermission = MutableLiveData<MutableList<String>>()
+    val toastMessage = MutableLiveData<String>()
     val jobs1 = MutableLiveData<List<String>>()
     val jobs2 = MutableLiveData<List<String>>()
     val jobs1value = MutableLiveData<Int>()
@@ -45,208 +35,122 @@ class CompanyFilterViewModel(application: Application): AndroidViewModel(applica
     var longitude = MutableLiveData<String>()
     var warningColor = MutableLiveData<Int>()
     var warningText = MutableLiveData<String>()
-    val progress_max = MutableLiveData<Int>(100)
-    val progress_cur = MutableLiveData<Int>(0)
-
+    val progressMax = MutableLiveData(100)
+    val progressCurrent = MutableLiveData(0)
+    private val sortType: Int get() = CompanyListParser.sortType
+    private val beDisposed = mutableListOf<Disposable>()
     lateinit var listDisposable: Disposable
-    private var company_stack = 0
-    var find = false
+    private var companyStack = 0
 
-    private val beDisposed = ArrayList<Disposable>()
-
-    fun useGPS(v: View){
-        permissionRequest.value = listOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
-        if(find) {
-            beDisposed.add(Single.fromCallable { getLocationWithCheckNetworkAndGPS(getApplication()) }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+    fun useGps(v: KTLoadingButton?) {
+        permissionRequested.value = listOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+        if (currentPermission.value?.containsAll(permissionRequested.value!!) == true) {
+            beDisposed.add(
+                LocationManager.getLocation(
                     { loc ->
                         latitude.value = loc?.latitude.toString()
                         longitude.value = loc?.longitude.toString()
-                        (v as KTLoadingButton).doResult(true)
+                        v?.doResult(true)
                     },
                     { err ->
-                        (v as KTLoadingButton).doResult(false)
-                        err.printStackTrace()
+                        v?.doResult(false)
+                        Log.e(TAG, "위치를 가져오지 못했습니다.", err)
                     }
-            ))
+                )
+            )
+        } else {
+            v?.reset()
         }
-        else (v as KTLoadingButton).reset()
     }
 
-    fun getCompanyList(){
-        if(CompanyListParser.sortType == -1) {
-            Toast.makeText(getApplication(), "분야를 선택해주세요.", Toast.LENGTH_SHORT).show()
-            return;
+    private fun getCompanyList() {
+        if (CompanyListParser.sortType == -1) {
+            toastMessage.value = "분야를 선택해주세요."
+            return
         }
-        if(latitude.value.isNullOrBlank() || longitude.value.isNullOrBlank()){
-            Toast.makeText(getApplication(), "위치를 선택해주세요.", Toast.LENGTH_SHORT).show()
-            return;
+        if (latitude.value.isNullOrBlank() || longitude.value.isNullOrBlank()) {
+            toastMessage.value = "위치를 선택해주세요."
+            return
         }
-        if(CompanyListParser.isNotParsing()) {
-            listDisposable = Observable.fromPublisher(CompanyListParser).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        if (CompanyListParser.isNotParsing()) {
+            listDisposable =
+                Observable.fromPublisher(CompanyListParser)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe {
-                        progress_max.value = 100; progress_cur.value = 0
+                        progressMax.value = 100
+                        progressCurrent.value = 0
                         warningColor.value = (0xff shl 24) or 0x000000
-                        warningText.value = "Parsing 시작.\n20초~60초 가량 기다려주세요."
+                        warningText.value = "Parsing 시작. 20초~60초 가량 기다려주세요."
                     }
                     .subscribe(
-                            { p ->
-                                getCompanyDetail(p)
-                                company_stack++
-                                progress_cur.value = progress_cur.value?.plus(1)
-                            },
-                            { err -> progress_cur.value = 0;
-                                Toast.makeText(getApplication(), err.toString(), Toast.LENGTH_SHORT).show(); },
-                            {
-                                warningText.value = "대기중"
-                                progress_cur.value = 0
-                                if(CompanyListParser.itemCount == 0) curFragment.value = CompanyListFragment()
-                                })
-        }
-        else Toast.makeText(getApplication(), "현재 정보를 로딩중입니다. 잠시 기다려주세요.", Toast.LENGTH_SHORT).show()
-    }
-
-
-    //"\.(?=(((?!\]).)*\[)|[^\[\]]*$)"
-    //\.(?=(((?!\]).)*\[)|[^\[\]]*$) <- Pattern.MULTILINE (?m)
-    fun doFilter(v: View){
-        beDisposed.add(CompanyDatabase.getInstance(getApplication()).companyDao().getSize(CompanyListParser.sortType).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{ size ->
-            if(size == 0) getCompanyList()
-            else updateDistance()
-        })
-    }
-    fun updateDistance(){
-        beDisposed.add(CompanyDatabase.getInstance(getApplication()).companyDao().getAll().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe { companies ->
-            companies.forEach{ company ->
-                company.distance = Location.getDistance(company.location!!.geo_location, Location.GeoLocation(latitude.value!!.toDouble(), longitude.value!!.toDouble()))
-            }
-            beDisposed.add(CompanyDatabase.getInstance(getApplication()).companyDao().updateAll(companies).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe {
-                curFragment.value = CompanyListFragment()
-            })
-        })
-    }
-    fun getCompanyDetail(c: Company){
-        beDisposed.add(Observable.fromCallable {
-            try{
-                val doc = JSONObject(Jsoup.connect(Constants.WANTED_INFORMATION + c.job_id).ignoreContentType(true).execute().body())
-                doc.optJSONObject("job").optJSONObject("detail").let { json ->
-                    c.intro = json.optString("intro")
-                    c.main_tasks = json.optString("main_tasks")
-                    c.requirements = json.optString("requirements")
-                    c.preferred = json.optString("preferred_points")
-                    c.benefits = json.optString("benefits")
-                }
-                c.location = Location().apply {
-                    doc.optJSONObject("job").optJSONObject("address").let { json ->
-                        location = json.optString("country")
-                        full_location = json.optString("full_location")
-                        geo_location = Location.GeoLocation(
-                                json.optJSONObject("geo_location").optJSONObject("location")
-                                        .optDouble("lat"),
-                                json.optJSONObject("geo_location").optJSONObject("location")
-                                        .optDouble("lng")
-                        )
-                    }
-                }
-                c.distance = Location.getDistance(c.location!!.geo_location, Location.GeoLocation(latitude.value!!.toDouble(), longitude.value!!.toDouble()))
-                // regex로 괄호 바깥 & 따옴표 바깥에 있는 . 검색, 그뒤에는 제거함. 이후
-                //TODO : 알고리즘 바꿔야함.
-                c.intro = c.intro.replaceAfter(".", "").replaceBeforeLast("\n", "").replace(Regex(".+\\?"), "").replace(Regex("【[^】]*】"), "").replace(Regex("\\[[^\\]]*\\]"), "").trim()
-                c.company_id = doc.optJSONObject("job").optJSONObject("company").optInt("id").toString()
-                PreferenceManager.getString(getApplication(), Constants.TOKEN).let{ token ->
-                    try {
-                        val doc2 = JSONObject(Jsoup.connect("https://www.wanted.co.kr/api/v4/companies/"+c.company_id+"/salary?period=1").cookie(
-                            Constants.TOKEN, token).ignoreContentType(true).execute().body())
-                        val length = doc2.optJSONArray("employee_histories").length()
-                        if(length > 0) {
-                            c.scale = doc2.optJSONArray("employee_histories").getJSONObject(length - 1).getInt("prsn_value")
-                            c.scale_date = doc2.optJSONArray("employee_histories").getJSONObject(doc2.optJSONArray("employee_histories").length() - 1).getString("base_ym")
-                            c.salary_normal = doc2.optJSONObject("salary").optString("formatted_avg_salary").replace("[^0-9]".toRegex(), "").toInt()
-                            c.salary_rookey = doc2.optJSONObject("salary").optString("formatted_rookey_salary").replace("[^0-9]".toRegex(), "").toInt()
-                        } else{
-                            println(c.title+"에는 정보가 담겨져 있지 않음.")
-                            println(doc2.toString())
+                        { p ->
+                            getCompanyDetail(p)
+                            companyStack++
+                            progressCurrent.value = progressCurrent.value?.plus(1)
+                        },
+                        { err ->
+                            progressCurrent.value = 0
+                            Log.e(TAG, "파싱 도중 에러 발생.", err)
+                        },
+                        {
+                            warningText.value = "대기중"
+                            progressCurrent.value = 0
+                            if (CompanyListParser.itemCount == 0) moveToNextFragment.value = true
                         }
-                    } catch (e: HttpStatusException) {
-                        println(c.title+"에는 정보가 담겨져 있지 않음.")
+                    )
+        } else {
+            toastMessage.value = "현재 정보를 로딩중입니다. 잠시 기다려주세요."
+        }
+    }
+
+    fun doFilter() {
+        beDisposed.add(
+            CompanyDatabaseMethods.getSizeBySortType(sortType) { size ->
+                if (size == 0) getCompanyList() else updateDistance()
+            }
+        )
+    }
+
+    private fun updateDistance() {
+        beDisposed.add(
+            CompanyDatabaseMethods.getAll() { companies ->
+                companies.forEach { company ->
+                    company.distance = LocationManager.getDistance(
+                        company.location!!.geoLocation,
+                        GeoLocation(latitude.value!!.toDouble(), longitude.value!!.toDouble())
+                    )
+                }
+                beDisposed.add(
+                    CompanyDatabaseMethods.updateAll(companies) {
+                        moveToNextFragment.value = true
+                    }
+                )
+            }
+        )
+    }
+
+    private fun getCompanyDetail(company: Company) {
+        val currentGeoLocation = GeoLocation(latitude.value!!.toDouble(), longitude.value!!.toDouble())
+        CompanyDetailParser.initDetail(company, currentGeoLocation, loginToken.value!!) { company ->
+            beDisposed.add(
+                CompanyDatabaseMethods.insert(company) {
+                    companyStack--
+                    if (listDisposable.isDisposed && companyStack == 0) {
+                        moveToNextFragment.value = true
                     }
                 }
-
-                val data = Jsoup.connect(MILITARY_SEARCH + c.military_url).ignoreContentType(true).get().body().select("table.table_row")[1].select("tr")[4].select("td")
-                c.scale_normal = data[0].text().filter{ it.isDigit() }.toInt()
-                c.scale_fourth = data[1].text().filter{ it.isDigit() }.toInt()
-            } catch(e: IOException){
-                Toast.makeText(getApplication(), "인터넷이 원활하지 않습니다.", Toast.LENGTH_LONG).show()
-                e.printStackTrace()
-            }
-            c
-        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{ company ->
-            beDisposed.add(CompanyDatabase.getInstance(getApplication()).companyDao().insert(company)
-                        .subscribeOn(Schedulers.single())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe {
-                            company_stack--
-                            if (listDisposable.isDisposed && company_stack == 0) {
-                                curFragment.value = CompanyListFragment()
-                            }
-                        })
-            })
-        // listDisposable이 마지막 onNext이후 onComplete를 너무 늦게 내버린다면 stack == 0이면서 disposed = false일 수도 있음.
-    }
-
-    init{
-        initSpinner()
-        checkLogin()
-    }
-
-    fun checkLogin(){
-        if(PreferenceManager.getString(getApplication(), Constants.TOKEN).isNullOrEmpty()) {
-            warningColor.value = (0xff shl 24) or 0xff2020
-            warningText.value = "주의 : Wanted로그인이 되어있지 않습니다.\n연봉 및 규모 검색기능이 비활성화됩니다.\n로그인은 우측 하단 Login 페이지를 통해 하실 수 있습니다."
-        }
-        else {
-            warningColor.value = (0xff shl 24) or 0x000000
-            warningText.value = "Wanted가 로그인되어있습니다."
-        }
-    }
-    fun initSpinner(){
-        var position1 = PreferenceManager.getInt(getApplication(), Constants.JOB)
-        var position2 = PreferenceManager.getInt(getApplication(), Constants.JOB_CLASSIFIED)
-        if(position1 == -1) position1 = 0
-        if(position2 == -1) position2 = 0
-
-        jobs1.value = CompanyOccupation.occupation.keys.toList()
-        jobs2.value = CompanyOccupation.occupation.values.toTypedArray()[position1].keys.toList()
-        if(position1 > 0 && position2 > 0)
-            CompanyListParser.sortType = CompanyOccupation.occupation.values.toTypedArray()[position1].values.toTypedArray()[position2]
-        jobs1value.value = position1
-        jobs2value.value = position2
-
-
-        jobs1listener.value = object: AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-            override fun onItemSelected(parent: AdapterView<*>, v: View?, position: Int, id: Long) {
-                jobs1value.value = position
-                jobs2.value = CompanyOccupation.occupation.values.toTypedArray()[position].keys.toList()
-                PreferenceManager.setInt(getApplication(), Constants.JOB, position)
-                CompanyListParser.sortType = CompanyOccupation.occupation.values.toTypedArray()[position].values.toTypedArray()[0]
-
-            }
-        }
-        jobs2listener.value = object: AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-            override fun onItemSelected(parent: AdapterView<*>, v: View?, position: Int, id: Long) {
-                jobs2value.value = position
-                CompanyListParser.sortType = CompanyOccupation.occupation.values.toTypedArray()[jobs1value.value!!].values.toTypedArray()[position]
-                PreferenceManager.setInt(getApplication(), Constants.JOB_CLASSIFIED, position)
-            }
+            )
         }
     }
 
     override fun onCleared() {
         super.onCleared()
-        for(disposed in beDisposed) disposed.dispose()
-        if(::listDisposable.isInitialized)listDisposable.dispose()
+        for (disposed in beDisposed) disposed.dispose()
+        if (::listDisposable.isInitialized) listDisposable.dispose()
+    }
+
+    companion object {
+        private const val TAG = "CompanyFilterViewModel"
     }
 }

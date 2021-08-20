@@ -1,6 +1,5 @@
 package com.ray.personnel.ui.mainpage.favorite
 
-import android.content.Context
 import android.graphics.Outline
 import android.net.Uri
 import android.view.LayoutInflater
@@ -15,98 +14,67 @@ import com.bumptech.glide.Glide
 import com.like.LikeButton
 import com.like.OnLikeListener
 import com.ray.personnel.data.Company
-import com.ray.personnel.domain.database.CompanyDatabase
 import com.ray.personnel.R
-import com.ray.personnel.Constants
-import com.ray.personnel.domain.preference.PreferenceManager
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.ray.personnel.domain.database.CompanyDatabaseMethods
 
-class FavoriteListAdapter(private val mContext: Context, var companies: List<Company>) : RecyclerView.Adapter<FavoriteListAdapter.SimpleCompanyHolder>() {
-    var onItemClickListener: OnItemClickListener? = null
-    var isLogined = PreferenceManager.getString(mContext, Constants.TOKEN)?.isNotEmpty()?:false
+class FavoriteListAdapter(var companies: List<Company>) : RecyclerView.Adapter<FavoriteListAdapter.SimpleCompanyHolder>() {
+    var onItemClickListener: ((View, Company) -> Unit)? = null
+    var isLogined = false
 
-    interface OnItemClickListener {
-        fun onItemClick(view: View, company: Company)
-    }
+    override fun getItemCount() = companies.size
 
-    fun setOnItemClickListener(listener: (View, Company) -> Unit) {
-        onItemClickListener = object: OnItemClickListener {
-            override fun onItemClick(view: View, company: Company) {
-                listener(view, company)
-            }
-        }
-    }
-
+    override fun getItemViewType(i: Int) = if (!isLogined || companies[i].scale > 0) 0 else 1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SimpleCompanyHolder {
-        val convertView = LayoutInflater.from(mContext).inflate(R.layout.item_company_list, parent, false)
+        val convertView = LayoutInflater.from(parent.context).inflate(R.layout.item_company_list, parent, false)
         val v = SimpleCompanyHolder(convertView)
-        if(viewType == 1) v.wrapper.setBackgroundColor(0x79ff0000)
-        else v.wrapper.setBackgroundColor(0x00000000)
+        if (viewType == 1) {
+            v.wrapper.setBackgroundColor(0x79ff0000)
+        } else {
+            v.wrapper.setBackgroundColor(0x00000000)
+        }
         return v
     }
 
     override fun onBindViewHolder(holder: SimpleCompanyHolder, position: Int) {
         val company = companies[position]
-        Glide.with(mContext)
-                .load(Uri.parse(company.thumbURL))
-                .thumbnail(0.5f)
-                .into(holder.img_thumb)
+        Glide.with(ctx)//no
+            .load(Uri.parse(company.thumbURL))
+            .thumbnail(0.5f)
+            .into(holder.imgThumb)
         holder.title.text = company.title
         holder.department.text = company.department
-        holder.pane.setOnClickListener { v -> onItemClickListener?.onItemClick(v, company) }
-        if(company.isLiked) holder.favorite.isLiked = true
-        holder.favorite.setOnLikeListener(object: OnLikeListener{
+        holder.pane.setOnClickListener { v -> onItemClickListener?.let { it(v, company) } }
+        if (company.isLiked) holder.favorite.isLiked = true
+        holder.favorite.setOnLikeListener(object : OnLikeListener {
             override fun liked(likeButton: LikeButton) {
                 company.isLiked = true
-                CompanyDatabase.getInstance(mContext).companyDao().update(company)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe()
+                CompanyDatabaseMethods.update(company) {}
             }
+
             override fun unLiked(likeButton: LikeButton) {
                 company.isLiked = false
-                CompanyDatabase.getInstance(mContext).companyDao().update(company)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe()
+                CompanyDatabaseMethods.update(company) {}
             }
         })
     }
 
-    override fun getItemViewType(i: Int) = if(!isLogined || companies[i].scale > 0) 0; else 1
-    override fun getItemCount() = companies.size
-
-    //override fun getItemViewType(i: Int) = if(companies[i].isMilitary) 0 else 1
-
-    inner class SimpleCompanyHolder(convertView: View) : RecyclerView.ViewHolder(convertView) {
-        val pane: ConstraintLayout
-        val img_thumb: ImageView
-        val title: TextView
-        val department: TextView
-        val favorite: LikeButton
-        val wrapper: View
+    class SimpleCompanyHolder(convertView: View) : RecyclerView.ViewHolder(convertView) {
+        val pane: ConstraintLayout = convertView.findViewById(R.id.company_list_item_pane)
+        val imgThumb: ImageView = convertView.findViewById(R.id.company_list_item_thumb)
+        val title: TextView = convertView.findViewById(R.id.company_list_item_title)
+        val department: TextView = convertView.findViewById(R.id.company_list_item_department)
+        val favorite: LikeButton = convertView.findViewById(R.id.favorite)
+        val wrapper: View = convertView.findViewById(R.id.wrapper)
 
         init {
-            pane = convertView.findViewById(R.id.company_list_item_pane)
-            img_thumb = convertView.findViewById(R.id.company_list_item_thumb)
-            title = convertView.findViewById(R.id.company_list_item_title)
-            department = convertView.findViewById(R.id.company_list_item_department)
-            wrapper = convertView.findViewById(R.id.wrapper)
-            favorite = convertView.findViewById(R.id.favorite)
             val radius = 30f
-            img_thumb.outlineProvider = object : ViewOutlineProvider() {
-                override fun getOutline(view: View?, outline: Outline?) {
-                    outline?.setRoundRect(0, 0, view!!.width, (view.height + radius).toInt(), radius)
+            imgThumb.outlineProvider = object : ViewOutlineProvider() {
+                override fun getOutline(view: View, outline: Outline) {
+                    outline.setRoundRect(0, 0, view.width, (view.height + radius).toInt(), radius)
                 }
             }
-            img_thumb.clipToOutline = true
-
-
-
+            imgThumb.clipToOutline = true
         }
     }
-
-
 }

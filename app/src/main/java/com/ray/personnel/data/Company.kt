@@ -1,15 +1,17 @@
 package com.ray.personnel.data
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.ray.personnel.domain.parser.NaverParser
 import io.reactivex.Single
+import kotlinx.parcelize.Parcelize
 
-
+@Parcelize
 @Entity
-data class Company constructor(var title: String) : Comparable<Company> {
+data class Company constructor(var title: String) : Comparable<Company>, Parcelable {
     /**
      * state means 'how many does it load'
      * 0 : init only
@@ -17,6 +19,7 @@ data class Company constructor(var title: String) : Comparable<Company> {
      */
     @PrimaryKey(autoGenerate = true)
     var id = 0
+
     /**
      * state 1
      * These informations will be initialized
@@ -28,11 +31,9 @@ data class Company constructor(var title: String) : Comparable<Company> {
     @ColumnInfo
     lateinit var department: String
     @ColumnInfo
-    lateinit var military_url: String
+    lateinit var militaryUrl: String
     @ColumnInfo
-    lateinit var job_id: String
-    //
-    //https://www.wanted.co.kr/wd/
+    lateinit var jobId: String
     @ColumnInfo
     lateinit var thumbURL: String
     @ColumnInfo
@@ -47,7 +48,7 @@ data class Company constructor(var title: String) : Comparable<Company> {
     @ColumnInfo
     var intro = "~~~를 하는 회사입니다."
     @ColumnInfo
-    var main_tasks = "업무는 ~~~를 합니다."
+    var mainTasks = "업무는 ~~~를 합니다."
     @ColumnInfo
     var requirements = "기술은 ~~가 필요합니다."
     @ColumnInfo
@@ -59,60 +60,30 @@ data class Company constructor(var title: String) : Comparable<Company> {
     @ColumnInfo
     var distance: Int = 0x7fffffff
     @ColumnInfo
-    lateinit var company_id: String
-
+    lateinit var companyId: String
     @ColumnInfo
-    var salary_rookey: Int = 0
+    var salaryRookey: Int = 0
     @ColumnInfo
-    var salary_normal: Int = 0
+    var salaryNormal: Int = 0
     @ColumnInfo
     var scale: Int = 0
     @ColumnInfo
-    var scale_date: String = "0000"
+    var scaleDate: String = "0000"
+    @ColumnInfo
+    var scaleNormal: Int = 0
+    @ColumnInfo
+    var scaleFourth: Int = 0
 
-    @ColumnInfo
-    var scale_normal: Int = 0
-    @ColumnInfo
-    var scale_fourth: Int = 0
     /**
      * after @link com.ray.personnel.Activity.Info
      * these are observable - callback
      * do not need to save in database
      */
-    val observableNews: Single<ArrayList<News>>
-        get() = NaverParser.Builder.build(title)
+    val observableNews: Single<List<News>> get() = NaverParser.build(title)
     @Ignore
-    var news: ArrayList<News>? = null
-
-/*
-    var salary: Int? = null
-        get(){
-            if(field == null){
-                val arr = CompanyBasicInformationParser.Builder.build(title, business_number)
-                scale = arr.get(0)
-                salary = arr.get(1)
-            }
-            return field
-        }
-
-    var scale: Int? = null
-        get(){
-            if(field == null){
-                val arr = CompanyBasicInformationParser.Builder.build(title, business_number)
-                scale = arr.get(0)
-                salary = arr.get(1)
-            }
-            return field
-        }*/
-
-
-    constructor(title: String, military_url: String): this(title) {
-        this.military_url = military_url
-    }
+    var news: List<News>? = null
 
     override fun compareTo(company: Company): Int {
         return title.compareTo(company.title)
     }
-
-
 }

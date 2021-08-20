@@ -1,54 +1,49 @@
 package com.ray.personnel.ui.mainpage.favorite
 
-import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.MutableLiveData
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
+import com.ray.personnel.Constants.KEY_TOKEN
 import com.ray.personnel.databinding.FragmentFavoriteListBinding
-import com.ray.personnel.ui.mainpage.FragmentChangeInterface
-import com.ray.personnel.ui.mainpage.filter.list.CompanyListAdapter
 
-
-class FavoriteListFragment() : Fragment(), FragmentChangeInterface {
-    lateinit var ctx: Context
-    override var isAttached: MutableLiveData<Any?> = MutableLiveData()
+class FavoriteListFragment : Fragment() {
     private var _binding: FragmentFavoriteListBinding? = null
     private val binding get() = _binding!!
-    override val model: FavoriteListViewModel by activityViewModels()
+    private val model: FavoriteListViewModel by viewModels()
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        ctx = context
-        isAttached.value = null
-    }
-
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentFavoriteListBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setRecyclerView(view)
+        setRecyclerView()
         binding.viewmodel = model
         binding.lifecycleOwner = this
         model.getAllByDistanceAsc()
     }
 
-    private fun setRecyclerView(view: View) {
-        with(binding.companyListRecyclerview){
-            layoutManager = GridLayoutManager(ctx, 2)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun setRecyclerView() {
+        with(binding.companyListRecyclerview) {
+            if (context != null) layoutManager = GridLayoutManager(requireContext(), 2)
             addItemDecoration(getGridDecoration())
-            adapter = FavoriteListAdapter(ctx, emptyList())
+            adapter = FavoriteListAdapter(emptyList()).apply {
+                isLogined = model.loginToken.value?.isNotEmpty() ?: false
+            }
         }
     }
 
@@ -71,9 +66,17 @@ class FavoriteListFragment() : Fragment(), FragmentChangeInterface {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+    companion object {
+        private fun getInitialArgumentsBundle(token: String): Bundle {
+            return Bundle().apply {
+                putString(KEY_TOKEN, token)
+            }
+        }
 
+        fun newInstance(token: String): FavoriteListFragment {
+            return FavoriteListFragment().apply {
+                arguments = getInitialArgumentsBundle(token)
+            }
+        }
+    }
 }

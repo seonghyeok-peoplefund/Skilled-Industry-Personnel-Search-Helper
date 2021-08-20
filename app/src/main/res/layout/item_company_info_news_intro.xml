@@ -32,6 +32,7 @@
             app:layout_constraintStart_toEndOf="@+id/news_intro_image"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/news_intro_subcontent"/>
+
         <TextView
             android:id="@+id/news_intro_subcontent"
             android:layout_width="wrap_content"
