@@ -1,4 +1,4 @@
-package com.ray.personnel.ui.mainpage
+package com.ray.personnel.ui
 
 import android.view.MenuItem
 import androidx.lifecycle.MutableLiveData

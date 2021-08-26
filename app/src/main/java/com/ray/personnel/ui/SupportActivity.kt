@@ -1,4 +1,4 @@
-package com.ray.personnel.ui.mainpage
+package com.ray.personnel.ui
 
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -11,16 +11,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.ray.personnel.Constants.KEY_TOKEN
 import com.ray.personnel.R
+import com.ray.personnel.domain.PreferenceManager
+import com.ray.personnel.ui.favorite.FavoriteListFragment
+import com.ray.personnel.ui.filter.CompanyFilterFragment
+import com.ray.personnel.ui.login.LoginFragment
 import com.ray.personnel.databinding.ActivitySupportLayoutBinding
-import com.ray.personnel.domain.preference.PreferenceManager
-import com.ray.personnel.ui.mainpage.favorite.FavoriteListFragment
-import com.ray.personnel.ui.mainpage.filter.CompanyFilterFragment
-import com.ray.personnel.ui.mainpage.login.LoginFragment
 
 class SupportActivity : AppCompatActivity() {
     private val binding: ActivitySupportLayoutBinding by lazy { ActivitySupportLayoutBinding.inflate(layoutInflater) }
     private val model: SupportViewModel by viewModels()
 
+    //region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -42,6 +43,7 @@ class SupportActivity : AppCompatActivity() {
             }
         }
     }
+    //endregion Lifecycle
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.top, menu)

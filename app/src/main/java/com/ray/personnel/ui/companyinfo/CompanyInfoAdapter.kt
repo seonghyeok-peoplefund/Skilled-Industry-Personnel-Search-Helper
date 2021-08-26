@@ -13,6 +13,7 @@ import com.ray.personnel.R
 import com.ray.personnel.data.Location
 
 class CompanyInfoAdapter(var company: Company) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    //TODO("홀더 새로 파일 만들어서 거기 넣을것. 근데 그전에 이거 잘못하고있는데... 전부 바꾸기엔 시간 너무 걸려. 다른 작업 먼저 진행하도록 함.")
     var onTitleClickListener: ((Company) -> Unit)? = null
     var onLocationClickListener: ((Location) -> Unit)? = null
     var onScaleClickListener: ((Company) -> Unit)? = null

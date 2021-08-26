@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.ray.personnel.ui.mainpage.filter.CompanyFilterViewModel"/>
+            type="com.ray.personnel.ui.filter.CompanyFilterViewModel"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -179,7 +179,7 @@
             android:layout_height="wrap_content"
             app:buttonName="@string/location_gps"
             android:layout_marginTop="@dimen/spacing_normal"
-            android:onClick="@{(v) -> viewmodel.useGps(v)}"
+            android:onClick="@{viewmodel::useGps}"
             app:layout_constraintTop_toBottomOf="@+id/location_latitude"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/divider2"/>
@@ -218,7 +218,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/spacing_big"
             android:textSize="@dimen/text_big"
-            android:onClick="@{(v) -> viewmodel.doFilter(v)}"
+            android:onClick="@{() -> viewmodel.doFilter()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/ic_search_company" />

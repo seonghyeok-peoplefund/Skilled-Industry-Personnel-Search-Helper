@@ -7,13 +7,14 @@ import java.util.Collections
 import kotlin.jvm.Throws
 
 object MilitaryParser {
-    lateinit var sortedCompany: List<Company>
+    private var sortedCompany: List<Company>? = null
 
     @JvmStatic
     @Throws(IOException::class)
     fun getMilitaryCompany(name: String): Company? {
+        if (sortedCompany == null) return null
         val i = Collections.binarySearch(sortedCompany, Company(name))
-        return if (i > -1) sortedCompany[i] else null
+        return if (i > -1) sortedCompany!![i] else null
     }
 
     @Throws(IOException::class)
@@ -27,15 +28,15 @@ object MilitaryParser {
         sortedCompany = link.getElementsByClass("title t-alignLt pl20px")
             .map { element ->
                 Company(
-                    element.child(0)
+                    title = element.child(0)
                         .text()
                         .replace("\\([^\\)]*\\)".toRegex(), "")
                         .replace("주식회사", "")
-                        .trim()
-                ).apply{
+                        .trim(),
                     militaryUrl = element.child(0)
                         .attr("href")
-                }
-            }.sorted()
+                )
+            }
+            .sorted()
     }
 }

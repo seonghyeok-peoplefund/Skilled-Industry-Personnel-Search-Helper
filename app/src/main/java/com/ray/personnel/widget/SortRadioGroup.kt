@@ -5,7 +5,7 @@ import android.widget.LinearLayout
 import androidx.core.view.children
 
 class SortRadioGroup(context: Context) : LinearLayout(context) {
-    var listener: ((Int, Boolean) -> Unit)? = null // TODO("include_sort_radio_group databinding에 어려움 생김.")
+    var listener: ((Int, Boolean) -> Unit)? = null
 
     fun setOffOtherRadio(v: SortRadioButton) {
         for (btn in children) {

@@ -1,4 +1,4 @@
-package com.ray.personnel.ui.mainpage.login
+package com.ray.personnel.ui.login
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,14 +10,15 @@ import androidx.fragment.app.viewModels
 import com.ray.personnel.Constants.KEY_TOKEN
 import com.ray.personnel.R
 import com.ray.personnel.databinding.FragmentLoginBinding
-import com.ray.personnel.domain.preference.PreferenceManager
-import com.ray.personnel.ui.mainpage.filter.CompanyFilterFragment
+import com.ray.personnel.domain.PreferenceManager
+import com.ray.personnel.ui.filter.CompanyFilterFragment
 
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
     private val model: LoginViewModel by viewModels()
 
+    //region Lifecycle
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
@@ -37,6 +38,7 @@ class LoginFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+    //endregion Lifecycle
 
     private fun moveToNextFragment(token: String) {
         val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()

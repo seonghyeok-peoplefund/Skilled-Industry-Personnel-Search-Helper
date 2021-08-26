@@ -9,11 +9,12 @@ import androidx.core.content.ContextCompat
 import com.ray.personnel.R
 import com.ray.personnel.domain.ImageManager
 
-class SortRadioButton(context: Context, attrs: AttributeSet? = null) :
-    AppCompatImageButton(context),
+class SortRadioButton(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : AppCompatImageButton(context, attrs, defStyleAttr),
     View.OnClickListener {
-
-    private val CHECK by lazy { intArrayOf(R.attr.isButtonChecked) }
     private var upBitmap = ImageManager.drawableToBitmap(ContextCompat.getDrawable(context, R.drawable.ic_up2)!!)
     private var downBitmap = ImageManager.drawableToBitmap(ContextCompat.getDrawable(context, R.drawable.ic_down2)!!)
     var isAscendant = true
@@ -21,9 +22,10 @@ class SortRadioButton(context: Context, attrs: AttributeSet? = null) :
 
     init {
         if (attrs != null) {
-            isButtonChecked = context
-                .obtainStyledAttributes(attrs, R.styleable.SortRadioButton)
-                .getBoolean(R.styleable.SortRadioButton_isButtonChecked, false)
+            with(context.obtainStyledAttributes(attrs, R.styleable.SortRadioButton)) {
+                isButtonChecked = getBoolean(R.styleable.SortRadioButton_isButtonChecked, false)
+                recycle()
+            }
         }
         setOnClickListener(this)
     }
@@ -62,18 +64,22 @@ class SortRadioButton(context: Context, attrs: AttributeSet? = null) :
             if (isAscendant) {
                 canvas.drawBitmap(
                     downBitmap,
-                    (width - downBitmap.width) - ImageManager.pxToDp(7, context),
+                    (width - downBitmap.width) - ImageManager.pxToDp(context, 7),
                     (height - downBitmap.height) / 2.toFloat(),
                     null
                 )
             } else {
                 canvas.drawBitmap(
                     upBitmap,
-                    (width - upBitmap.width) - ImageManager.pxToDp(7, context),
+                    (width - upBitmap.width) - ImageManager.pxToDp(context, 7),
                     (height - upBitmap.height) / 2.toFloat(), null
                 )
             }
         }
         super.onDraw(canvas)
+    }
+
+    companion object {
+        private val CHECK by lazy { intArrayOf(R.attr.isButtonChecked) }
     }
 }

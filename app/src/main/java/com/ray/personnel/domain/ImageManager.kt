@@ -18,7 +18,7 @@ object ImageManager {
         return bitmap
     }
 
-    fun pxToDp(px: Int, context: Context): Float {
+    fun pxToDp(context: Context, px: Int): Float {
         val resources: Resources = context.resources
         val metrics: DisplayMetrics = resources.displayMetrics
         return px / (metrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)

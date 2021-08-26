@@ -1,7 +1,11 @@
 package com.ray.personnel.data
 
-class Location {
-    lateinit var location: String
-    lateinit var fullLocation: String
-    lateinit var geoLocation: GeoLocation
-}
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+data class Location(
+    val location: String,
+    val fullLocation: String,
+    val geoLocation: GeoLocation
+) : Parcelable

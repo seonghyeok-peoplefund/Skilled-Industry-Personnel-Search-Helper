@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.ray.personnel.ui.mainpage.filter.list.CompanyListViewModel"/>
+            type="com.ray.personnel.ui.filter.list.CompanyListViewModel"/>
     </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"

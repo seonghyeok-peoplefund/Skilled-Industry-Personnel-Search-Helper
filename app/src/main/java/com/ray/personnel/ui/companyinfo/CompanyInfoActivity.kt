@@ -13,11 +13,13 @@ import com.bumptech.glide.Glide
 import com.ray.personnel.R
 import com.ray.personnel.data.Company
 import com.ray.personnel.databinding.ActivityCompanyInfoBinding
+import com.ray.personnel.domain.parser.NaverParser
 
 class CompanyInfoActivity : AppCompatActivity() {
     private val binding: ActivityCompanyInfoBinding by lazy { ActivityCompanyInfoBinding.inflate(layoutInflater) }
     private val model: CompanyInfoViewModel by viewModels()
 
+    //region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -25,20 +27,9 @@ class CompanyInfoActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         initObserver()
     }
+    //endregion Lifecycle
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if (item.itemId == android.R.id.home) {
-            finish()
-            overridePendingTransition(R.anim.activity_slide_enter, R.anim.activity_slide_exit)
-            true
-        } else super.onOptionsItemSelected(item)
-    }
-
-    override fun onBackPressed() {
-        finish()
-        overridePendingTransition(R.anim.activity_slide_enter, R.anim.activity_slide_exit)
-    }
-
+    //region initialize
     private fun initObserver() {
         model.uriLiveData.observe(this) { str ->
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(str))
@@ -47,20 +38,26 @@ class CompanyInfoActivity : AppCompatActivity() {
         model.company.observe(this) { company ->
             setToolbar(company)
             setBackgroundImage(company)
-            setRecyclerView(company)
-            company.observableNews.subscribe(
-                { arr ->
+            initRecyclerView(company)
+            NaverParser.getNaverNews(
+                content = company.title,
+                onSuccess = { arr ->
                     company.news = arr
                     (binding.companyInfo.adapter as CompanyInfoAdapter).refresh(CompanyInfoAdapter.NEWS)
-                }, { err ->
+                },
+                onError = { err -> // 원래라면 한 줄에 들어가야 하는 내용이지만, value parameter이 같은 곳에서 시작해야 한다고 생각했기 때문에 줄바꿈을 했다.
                     Log.e(TAG, "인터넷 연결이 올바르지 않습니다.", err)
-                    Toast.makeText(this, "인터넷 연결이 올바르지 않습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "인터넷 연결이 올바르지 않습니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             )
         }
     }
 
-    private fun setRecyclerView(company: Company) {
+    private fun initRecyclerView(company: Company) {
         binding.companyInfo.also { recyclerView ->
             recyclerView.layoutManager = LinearLayoutManager(this)
             recyclerView.adapter = CompanyInfoAdapter(company).apply {
@@ -72,6 +69,22 @@ class CompanyInfoActivity : AppCompatActivity() {
             }
 
         }
+    }
+    //endregion initialize
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == android.R.id.home) {
+            finish()
+            overridePendingTransition(R.anim.activity_slide_enter, R.anim.activity_slide_exit)
+            true
+        } else {
+            super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.activity_slide_enter, R.anim.activity_slide_exit)
     }
 
     private fun setToolbar(company: Company) {

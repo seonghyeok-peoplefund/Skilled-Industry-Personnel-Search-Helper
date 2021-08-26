@@ -21,16 +21,24 @@ abstract class CompanyDatabase : RoomDatabase() {
     companion object {
         private var instance: CompanyDatabase? = null
         fun getInstance(context: Context): CompanyDatabase {
-            return instance ?: run {
-                instance = Room.databaseBuilder(
-                    context.applicationContext, CompanyDatabase::class.java, "company_db_${CompanyListParser}.sortType"
-                )
+            /*
+             방안 1 : @synchronized fun getInstance
+             -> 생성작업을 이미 완료해 instance != null 일 때에도 synchronized가 작동함.
+             방안 2 : instance ?: synchronized(this)
+             방안 3 : Instance ?: synchronized(CompanyDatabase::class)
+             -> 어짜피 companion object라서 작동은 같을 것 같다. 더 직관성을 높이기 위해 방법3이 좋을 것 같다.
+             이대로 사용해도 좋으려나?
+             */
+            return instance ?: synchronized(this) {
+                instance = Room
+                    .databaseBuilder(
+                        context.applicationContext,
+                        CompanyDatabase::class.java,
+                        "company_db_${CompanyListParser}.db"
+                    )
                     .fallbackToDestructiveMigration()
-                    .addCallback(object : Callback() {
-                        override fun onCreate(db: SupportSQLiteDatabase) {
-                            super.onCreate(db)
-                        }
-                    }).build()
+                    .build()
+                // Chained call formatting 참고. 호출의 시작과 닫는 괄호를 수직으로 정렬함.
                 return instance!!
             }
         }
@@ -46,15 +54,5 @@ class LocationConverter {
     @TypeConverter
     fun locationToJson(location: Location?): String? {
         return location?.let { Gson().toJson(location) }
-    }
-
-    @TypeConverter
-    fun jsonToList(value: String?): List<String>? {
-        return value?.let { Gson().fromJson(value, object: TypeToken<List<String>>(){}.type) }
-    }
-
-    @TypeConverter
-    fun listToJson(list: List<String>?): String? {
-        return list?.let { Gson().toJson(list) }
     }
 }

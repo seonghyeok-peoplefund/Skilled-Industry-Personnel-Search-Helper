@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.ray.personnel.ui.mainpage.favorite.FavoriteListViewModel"/>
+            type="com.ray.personnel.ui.favorite.FavoriteListViewModel"/>
     </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"

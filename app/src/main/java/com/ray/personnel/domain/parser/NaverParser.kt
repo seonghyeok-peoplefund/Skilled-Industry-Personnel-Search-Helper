@@ -4,6 +4,8 @@ import android.util.Log
 import com.ray.personnel.data.News
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import org.json.JSONArray
 import org.json.JSONObject
@@ -26,16 +28,28 @@ object NaverParser {
         News()
     )
 
-    fun build(content: String, itemCount: Int = NEWS_DEFAULT_ITEM_COUNT): Single<List<News>> =
-        Single.fromCallable(parse(content, itemCount)).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+    fun getNaverNews(
+        content: String,
+        itemCount: Int = NEWS_DEFAULT_ITEM_COUNT,
+        onSuccess: Consumer<in List<News>>,
+        onError: Consumer<in Throwable>
+    ): Disposable {
+        return Single.fromCallable(parse(content, itemCount))
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe(onSuccess, onError)
+    }
 
-    private fun parse(keyword: String, itemCount: Int): Callable<List<News>> = Callable<List<News>> {
-        val text = URLEncoder.encode(keyword, "UTF-8")
-        val apiURL = "https://openapi.naver.com/v1/search/news.json?query=$text&display=$itemCount&start=1&sort=sim"
-        var jsonNews: JSONArray? = null
-        try {
-            jsonNews =
-                JSONObject(
+    private fun parse(
+        keyword: String,
+        itemCount: Int
+    ): Callable<List<News>> {
+        return Callable<List<News>> {
+            val text = URLEncoder.encode(keyword, "UTF-8")
+            val apiURL = "https://openapi.naver.com/v1/search/news.json?query=$text&display=$itemCount&start=1&sort=sim"
+            //적절한 방법이 없지만 옳은 방법
+            val jsonNews: JSONArray = JSONObject(
+                try {
                     Jsoup.connect(apiURL)
                         .header("X-Naver-Client-Id", clientId)
                         .header("X-Naver-Client-Secret", clientSecret)
@@ -43,23 +57,25 @@ object NaverParser {
                         .ignoreContentType(true)
                         .execute()
                         .body()
-                ).optJSONArray("items")
-        } catch (e: IOException) {
-            Log.e(TAG, "통신 결과가 올바르지 못합니다.", e)
-        }
-        if (jsonNews == null) return@Callable nothing
-        val result = mutableListOf<News>()
-        for (i in 0 until itemCount) {
-            val curNewsJson = jsonNews
-                .optJSONObject(i)
-            result.add(
-                News(
-                    curNewsJson.optString("title"),
-                    curNewsJson.optString("description"),
-                    curNewsJson.optString("link")
-                )
+                } catch (e: IOException) {
+                    Log.e(TAG, "통신 결과가 올바르지 못합니다.", e)
+                    return@Callable nothing
+                }
             )
+                .optJSONArray("items")
+                ?: return@Callable nothing
+            val result = mutableListOf<News>()
+            for (i in 0 until itemCount) {
+                val curNewsJson = jsonNews.optJSONObject(i)
+                result.add(
+                    News(
+                        curNewsJson.optString("title"),
+                        curNewsJson.optString("description"),
+                        curNewsJson.optString("link")
+                    )
+                )
+            }
+            return@Callable result
         }
-        return@Callable result
     }
 }

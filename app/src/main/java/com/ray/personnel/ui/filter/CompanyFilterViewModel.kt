@@ -1,7 +1,8 @@
-package com.ray.personnel.ui.mainpage.filter
+package com.ray.personnel.ui.filter
 
 import android.Manifest
 import android.util.Log
+import android.view.View
 import android.widget.AdapterView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -37,34 +38,36 @@ class CompanyFilterViewModel(state: SavedStateHandle) : ViewModel() {
     var warningText = MutableLiveData<String>()
     val progressMax = MutableLiveData(100)
     val progressCurrent = MutableLiveData(0)
-    private val sortType: Int get() = CompanyListParser.sortType
+    private val departmentType: Int get() = CompanyListParser.departmentType
     private val beDisposed = mutableListOf<Disposable>()
     lateinit var listDisposable: Disposable
     private var companyStack = 0
 
-    fun useGps(v: KTLoadingButton?) {
+    fun useGps(v: View?) {
+        if (v !is KTLoadingButton) return
         permissionRequested.value = listOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
         if (currentPermission.value?.containsAll(permissionRequested.value!!) == true) {
             beDisposed.add(
                 LocationManager.getLocation(
+                    ctx,
                     { loc ->
                         latitude.value = loc?.latitude.toString()
                         longitude.value = loc?.longitude.toString()
-                        v?.doResult(true)
+                        v.doResult(true)
                     },
                     { err ->
-                        v?.doResult(false)
+                        v.doResult(false)
                         Log.e(TAG, "위치를 가져오지 못했습니다.", err)
                     }
                 )
             )
         } else {
-            v?.reset()
+            v.reset()
         }
     }
 
     private fun getCompanyList() {
-        if (CompanyListParser.sortType == -1) {
+        if (CompanyListParser.departmentType == -1) {
             toastMessage.value = "분야를 선택해주세요."
             return
         }
@@ -88,12 +91,10 @@ class CompanyFilterViewModel(state: SavedStateHandle) : ViewModel() {
                             getCompanyDetail(p)
                             companyStack++
                             progressCurrent.value = progressCurrent.value?.plus(1)
-                        },
-                        { err ->
+                        }, { err ->
                             progressCurrent.value = 0
                             Log.e(TAG, "파싱 도중 에러 발생.", err)
-                        },
-                        {
+                        }, {
                             warningText.value = "대기중"
                             progressCurrent.value = 0
                             if (CompanyListParser.itemCount == 0) moveToNextFragment.value = true
@@ -106,27 +107,36 @@ class CompanyFilterViewModel(state: SavedStateHandle) : ViewModel() {
 
     fun doFilter() {
         beDisposed.add(
-            CompanyDatabaseMethods.getSizeBySortType(sortType) { size ->
-                if (size == 0) getCompanyList() else updateDistance()
-            }
+            CompanyDatabaseMethods.getSizeByDepartmentType(
+                context,
+                departmentType,
+                { size ->
+                    if (size == 0) getCompanyList() else updateDistance()
+                },
+                onError
+            )
         )
     }
 
     private fun updateDistance() {
         beDisposed.add(
-            CompanyDatabaseMethods.getAll() { companies ->
-                companies.forEach { company ->
-                    company.distance = LocationManager.getDistance(
-                        company.location!!.geoLocation,
-                        GeoLocation(latitude.value!!.toDouble(), longitude.value!!.toDouble())
-                    )
-                }
-                beDisposed.add(
-                    CompanyDatabaseMethods.updateAll(companies) {
-                        moveToNextFragment.value = true
+            CompanyDatabaseMethods.getAll(
+                ctx,
+                { companies ->
+                    companies.forEach { company ->
+                        company.distance = LocationManager.getDistance(
+                            company.location!!.geoLocation,
+                            GeoLocation(latitude.value!!.toDouble(), longitude.value!!.toDouble())
+                        )
                     }
-                )
-            }
+                    beDisposed.add(
+                        CompanyDatabaseMethods.update(companies) {
+                            moveToNextFragment.value = true
+                        }
+                    )
+                },
+                onError
+            )
         )
     }
 

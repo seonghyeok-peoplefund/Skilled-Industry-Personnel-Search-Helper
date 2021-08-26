@@ -1,4 +1,4 @@
-package com.ray.personnel.ui.mainpage.filter.list
+package com.ray.personnel.ui.filter.list
 
 import android.graphics.Rect
 import android.os.Bundle
@@ -11,13 +11,15 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.ray.personnel.Constants.KEY_TOKEN
 import com.ray.personnel.databinding.FragmentCompanyListBinding
-import com.ray.personnel.ui.mainpage.favorite.FavoriteListAdapter
+import com.ray.personnel.ui.favorite.FavoriteListAdapter
 
+//TODO("Favorite 작업 완료하고, 합치거나 코드를 가져오거나 할거임. 그 때까지 보류")
 class CompanyListFragment : Fragment() {
     private var _binding: FragmentCompanyListBinding? = null
     private val binding get() = _binding!!
     private val model: CompanyListViewModel by viewModels()
 
+    //region Lifecycle
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentCompanyListBinding.inflate(inflater, container, false)
         return binding.root
@@ -25,7 +27,7 @@ class CompanyListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setRecyclerView()
+        initRecyclerView()
         binding.viewmodel = model
         binding.lifecycleOwner = this
         model.getAllByDistanceAsc()
@@ -35,16 +37,21 @@ class CompanyListFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+    //endregion Lifecycle
 
-    private fun setRecyclerView() {
+    //region initialize
+    private fun initRecyclerView() {
         with(binding.companyListRecyclerview) {
             if (context != null) layoutManager = GridLayoutManager(requireContext(), 2)
             addItemDecoration(getGridDecoration())
-            adapter = FavoriteListAdapter(emptyList()).apply {
+            adapter = CompanyListAdapter(emptyList()).apply {
                 isLogined = model.loginToken.value?.isNotEmpty() ?: false
+                onItemClickListener = model.onItemClickListener
+                onLikeListener = model.onLikeListener
             }
         }
     }
+    //endregion initialize
 
     private fun getGridDecoration(): ItemDecoration = object : ItemDecoration() {
         override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {

@@ -1,4 +1,4 @@
-package com.ray.personnel.ui.mainpage.login
+package com.ray.personnel.ui.login
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

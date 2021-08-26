@@ -7,7 +7,7 @@ import org.reactivestreams.Publisher
 import org.reactivestreams.Subscriber
 import java.io.IOException
 
-object CompanyListParser : Publisher<Company>{
+object CompanyListParser : Publisher<Company> {
     const val MAX_SEARCH_COUNT = 100
     const val NO_PROGRESS = 0
     const val PARSING_WANTED = NO_PROGRESS + 1
@@ -15,9 +15,9 @@ object CompanyListParser : Publisher<Company>{
     const val SEARCH_FINISHED = CHECKING_MILITARY + 1
     const val END = SEARCH_FINISHED + 1
 
-    var sortType = -1
+    var departmentType = -1
     private val wantedUrl: String //TODO("긴 URL 어떻게 줄일건가?")
-        get() = "https://www.wanted.co.kr/api/v4/jobs?country=kr&locations=all&years=-1&limit=$MAX_SEARCH_COUNT&offset=$itemCount&job_sort=job.latest_order&tag_type_id=$sortType"
+        get() = "https://www.wanted.co.kr/api/v4/jobs?country=kr&locations=all&years=-1&limit=$MAX_SEARCH_COUNT&offset=$itemCount&job_sort=job.latest_order&tag_type_id=$departmentType"
     private var progress = NO_PROGRESS
     private var jsonCompany: JSONObject? = null
     var itemCount: Int = 0
@@ -74,7 +74,7 @@ object CompanyListParser : Publisher<Company>{
                         company.jobId = jsonCompany!!.getJSONArray("data")
                             .getJSONObject(i)
                             .getString("id")
-                        company.sortType = sortType
+                        company.departmentType = departmentType
                         subscriber.onNext(company)
                     }
                     i++
@@ -98,8 +98,12 @@ object CompanyListParser : Publisher<Company>{
         }
     }
 
-    fun isParsingFinished() = (jsonCompany != null && jsonCompany!!.getJSONObject("links")["next"].toString() == "null")
+    //당장은 내부에서만 사용되지만, 외부에서 사용해도 상관없는 내용이다. 우선은 private 붙여놓는게 좋다고 판단했다.
+    private fun isParsingFinished(): Boolean {
+        return (jsonCompany != null && jsonCompany!!.getJSONObject("links")["next"].toString() == "null")
+    }
 
+    //위랑 같은 경우지만, isNotParsing이 외부에서 사용되고 있기에 같은 쌍인 해당 메소드는 외부에서 사용되지 않을지라도 public해야 한다고 판단했다.
     fun isParsing() = progress in (NO_PROGRESS + 1) until SEARCH_FINISHED
 
     fun isNotParsing() = !isParsing()

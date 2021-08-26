@@ -1,5 +1,6 @@
 package com.ray.personnel.domain.database
 
+import android.content.Context
 import com.ray.personnel.data.Company
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -8,156 +9,231 @@ import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 
 object CompanyDatabaseMethods {
-    fun getAll(onSuccess: (Consumer<in List<Company>>)): Disposable {
-        return CompanyDatabase.getInstance(getApplication())
+    fun getAll(
+        context: Context,
+        onSuccess: (Consumer<in List<Company>>),
+        onError: (Consumer<in Throwable>)
+    ): Disposable {
+        return CompanyDatabase.getInstance(context.applicationContext)
             .companyDao()
             .getAll()
             .subscribeOn(Schedulers.single())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(onSuccess)
+            .subscribe(onSuccess, onError)
     }
 
-    fun getAllByDistanceAsc(sortType: Int, onSuccess: (Consumer<in List<Company>>)): Disposable {
-        return CompanyDatabase.getInstance(getApplication())
+    fun getAllByDistanceAsc(
+        context: Context,
+        departmentType: Int,
+        onSuccess: (Consumer<in List<Company>>),
+        onError: (Consumer<in Throwable>)
+    ): Disposable {
+        return CompanyDatabase.getInstance(context.applicationContext)
             .companyDao()
-            .getAllByDistanceAsc(sortType)
+            .getAllByDistanceAsc(departmentType)
             .subscribeOn(Schedulers.single())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(onSuccess)
+            .subscribe(onSuccess, onError)
     }
 
-    fun getAllByDistanceDesc(sortType: Int, onSuccess: (Consumer<in List<Company>>)): Disposable {
-        return CompanyDatabase.getInstance(getApplication())
+    fun getAllByDistanceDesc(
+        context: Context,
+        departmentType: Int,
+        onSuccess: (Consumer<in List<Company>>),
+        onError: (Consumer<in Throwable>)
+    ): Disposable {
+        return CompanyDatabase.getInstance(context.applicationContext)
             .companyDao()
-            .getAllByDistanceDesc(sortType)
+            .getAllByDistanceDesc(departmentType)
             .subscribeOn(Schedulers.single())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(onSuccess)
+            .subscribe(onSuccess, onError)
     }
 
-    fun getAllBySalaryAsc(sortType: Int, onSuccess: (Consumer<in List<Company>>)): Disposable {
-        return CompanyDatabase.getInstance(getApplication())
+    fun getAllBySalaryAsc(
+        context: Context,
+        departmentType: Int,
+        onSuccess: (Consumer<in List<Company>>),
+        onError: (Consumer<in Throwable>)
+    ): Disposable {
+        return CompanyDatabase.getInstance(context.applicationContext)
             .companyDao()
-            .getAllBySalaryAsc(sortType)
+            .getAllBySalaryAsc(departmentType)
             .subscribeOn(Schedulers.single())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(onSuccess)
+            .subscribe(onSuccess, onError)
     }
 
-    fun getAllBySalaryDesc(sortType: Int, onSuccess: (Consumer<in List<Company>>)): Disposable {
-        return CompanyDatabase.getInstance(getApplication())
+    fun getAllBySalaryDesc(
+        context: Context,
+        departmentType: Int,
+        onSuccess: (Consumer<in List<Company>>),
+        onError: (Consumer<in Throwable>)
+    ): Disposable {
+        return CompanyDatabase.getInstance(context.applicationContext)
             .companyDao()
-            .getAllBySalaryDesc(sortType)
+            .getAllBySalaryDesc(departmentType)
             .subscribeOn(Schedulers.single())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(onSuccess)
+            .subscribe(onSuccess, onError)
     }
 
-    fun getAllByPercentAsc(sortType: Int, onSuccess: (Consumer<in List<Company>>)): Disposable {
-        return CompanyDatabase.getInstance(getApplication())
+    fun getAllByPercentAsc(
+        context: Context,
+        departmentType: Int,
+        onSuccess: (Consumer<in List<Company>>),
+        onError: (Consumer<in Throwable>)
+    ): Disposable {
+        return CompanyDatabase.getInstance(context.applicationContext)
             .companyDao()
-            .getAllByPercentAsc(sortType)
+            .getAllByPercentAsc(departmentType)
             .subscribeOn(Schedulers.single())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(onSuccess)
+            .subscribe(onSuccess, onError)
     }
 
-    fun getAllByPercentDesc(sortType: Int, onSuccess: (Consumer<in List<Company>>)): Disposable {
-        return CompanyDatabase.getInstance(getApplication())
+    fun getAllByPercentDesc(
+        context: Context,
+        departmentType: Int,
+        onSuccess: (Consumer<in List<Company>>),
+        onError: (Consumer<in Throwable>)
+    ): Disposable {
+        return CompanyDatabase.getInstance(context.applicationContext)
             .companyDao()
-            .getAllByPercentDesc(sortType)
+            .getAllByPercentDesc(departmentType)
             .subscribeOn(Schedulers.single())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(onSuccess)
+            .subscribe(onSuccess, onError)
     }
 
-    fun getLikedByDistanceAsc(onSuccess: (Consumer<in List<Company>>)): Disposable {
-        return CompanyDatabase.getInstance(getApplication())
+    fun getLikedByDistanceAsc(
+        context: Context,
+        onSuccess: (Consumer<in List<Company>>),
+        onError: (Consumer<in Throwable>)
+    ): Disposable {
+        return CompanyDatabase.getInstance(context.applicationContext)
             .companyDao()
             .getLikedByDistanceAsc()
             .subscribeOn(Schedulers.single())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(onSuccess)
+            .subscribe(onSuccess, onError)
     }
 
-    fun getLikedByDistanceDesc(onSuccess: (Consumer<in List<Company>>)): Disposable {
-        return CompanyDatabase.getInstance(getApplication())
+    fun getLikedByDistanceDesc(
+        context: Context,
+        onSuccess: (Consumer<in List<Company>>),
+        onError: (Consumer<in Throwable>)
+    ): Disposable {
+        return CompanyDatabase.getInstance(context.applicationContext)
             .companyDao()
             .getLikedByDistanceDesc()
             .subscribeOn(Schedulers.single())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(onSuccess)
+            .subscribe(onSuccess, onError)
     }
 
-    fun getLikedBySalaryAsc(onSuccess: (Consumer<in List<Company>>)): Disposable {
-        return CompanyDatabase.getInstance(getApplication())
+    fun getLikedBySalaryAsc(
+        context: Context,
+        onSuccess: (Consumer<in List<Company>>),
+        onError: (Consumer<in Throwable>)
+    ): Disposable {
+        return CompanyDatabase.getInstance(context.applicationContext)
             .companyDao()
             .getLikedBySalaryAsc()
             .subscribeOn(Schedulers.single())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(onSuccess)
+            .subscribe(onSuccess, onError)
     }
 
-    fun getLikedBySalaryDesc(onSuccess: (Consumer<in List<Company>>)): Disposable {
-        return CompanyDatabase.getInstance(getApplication())
+    fun getLikedBySalaryDesc(
+        context: Context, 
+        onSuccess: (Consumer<in List<Company>>),
+        onError: (Consumer<in Throwable>)
+    ): Disposable {
+        return CompanyDatabase.getInstance(context.applicationContext)
             .companyDao()
             .getLikedBySalaryDesc()
             .subscribeOn(Schedulers.single())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(onSuccess)
+            .subscribe(onSuccess, onError)
     }
 
-    fun getLikedByPercentAsc(onSuccess: (Consumer<in List<Company>>)): Disposable {
-        return CompanyDatabase.getInstance(getApplication())
+    fun getLikedByPercentAsc(
+        context: Context, 
+        onSuccess: (Consumer<in List<Company>>), 
+        onError: (Consumer<in Throwable>)
+    ): Disposable {
+        return CompanyDatabase.getInstance(context.applicationContext)
             .companyDao()
             .getLikedByPercentAsc()
             .subscribeOn(Schedulers.single())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(onSuccess)
+            .subscribe(onSuccess, onError)
     }
 
-    fun getLikedByPercentDesc(onSuccess: (Consumer<in List<Company>>)): Disposable {
-        return CompanyDatabase.getInstance(getApplication())
+    fun getLikedByPercentDesc(
+        context: Context, 
+        onSuccess: (Consumer<in List<Company>>),
+        onError: (Consumer<in Throwable>)
+    ): Disposable {
+        return CompanyDatabase.getInstance(context.applicationContext)
             .companyDao()
             .getLikedByPercentDesc()
             .subscribeOn(Schedulers.single())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(onSuccess)
+            .subscribe(onSuccess, onError)
     }
 
-    fun getSizeBySortType(sortType: Int, onSuccess: (Consumer<in Int>)): Disposable {
-        return CompanyDatabase.getInstance(getApplication())
+    fun getSizeByDepartmentType(
+        context: Context,
+        departmentType: Int,
+        onSuccess: (Consumer<in Int>),
+        onError: (Consumer<in Throwable>)
+    ): Disposable {
+        return CompanyDatabase.getInstance(context.applicationContext)
             .companyDao()
-            .getSize(sortType)
+            .getSize(departmentType)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(onSuccess)
+            .subscribe(onSuccess, onError)
     }
 
-    fun update(company: Company, onComplete: Action): Disposable {
-        return CompanyDatabase.getInstance(getApplication())
+    fun update(
+        context: Context, 
+        company: Company, onComplete: Action,
+        onError: (Consumer<in Throwable>)
+    ): Disposable {
+        return CompanyDatabase.getInstance(context.applicationContext)
             .companyDao()
             .update(company)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(onComplete)
+            .subscribe(onComplete, onError)
     }
 
-    fun updateAll(companies: List<Company>, onComplete: Action): Disposable {
-        return CompanyDatabase.getInstance(getApplication())
+    fun update(
+        context: Context, 
+        companies: List<Company>, 
+        onComplete: Action, onError: (Consumer<in Throwable>)
+    ): Disposable {
+        return CompanyDatabase.getInstance(context.applicationContext)
             .companyDao()
-            .updateAll(companies)
+            .update(companies)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(onComplete)
+            .subscribe(onComplete, onError)
     }
 
-    fun insert(company: Company, onComplete: Action): Disposable {
-        return CompanyDatabase.getInstance(getApplication())
+    fun insert(
+        context: Context, 
+        company: Company, onComplete: Action,
+        onError: (Consumer<in Throwable>)
+    ): Disposable {
+        return CompanyDatabase.getInstance(context.applicationContext)
             .companyDao()
             .insert(company)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(onComplete)
+            .subscribe(onComplete, onError)
     }
 }

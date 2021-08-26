@@ -38,10 +38,10 @@ object LocationManager {
         return (radius * angularDistance).roundToInt()
     }
 
-    fun getLocation(onSuccess: Consumer<in Location>, onError: Consumer<in Throwable>): Disposable {
+    fun getLocation(context: Context, onSuccess: Consumer<in Location>, onError: Consumer<in Throwable>): Disposable {
         return Single
             .fromCallable {
-                getLocationWithCheckNetworkAndGPS(getApplication()) ?: throw IOException("위치를 얻지 못함.")
+                getLocationWithCheckNetworkAndGPS(context) ?: throw IOException("위치를 얻지 못함.")
             }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -49,23 +49,23 @@ object LocationManager {
     }
 
     private fun getLocationWithCheckNetworkAndGPS(ctx: Context): Location? {
-        val locationManager = (ctx.getSystemService(Context.LOCATION_SERVICE) as LocationManager)
+        val locationManager = ctx.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         val isNetworkLocationEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-        var networkLoacation: Location? = null
+        var networkLocation: Location? = null
         if (isGpsEnabled) {
             if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
                 ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
             ) {
                 val gpsLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
                 if (isNetworkLocationEnabled) {
-                    networkLoacation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+                    networkLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
                 }
-                if (gpsLocation != null && networkLoacation != null) {
-                    return if (gpsLocation.accuracy > networkLoacation.accuracy) networkLoacation else gpsLocation
+                if (gpsLocation != null && networkLocation != null) {
+                    return if (gpsLocation.accuracy > networkLocation.accuracy) networkLocation else gpsLocation
                 }
                 if (gpsLocation != null) return gpsLocation
-                if (networkLoacation != null) return networkLoacation
+                if (networkLocation != null) return networkLocation
             }
         }
         return null

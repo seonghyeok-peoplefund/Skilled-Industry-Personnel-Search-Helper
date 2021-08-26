@@ -5,7 +5,7 @@
     <data>
         <variable
             name="sortListener"
-            type="com.ray.personnel.widget.SortRadioGroup.SortRadioGroupListener"/>
+            type="kotlin.jvm.functions.Function2&lt;Integer, Boolean, kotlin.Unit>"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

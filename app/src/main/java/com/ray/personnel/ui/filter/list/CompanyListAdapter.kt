@@ -1,4 +1,4 @@
-package com.ray.personnel.ui.mainpage.favorite
+package com.ray.personnel.ui.filter.list
 
 import android.graphics.Outline
 import android.net.Uri
@@ -17,8 +17,10 @@ import com.ray.personnel.data.Company
 import com.ray.personnel.R
 import com.ray.personnel.domain.database.CompanyDatabaseMethods
 
-class FavoriteListAdapter(var companies: List<Company>) : RecyclerView.Adapter<FavoriteListAdapter.SimpleCompanyHolder>() {
-    var onItemClickListener: ((View, Company) -> Unit)? = null
+//TODO("Favorite 작업 완료하고, 합치거나 코드를 가져오거나 할거임. 그 때까지 보류")
+class CompanyListAdapter(var companies: List<Company>) : RecyclerView.Adapter<CompanyListAdapter.SimpleCompanyHolder>() {
+    var onItemClickListener: ((Company) -> Unit)? = null
+    var onLikeListener: OnLikeListener? = null
     var isLogined = false
 
     override fun getItemCount() = companies.size
@@ -38,25 +40,15 @@ class FavoriteListAdapter(var companies: List<Company>) : RecyclerView.Adapter<F
 
     override fun onBindViewHolder(holder: SimpleCompanyHolder, position: Int) {
         val company = companies[position]
-        Glide.with(ctx)//no
+        Glide.with(holder.imgThumb.context)
             .load(Uri.parse(company.thumbURL))
             .thumbnail(0.5f)
             .into(holder.imgThumb)
         holder.title.text = company.title
         holder.department.text = company.department
-        holder.pane.setOnClickListener { v -> onItemClickListener?.let { it(v, company) } }
+        holder.pane.setOnClickListener { onItemClickListener?.let { it(company) } }
         if (company.isLiked) holder.favorite.isLiked = true
-        holder.favorite.setOnLikeListener(object : OnLikeListener {
-            override fun liked(likeButton: LikeButton) {
-                company.isLiked = true
-                CompanyDatabaseMethods.update(company) {}
-            }
-
-            override fun unLiked(likeButton: LikeButton) {
-                company.isLiked = false
-                CompanyDatabaseMethods.update(company) {}
-            }
-        })
+        holder.favorite.setOnLikeListener(onLikeListener)
     }
 
     class SimpleCompanyHolder(convertView: View) : RecyclerView.ViewHolder(convertView) {
@@ -71,7 +63,12 @@ class FavoriteListAdapter(var companies: List<Company>) : RecyclerView.Adapter<F
             val radius = 30f
             imgThumb.outlineProvider = object : ViewOutlineProvider() {
                 override fun getOutline(view: View, outline: Outline) {
-                    outline.setRoundRect(0, 0, view.width, (view.height + radius).toInt(), radius)
+                    outline.setRoundRect(
+                        0,
+                        0,
+                        view.width,
+                        (view.height + radius).toInt(), radius
+                    )
                 }
             }
             imgThumb.clipToOutline = true

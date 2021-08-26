@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.ray.personnel.ui.mainpage.SupportViewModel"/>
+            type="com.ray.personnel.ui.SupportViewModel"/>
     </data>
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"

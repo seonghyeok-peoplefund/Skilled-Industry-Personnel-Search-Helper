@@ -1,4 +1,4 @@
-package com.ray.personnel.ui.mainpage.filter
+package com.ray.personnel.ui.filter
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,17 +9,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import com.ray.personnel.databinding.FragmentCompanyFilterBinding
-import androidx.lifecycle.Observer
 import com.ray.personnel.Constants.KEY_TOKEN
 import com.ray.personnel.R
-import com.ray.personnel.domain.preference.PreferenceManager
-import com.ray.personnel.ui.mainpage.filter.list.CompanyListFragment
+import com.ray.personnel.domain.PreferenceManager
+import com.ray.personnel.ui.filter.list.CompanyListFragment
 
 class CompanyFilterFragment : Fragment() {
     private var _binding: FragmentCompanyFilterBinding? = null
     private val binding get() = _binding!!
     private val model: CompanyFilterViewModel by viewModels()
 
+    //region Lifecycle
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentCompanyFilterBinding.inflate(inflater, container, false)
         return binding.root
@@ -46,6 +46,7 @@ class CompanyFilterFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+    //endregion Lifecycle
 
     private fun moveToNextFragment() {
         val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()

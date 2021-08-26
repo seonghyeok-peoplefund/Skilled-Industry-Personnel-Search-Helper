@@ -4,7 +4,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.ray.personnel.ui.mainpage.login.LoginViewModel"/>
+            type="com.ray.personnel.ui.login.LoginViewModel"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
