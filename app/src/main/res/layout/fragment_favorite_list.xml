@@ -5,14 +5,13 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.ray.personnel.viewmodel.favorite.FavoriteListViewModel"/>
+            type="com.ray.personnel.ui.favorite.FavoriteListViewModel"/>
     </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         android:background="@color/off_white">
-
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar_layout"
@@ -52,9 +51,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/company_list_title"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:sortListener="@{viewmodel.sortListener}"/>
-
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </com.google.android.material.appbar.AppBarLayout>
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -68,6 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:animateLayoutChanges="true">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -80,18 +78,14 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/company_list_recyclerview"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:onChanged="@{viewmodel.companies}"/>
+                    app:layout_constraintTop_toTopOf="parent"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </androidx.core.widget.NestedScrollView>
-
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
 </layout>

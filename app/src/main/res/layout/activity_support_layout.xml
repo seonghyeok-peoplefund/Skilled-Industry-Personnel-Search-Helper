@@ -5,15 +5,15 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.ray.personnel.viewmodel.SupportViewModel"/>
+            type="com.ray.personnel.ui.SupportViewModel"/>
     </data>
-
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:fitsSystemWindows="true"
         android:background="@color/greeny">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -21,6 +21,7 @@
             android:minHeight="?attr/actionBarSize"
             android:background="@color/greeny"
             app:contentInsetStart="@dimen/toolbar_indentation"/>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
@@ -37,7 +38,5 @@
             app:itemIconTint="@color/tabs_color"
             android:onNavigationItemSelectedListener="@{viewmodel::navItemSelected}"
             app:menu="@menu/bottom" />
-
     </androidx.appcompat.widget.LinearLayoutCompat>
-
 </layout>

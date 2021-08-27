@@ -45,6 +45,7 @@
             app:layout_constraintStart_toEndOf="@+id/salary_image"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/salary_subcontent"/>
+
         <TextView
             android:id="@+id/salary_subcontent"
             android:layout_width="wrap_content"
