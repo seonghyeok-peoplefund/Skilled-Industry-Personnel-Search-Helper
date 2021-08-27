@@ -1,36 +1,52 @@
 package com.ray.personnel.ui.filter.list
 
+import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.ray.personnel.Constants.KEY_TOKEN
+import com.ray.personnel.data.Company
 import com.ray.personnel.databinding.FragmentCompanyListBinding
-import com.ray.personnel.ui.favorite.FavoriteListAdapter
+import com.ray.personnel.domain.database.CompanyDatabaseMethods
+import com.ray.personnel.domain.parser.CompanyListParser
+import com.ray.personnel.ui.companyinfo.CompanyInfoActivity
 
 //TODO("Favorite 작업 완료하고, 합치거나 코드를 가져오거나 할거임. 그 때까지 보류")
 class CompanyListFragment : Fragment() {
     private var _binding: FragmentCompanyListBinding? = null
+
     private val binding get() = _binding!!
+
     private val model: CompanyListViewModel by viewModels()
 
     //region Lifecycle
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentCompanyListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
+        initObserver()
         binding.viewmodel = model
         binding.lifecycleOwner = this
-        model.getAllByDistanceAsc()
+        model.initData()
     }
 
     override fun onDestroyView() {
@@ -40,6 +56,33 @@ class CompanyListFragment : Fragment() {
     //endregion Lifecycle
 
     //region initialize
+    private fun initObserver() {
+        model.moveToNextActivity.observe(viewLifecycleOwner) { company ->
+            moveToNextActivity(company)
+        }
+        model.requestDatabaseGetMethod.observe(viewLifecycleOwner) { options ->
+            if (context != null) {
+                CompanyDatabaseMethods.getDataByUsingOptions(
+                    context = requireContext(),
+                    options = options,
+                    departmentType = CompanyListParser.departmentType,
+                    onSuccess = model.onSuccess,
+                    onError = model.onError
+                )
+            }
+        }
+        model.requestDatabaseUpdateMethod.observe(viewLifecycleOwner) { company ->
+            if (context != null) {
+                CompanyDatabaseMethods.update(
+                    context = requireContext(),
+                    company = company,
+                    onComplete = {},
+                    onError = model.onError
+                )
+            }
+        }
+    }
+
     private fun initRecyclerView() {
         with(binding.companyListRecyclerview) {
             if (context != null) layoutManager = GridLayoutManager(requireContext(), 2)
@@ -52,6 +95,14 @@ class CompanyListFragment : Fragment() {
         }
     }
     //endregion initialize
+
+    private fun moveToNextActivity(company: Company) { // (" 이곳도 fragment처럼 newInstance같은걸로 이곳이 아닌 CompanyInfoActivity에서 처리하도록")
+        if (context != null) {
+            val i = Intent(requireContext(), CompanyInfoActivity::class.java)
+            i.putExtra("Company", company) // ("name도 따로 빼서 처리.")
+            startActivity(i)
+        }
+    }
 
     private fun getGridDecoration(): ItemDecoration = object : ItemDecoration() {
         override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {

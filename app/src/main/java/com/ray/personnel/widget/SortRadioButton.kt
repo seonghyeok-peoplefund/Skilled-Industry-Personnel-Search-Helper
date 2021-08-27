@@ -9,15 +9,18 @@ import androidx.core.content.ContextCompat
 import com.ray.personnel.R
 import com.ray.personnel.domain.ImageManager
 
-class SortRadioButton(
+// 직접 적은 코드 1도 없음.
+class SortRadioButton @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AppCompatImageButton(context, attrs, defStyleAttr),
-    View.OnClickListener {
-    private var upBitmap = ImageManager.drawableToBitmap(ContextCompat.getDrawable(context, R.drawable.ic_up2)!!)
-    private var downBitmap = ImageManager.drawableToBitmap(ContextCompat.getDrawable(context, R.drawable.ic_down2)!!)
+) : AppCompatImageButton(context, attrs, defStyleAttr), View.OnClickListener {
+    private var upBitmap = ImageManager.drawableToBitmap(ContextCompat.getDrawable(context, R.drawable.ic_up2))
+
+    private var downBitmap = ImageManager.drawableToBitmap(ContextCompat.getDrawable(context, R.drawable.ic_down2))
+
     var isAscendant = true
+
     var isButtonChecked = false
 
     init {

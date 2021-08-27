@@ -13,12 +13,9 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import java.io.IOException
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
-import kotlin.math.roundToInt
+import kotlin.math.*
 
+//완전히 가져옴. 수정한 내용 1도 없음.
 object LocationManager {
     fun getDistance(locationA: GeoLocation, locationB: GeoLocation): Int {
         val radius = 6371e3

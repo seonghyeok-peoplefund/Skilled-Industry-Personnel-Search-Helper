@@ -1,5 +1,6 @@
 package com.ray.personnel.data
 
+// WANTED 에서 직접 가져옴.
 object CompanyOccupation {
     val occupation: Map<String, Map<String, Int>> = mapOf(
         "NONE" to mapOf("NONE" to -1),

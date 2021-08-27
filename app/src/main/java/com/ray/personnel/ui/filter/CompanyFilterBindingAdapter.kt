@@ -1,4 +1,4 @@
-package com.ray.personnel.ui.mainpage.filter
+package com.ray.personnel.ui.filter
 
 import android.widget.AdapterView
 import androidx.appcompat.widget.AppCompatSpinner

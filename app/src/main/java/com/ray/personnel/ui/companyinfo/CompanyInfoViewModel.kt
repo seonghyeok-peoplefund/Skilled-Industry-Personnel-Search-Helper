@@ -15,24 +15,33 @@ import com.ray.personnel.data.News
 
 class CompanyInfoViewModel(state: SavedStateHandle) : ViewModel() {
     val company = state.getLiveData<Company>("Company")
+
     val uriLiveData = MutableLiveData<String>()
+
     val companyImage = MutableLiveData<Bitmap>()
+
     val colorOfTheme = MutableLiveData<Int>()
+
     val onTitleClickListener = fun(company: Company) {
         uriLiveData.value = Constants.WANTED_RECRUIT + company.jobId
     }
+
     val onLocationClickListener = fun(location: Location) {
         uriLiveData.value = "https://www.google.co.kr/maps/@${location.geoLocation.latitude},${location.geoLocation.longitude},20z"
     }
+
     val onScaleClickListener = fun(company: Company) {
         uriLiveData.value = Constants.MILITARY_SEARCH + company.militaryUrl
     }
+
     val onSalaryClickListener = fun(company: Company) {
         uriLiveData.value = Constants.WANTED_INTRO + company.companyId
     }
+
     val onNewsClickListener = fun(news: News) {
-        uriLiveData.value = news.searchURL
+        uriLiveData.value = news.url
     }
+
     val targetBitmap = object : SimpleTarget<Bitmap>() {
         override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
             companyImage.value = resource

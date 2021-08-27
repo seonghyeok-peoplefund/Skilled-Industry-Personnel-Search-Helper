@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.ray.personnel">
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_company"
         android:roundIcon="@mipmap/ic_company_round"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.RayTheme"
-        android:requestLegacyExternalStorage="true">
+        android:theme="@style/Theme.RayTheme">
         <activity
             android:name=".ui.SupportActivity">
             <intent-filter>
@@ -23,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.ray.personnel.ui.companyinfo.CompanyInfoActivity"/>
+            android:name=".ui.companyinfo.CompanyInfoActivity"/>
     </application>
 
 </manifest>

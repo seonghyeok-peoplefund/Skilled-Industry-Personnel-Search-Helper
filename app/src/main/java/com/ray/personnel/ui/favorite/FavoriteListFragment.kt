@@ -8,35 +8,46 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.ray.personnel.Constants.KEY_TOKEN
-import com.ray.personnel.R
 import com.ray.personnel.data.Company
 import com.ray.personnel.databinding.FragmentFavoriteListBinding
+import com.ray.personnel.domain.database.CompanyDatabaseMethods
 import com.ray.personnel.ui.companyinfo.CompanyInfoActivity
+import io.reactivex.disposables.Disposable
 
 class FavoriteListFragment : Fragment() {
     private var _binding: FragmentFavoriteListBinding? = null
+
     private val binding get() = _binding!!
+
     private val model: FavoriteListViewModel by viewModels()
 
+    private val beDisposed = mutableListOf<Disposable>()
+
     //region Lifecycle
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentFavoriteListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
         initObserver()
         binding.viewmodel = model
         binding.lifecycleOwner = this
-        model.getAllByDistanceAsc()
+        model.initData()
     }
 
     override fun onDestroyView() {
@@ -49,6 +60,30 @@ class FavoriteListFragment : Fragment() {
     private fun initObserver() {
         model.moveToNextActivity.observe(viewLifecycleOwner) { company ->
             moveToNextActivity(company)
+        }
+        model.requestDatabaseGetMethod.observe(viewLifecycleOwner) { options ->
+            if (context != null) {
+                beDisposed.add(
+                    CompanyDatabaseMethods.getDataByUsingOptions(
+                        context = requireContext(),
+                        options = options,
+                        onSuccess = model.onSuccess,
+                        onError = model.onError
+                    )
+                )
+            }
+        }
+        model.requestDatabaseUpdateMethod.observe(viewLifecycleOwner) { company ->
+            if (context != null) {
+                beDisposed.add(
+                    CompanyDatabaseMethods.update(
+                        context = requireContext(),
+                        company = company,
+                        onComplete = {},
+                        onError = model.onError
+                    )
+                )
+            }
         }
     }
 

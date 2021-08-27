@@ -11,11 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.ray.personnel.Constants.KEY_TOKEN
 import com.ray.personnel.R
+import com.ray.personnel.databinding.ActivitySupportLayoutBinding
 import com.ray.personnel.domain.PreferenceManager
 import com.ray.personnel.ui.favorite.FavoriteListFragment
 import com.ray.personnel.ui.filter.CompanyFilterFragment
 import com.ray.personnel.ui.login.LoginFragment
-import com.ray.personnel.databinding.ActivitySupportLayoutBinding
 
 class SupportActivity : AppCompatActivity() {
     private val binding: ActivitySupportLayoutBinding by lazy { ActivitySupportLayoutBinding.inflate(layoutInflater) }
@@ -50,7 +50,11 @@ class SupportActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         // TODO("fragment 에게 어떻게 전달?")
     }

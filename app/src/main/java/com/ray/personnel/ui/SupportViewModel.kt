@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.ray.personnel.R
 
 class SupportViewModel : ViewModel() {
-    val selectedNavItemId = MutableLiveData<Int>(R.id.icon_company)
+    val selectedNavItemId = MutableLiveData(R.id.icon_company)
 
     fun navItemSelected(item: MenuItem): Boolean {
         selectedNavItemId.value = item.itemId

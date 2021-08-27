@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
-//애초에 설계를 잘못한 듯 하다. 이로 인해 무분별하게 null을 사용하게 되었다. (데이터가 비어있다가 점점 채워지는 형식...)
+//room db 예제 복붙해옴.
 @Parcelize
 @Entity
 data class Company(
@@ -17,28 +17,28 @@ data class Company(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
 
-    @ColumnInfo
+    @ColumnInfo(name = "department_type")
     var departmentType: Int = 0,
 
     @ColumnInfo
     var department: String? = null,
 
-    @ColumnInfo
+    @ColumnInfo(name = "military_url")
     var militaryUrl: String? = null,
 
-    @ColumnInfo
+    @ColumnInfo(name = "job_id")
     var jobId: String? = null,
 
-    @ColumnInfo
-    var thumbURL: String? = null,
+    @ColumnInfo(name = "thumb_url")
+    var thumbUrl: String? = null,
 
-    @ColumnInfo
+    @ColumnInfo(name = "is_liked")
     var isLiked: Boolean = false,
 
     @ColumnInfo
     var intro: String = "~~~를 하는 회사입니다.",
 
-    @ColumnInfo
+    @ColumnInfo(name = "main_tasks")
     var mainTasks: String = "업무는 ~~~를 합니다.",
 
     @ColumnInfo
@@ -48,7 +48,7 @@ data class Company(
     var preferred: String = "기술 ~~이 있으면 우대해줍니다.",
 
     @ColumnInfo
-    var benefits: String = "복지는 ~~가 있습니.",
+    var welfare: String = "복지는 ~~가 있습니.",
 
     @ColumnInfo
     var location: Location? = null,
@@ -59,23 +59,23 @@ data class Company(
     @ColumnInfo
     var companyId: String? = null,
 
-    @ColumnInfo
+    @ColumnInfo(name = "salary_rookey")
     var salaryRookey: Int = 0,
 
-    @ColumnInfo
+    @ColumnInfo(name = "salary_normal")
     var salaryNormal: Int = 0,
 
     @ColumnInfo
-    var scale: Int = 0,
+    var employees: Int = 0,
 
-    @ColumnInfo
-    var scaleDate: String = "0000",
+    @ColumnInfo(name = "employees_latest_date")
+    var employeesLatestDate: String = "0000",
 
-    @ColumnInfo
-    var scaleNormal: Int = 0,
+    @ColumnInfo(name = "employees_active_personnel")
+    var employeesActivePersonnel: Int = 0,
 
-    @ColumnInfo
-    var scaleFourth: Int = 0, //trailing comma
+    @ColumnInfo(name = "employees_reserve_personnel")
+    var employeesReservePersonnel: Int = 0
 ) : Comparable<Company>, Parcelable {
     @IgnoredOnParcel
     @Ignore

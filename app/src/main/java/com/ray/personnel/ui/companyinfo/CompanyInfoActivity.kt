@@ -14,10 +14,14 @@ import com.ray.personnel.R
 import com.ray.personnel.data.Company
 import com.ray.personnel.databinding.ActivityCompanyInfoBinding
 import com.ray.personnel.domain.parser.NaverParser
+import io.reactivex.disposables.Disposable
 
 class CompanyInfoActivity : AppCompatActivity() {
     private val binding: ActivityCompanyInfoBinding by lazy { ActivityCompanyInfoBinding.inflate(layoutInflater) }
+
     private val model: CompanyInfoViewModel by viewModels()
+
+    private val beDisposed = mutableListOf<Disposable>()
 
     //region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,20 +43,23 @@ class CompanyInfoActivity : AppCompatActivity() {
             setToolbar(company)
             setBackgroundImage(company)
             initRecyclerView(company)
-            NaverParser.getNaverNews(
-                content = company.title,
-                onSuccess = { arr ->
-                    company.news = arr
-                    (binding.companyInfo.adapter as CompanyInfoAdapter).refresh(CompanyInfoAdapter.NEWS)
-                },
-                onError = { err -> // 원래라면 한 줄에 들어가야 하는 내용이지만, value parameter이 같은 곳에서 시작해야 한다고 생각했기 때문에 줄바꿈을 했다.
-                    Log.e(TAG, "인터넷 연결이 올바르지 않습니다.", err)
-                    Toast.makeText(
-                        this,
-                        "인터넷 연결이 올바르지 않습니다.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+
+            beDisposed.add(
+                NaverParser.getNaverNews(
+                    content = company.title,
+                    onSuccess = { arr ->
+                        company.news = arr
+                        (binding.companyInfo.adapter as CompanyInfoAdapter).refresh(CompanyInfoAdapter.NEWS)
+                    },
+                    onError = { err -> // 원래라면 한 줄에 들어가야 하는 내용이지만, value parameter이 같은 곳에서 시작해야 한다고 생각했기 때문에 줄바꿈을 했다.
+                        Log.e(TAG, "인터넷 연결이 올바르지 않습니다.", err)
+                        Toast.makeText(
+                            this,
+                            "인터넷 연결이 올바르지 않습니다.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                )
             )
         }
     }
@@ -98,7 +105,7 @@ class CompanyInfoActivity : AppCompatActivity() {
     private fun setBackgroundImage(company: Company) {
         Glide.with(this)
             .asBitmap()
-            .load(Uri.parse(company.thumbURL))
+            .load(Uri.parse(company.thumbUrl))
             .thumbnail(0.3f)
             .into(model.targetBitmap)
     }

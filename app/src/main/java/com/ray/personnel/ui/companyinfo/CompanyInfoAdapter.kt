@@ -7,17 +7,21 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.ray.personnel.data.Company
-import com.ray.personnel.data.News
 import com.ray.personnel.R
+import com.ray.personnel.data.Company
 import com.ray.personnel.data.Location
+import com.ray.personnel.data.News
 
 class CompanyInfoAdapter(var company: Company) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     //TODO("홀더 새로 파일 만들어서 거기 넣을것. 근데 그전에 이거 잘못하고있는데... 전부 바꾸기엔 시간 너무 걸려. 다른 작업 먼저 진행하도록 함.")
     var onTitleClickListener: ((Company) -> Unit)? = null
+
     var onLocationClickListener: ((Location) -> Unit)? = null
+
     var onScaleClickListener: ((Company) -> Unit)? = null
+
     var onSalaryClickListener: ((Company) -> Unit)? = null
+
     var onNewsClickListener: ((News) -> Unit)? = null
 
     override fun getItemCount() = FINAL
@@ -56,9 +60,7 @@ class CompanyInfoAdapter(var company: Company) : RecyclerView.Adapter<RecyclerVi
                 holder as SubtitledHolder
                 holder.content.text = company.title
                 holder.subcontent.text = company.department
-                holder.wrapper.setOnClickListener { v ->
-                    onTitleClickListener?.let { it(company) }
-                }
+                holder.wrapper.setOnClickListener { onTitleClickListener?.let { it(company) } }
             }
             INTRO -> {
                 (holder as DefaultHolder).content.text = company.intro
@@ -75,19 +77,19 @@ class CompanyInfoAdapter(var company: Company) : RecyclerView.Adapter<RecyclerVi
             LOCATION -> {
                 (holder as LocationHolder).content.text = "거리 : ${company.distance} M"
                 holder.subcontent.text = company.location?.fullLocation
-                holder.wrapper.setOnClickListener { v -> onLocationClickListener?.let { it(company.location!!) } }
+                holder.wrapper.setOnClickListener { onLocationClickListener?.let { it(company.location!!) } }
             }
             SCALE -> {
-                (holder as ScaleHolder).content.text = "사원 : ${company.scale} 명"
-                holder.subcontent.text = "${company.scaleDate.substring(0, 2)}년 ${company.scaleDate.substring(2, 4)}월 기준"
-                holder.third.text = "현역복무 : ${company.scaleNormal}명"
-                holder.fourth.text = "보충복무 : ${company.scaleFourth}명"
+                (holder as ScaleHolder).content.text = "사원 : ${company.employees} 명"
+                holder.subcontent.text = "${company.employeesLatestDate.substring(0, 2)}년 ${company.employeesLatestDate.substring(2, 4)}월 기준"
+                holder.third.text = "현역복무 : ${company.employeesActivePersonnel}명"
+                holder.fourth.text = "보충복무 : ${company.employeesReservePersonnel}명"
                 holder.wrapper.setOnClickListener { v -> onScaleClickListener?.let { it(company) } }
             }
             SALARY -> {
                 (holder as SalaryHolder).content.text = "루키 : ${company.salaryRookey} 만원"
                 holder.subcontent.text = "일반 : ${company.salaryNormal} 만원"
-                holder.wrapper.setOnClickListener { v -> onSalaryClickListener?.let { it(company) } }
+                holder.wrapper.setOnClickListener { onSalaryClickListener?.let { it(company) } }
             }
             NEWS_INTRO -> {
                 (holder as NewsIntroHolder).content.text = "\"${company.title}\"의 최근 정보"
@@ -96,11 +98,9 @@ class CompanyInfoAdapter(var company: Company) : RecyclerView.Adapter<RecyclerVi
                 if (company.news != null) {
                     holder as NewsHolder
                     for (i in company.news!!.indices) {
-                        holder.title[i].text = Html.fromHtml(company.news!![i].searchTitle)
-                        holder.contents[i].text = Html.fromHtml(company.news!![i].searchDescription)
-                        holder.button[i].setOnClickListener {
-                            onNewsClickListener?.let { it(company.news!![i]) }
-                        }
+                        holder.title[i].text = Html.fromHtml(company.news!![i].title)
+                        holder.contents[i].text = Html.fromHtml(company.news!![i].description)
+                        holder.button[i].setOnClickListener { onNewsClickListener?.let { it(company.news!![i]) } }
                     }
                 }
             }

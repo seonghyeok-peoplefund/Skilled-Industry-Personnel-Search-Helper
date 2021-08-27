@@ -3,13 +3,13 @@ package com.ray.personnel.domain.parser
 import com.ray.personnel.data.Company
 import org.jsoup.Jsoup
 import java.io.IOException
-import java.util.Collections
-import kotlin.jvm.Throws
+import java.util.*
 
+//어렸을 때 Jsoup 이용한 기억을 더듬어 비교하며 인터넷에 있는 내용 가져옴.
+//Regex도 필요할 때마다 검색해서 가져옴
 object MilitaryParser {
     private var sortedCompany: List<Company>? = null
 
-    @JvmStatic
     @Throws(IOException::class)
     fun getMilitaryCompany(name: String): Company? {
         if (sortedCompany == null) return null

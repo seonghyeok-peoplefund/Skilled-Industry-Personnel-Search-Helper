@@ -5,18 +5,17 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
-import androidx.room.Room
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.ray.personnel.data.Company
 import com.ray.personnel.data.Location
-import com.ray.personnel.domain.parser.CompanyListParser
 
+// 인터넷에서 가져온 내용
 @Database(entities = [Company::class], version = 1)
 @TypeConverters(LocationConverter::class)
 abstract class CompanyDatabase : RoomDatabase() {
     abstract fun companyDao(): CompanyDao
+    //main thread 에서 room db 접근시 IllegalStateException : Cannot access database on the main thread since it may potentially lock the UI
+    // for a long periods of time.
 
     companion object {
         private var instance: CompanyDatabase? = null
@@ -28,8 +27,12 @@ abstract class CompanyDatabase : RoomDatabase() {
              방안 3 : Instance ?: synchronized(CompanyDatabase::class)
              -> 어짜피 companion object라서 작동은 같을 것 같다. 더 직관성을 높이기 위해 방법3이 좋을 것 같다.
              이대로 사용해도 좋으려나?
+
+             TODO("-> runBlocking 이용해야하나? 이건 바꾸기 전에 더 자세하게 공부해야하겠다.")
              */
-            return instance ?: synchronized(this) {
+            //아직 처리 못함
+            return instance!!
+            /*?: runBlocking {
                 instance = Room
                     .databaseBuilder(
                         context.applicationContext,
@@ -38,9 +41,10 @@ abstract class CompanyDatabase : RoomDatabase() {
                     )
                     .fallbackToDestructiveMigration()
                     .build()
-                // Chained call formatting 참고. 호출의 시작과 닫는 괄호를 수직으로 정렬함.
                 return instance!!
             }
+            */
+
         }
     }
 }

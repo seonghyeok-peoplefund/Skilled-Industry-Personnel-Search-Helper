@@ -1,29 +1,29 @@
 package com.ray.personnel.ui.favorite
 
-import android.content.Intent
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.like.LikeButton
-import com.like.OnLikeListener
 import com.ray.personnel.Constants.KEY_TOKEN
 import com.ray.personnel.data.Company
 import com.ray.personnel.domain.database.CompanyDatabaseMethods
-import com.ray.personnel.ui.companyinfo.CompanyInfoActivity
-import com.ray.personnel.ui.filter.list.CompanyListViewModel
 import io.reactivex.functions.Consumer
 
 class FavoriteListViewModel(state: SavedStateHandle) : ViewModel() {
     val loginToken = state.getLiveData<String>(KEY_TOKEN)
-    val companies = MutableLiveData<List<Company>>()
-    val isNothing = MutableLiveData<Int>(View.INVISIBLE)
-    val moveToNextActivity = MutableLiveData<Company>() // 이거 Company 넘기는건 좋은 선택이 아닌것같음. 변수명도 맞지 않음.
-    val requireDatabaseMethod = MutableLiveData<>()
-    // 작업을 Activity/Fragment에서 해야 하는데, 어떤 작업을 할 지에 관한 정보를 어떻게 넘길 지 생각중
 
-    private val onSuccess: (Consumer<in List<Company>>) = Consumer { arr ->
+    val companies = MutableLiveData<List<Company>>()
+
+    val isNothing = MutableLiveData(View.INVISIBLE)
+
+    val moveToNextActivity = MutableLiveData<Company>()
+
+    val requestDatabaseGetMethod = MutableLiveData<Int>()
+
+    val requestDatabaseUpdateMethod = MutableLiveData<Company>()
+
+    val onSuccess: (Consumer<in List<Company>>) = Consumer { arr ->
         companies.value = arr
         if (arr.isEmpty()) {
             isNothing.value = View.VISIBLE
@@ -31,78 +31,56 @@ class FavoriteListViewModel(state: SavedStateHandle) : ViewModel() {
             isNothing.value = View.INVISIBLE
         }
     }
-    private val onError: Consumer<in Throwable> = Consumer { err ->
+
+    val onError: Consumer<in Throwable> = Consumer { err ->
         Log.e(TAG, "DB작업중 에러", err)
     }
 
     val onLikeListener = fun(company: Company, isLiked: Boolean) {
         company.isLiked = isLiked
-        CompanyDatabaseMethods.update(
-            context,
-            company,
-            {},
-            onError
-        )
+        requestDatabaseUpdateMethod.value = company
     }
+
     val onItemClickListener = fun(company: Company) {
         moveToNextActivity.value = company
     }
+
     val sortListener = fun(index: Int, isAscendant: Boolean) {
+        var value = CompanyDatabaseMethods.LIKED
         when (index) {
             DISTANCE -> {
-                if (isAscendant) {
-                    CompanyDatabaseMethods.getLikedByDistanceAsc(
-                        context,
-                        onSuccess,
-                        onError
-                    )
-                } else {
-                    CompanyDatabaseMethods.getLikedByDistanceDesc(
-                        context,
-                        onSuccess,
-                        onError
-                    )
-                }
+                value = value or
+                        CompanyDatabaseMethods.DISTANCE or
+                        if (isAscendant) {
+                            CompanyDatabaseMethods.ASCENDANT
+                        } else {
+                            CompanyDatabaseMethods.DESCENDANT
+                        }
             }
             SALARY -> {
-                if (isAscendant) {
-                    CompanyDatabaseMethods.getLikedBySalaryAsc(
-                        context,
-                        onSuccess,
-                        onError
-                    )
-                } else {
-                    CompanyDatabaseMethods.getLikedBySalaryDesc(
-                        context,
-                        onSuccess,
-                        onError
-                    )
-                }
+                value = value or CompanyDatabaseMethods.SALARY or
+                        if (isAscendant) {
+                            CompanyDatabaseMethods.ASCENDANT
+                        } else {
+                            CompanyDatabaseMethods.DESCENDANT
+                        }
             }
             PERCENT -> {
-                if (isAscendant) {
-                    CompanyDatabaseMethods.getLikedByPercentAsc(
-                        context,
-                        onSuccess,
-                        onError
-                    )
-                } else {
-                    CompanyDatabaseMethods.getLikedByPercentDesc(
-                        context,
-                        onSuccess,
-                        onError
-                    )
-                }
+                value = value or CompanyDatabaseMethods.PERCENT or
+                        if (isAscendant) {
+                            CompanyDatabaseMethods.ASCENDANT
+                        } else {
+                            CompanyDatabaseMethods.DESCENDANT
+                        }
             }
         }
+        requestDatabaseGetMethod.value = value
     }
 
-    fun getAllByDistanceAsc() {
-        CompanyDatabaseMethods.getLikedByDistanceAsc(
-            context,
-            onSuccess,
-            onError
-        )
+    fun initData() {
+        requestDatabaseGetMethod.value = CompanyDatabaseMethods.LIKED or
+                CompanyDatabaseMethods.DISTANCE or
+                CompanyDatabaseMethods.ASCENDANT
     }
 
     companion object {
